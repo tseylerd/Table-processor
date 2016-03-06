@@ -1,9 +1,12 @@
 package ui.math.calculator;
 
+import javafx.scene.control.Cell;
 import ui.table.CellValue;
 import ui.table.SpreadSheetModel;
 import ui.util.CellPointer;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -14,8 +17,10 @@ public class MathCalculator implements Calculator {
     private Lexem lexem;
     private Lexer lexer;
     private final SpreadSheetModel model;
+    private final List<CellPointer> pointers;
 
     public MathCalculator(SpreadSheetModel model) {
+        pointers = new ArrayList<>();
         this.model = model;
     }
 
@@ -29,10 +34,10 @@ public class MathCalculator implements Calculator {
 
     public double calculate(String expression) {
         lexer = new Lexer(expression.toUpperCase(), model);
+        pointers.clear();
         lexem = lexer.nextLexem();
         return expression();
     }
-
 
     private double expression() {
         double result = composed();
@@ -43,6 +48,14 @@ public class MathCalculator implements Calculator {
             result += tempLexem.getResult(composed());
         }
         return result;
+    }
+
+    public List<CellPointer> getPointers() {
+        return pointers;
+    }
+
+    public void reset() {
+        pointers.clear();
     }
 
     private double composed() {
@@ -79,6 +92,7 @@ public class MathCalculator implements Calculator {
         switch (lexem.getType()) {
             case C: {
                 CellPointer pointer = lexer.getCellPointer();
+                pointers.add(pointer);
                 lexem = lexer.nextLexem();
                 CellValue value = (CellValue)model.getValueAt(pointer.getRow(), pointer.getColumn());
                 return Double.parseDouble(value.getRendererValue());
