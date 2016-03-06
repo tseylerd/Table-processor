@@ -6,6 +6,8 @@ package ui.math.calculator;
 public enum Lexem {
     FUNC(),
     NUMBERS(),
+    C,
+    CELL(C, '@', 1),
     CLOSE(null,')',1),
     COS (FUNC,'C', 4){
         @Override
@@ -68,10 +70,10 @@ public enum Lexem {
         this.value = 'R';
         this.pointerPlus = 0;
     }
-    public static Lexem getLexem(char value){
-        if (Character.isDigit(value))
+    public static Lexem getLexem(char value) {
+        if (Character.isDigit(value)) {
             return NUM;
-        else {
+        } else {
             for (Lexem lexem : Lexem.values()){
                 if (lexem.value == value)
                     return lexem;

@@ -1,10 +1,13 @@
 package ui.table;
 
+import ui.math.calculator.MathCalculator;
+import ui.util.Util;
+
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringJoiner;
+import java.util.regex.Pattern;
 
 /**
  * @author Dmitriy Tseyler
@@ -64,6 +67,10 @@ public class SpreadSheetModel implements TableModel {
     }
 
     private String evaluate(String s) {
+        if (!s.isEmpty() && s.charAt(0) == '=') {
+            MathCalculator calculator = new MathCalculator(this);
+            return String.valueOf(calculator.calculate(Util.addCellSymbol(s.replaceFirst("=", ""))));
+        }
         return s;
     }
 
