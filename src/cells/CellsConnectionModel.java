@@ -1,7 +1,5 @@
 package cells;
 
-import cells.CellPointer;
-import cells.CellRange;
 import ui.table.SpreadSheetModel;
 
 import java.util.*;
@@ -9,13 +7,13 @@ import java.util.*;
 /**
  * @author Dmitriy Tseyler
  */
-public class CellsModel {
+public class CellsConnectionModel {
     private final HashMap<CellPointer, Set<CellPointer>> toRecalculate;
     private final HashMap<CellPointer, Set<CellPointer>> references;
 
     private final SpreadSheetModel model;
 
-    public CellsModel(SpreadSheetModel model) {
+    public CellsConnectionModel(SpreadSheetModel model) {
         toRecalculate = new HashMap<>();
         references = new HashMap<>();
         this.model = model;
@@ -31,22 +29,13 @@ public class CellsModel {
         }
     }
 
-    public void subscribe(CellPointer pointer, CellRange... ranges) {
-        clearOldReferences(pointer);
-        HashSet<CellPointer> newReferences = new HashSet<>();
-        for (CellRange range : ranges) {
-            processRange(pointer, range, newReferences);
-        }
-        references.put(pointer, newReferences);
-    }
-
-    private void processRange(CellPointer pointer, CellRange range, Set<CellPointer> newRefs) { // // TODO: 06.03.16 Store only ranges in newRefs
+    private void processRange(CellPointer pointer, CellRange range, Set<CellPointer> newRefs) {
         for (CellPointer cellPointer : range) {
             processReference(pointer, cellPointer, newRefs);
         }
     }
 
-    private void clearOldReferences(CellPointer pointer) {
+    private void clearOldReferences(CellPointer pointer) { //// TODO: 06.03.16 more effective (store only ranges for ranges, not clearing references that we should add later)
         Set<CellPointer> references = this.references.get(pointer);
         if (references != null) {
             for (CellPointer reference : references) {
@@ -55,13 +44,24 @@ public class CellsModel {
         }
     }
 
-    public void subscribe(CellPointer pointer, CellPointer... referenced) { //// TODO: 06.03.16 Problem if ranges and cell pointers are exists in expression
+    public void subscribe(CellPointer pointer, Set<CellPointer> referenced, Set<CellRange> ranges) {
         clearOldReferences(pointer);
-        Set<CellPointer> newReferences = new HashSet<>();
+        Set<CellPointer> newRefs = new HashSet<>();
+        processCellPointers(pointer, referenced, newRefs);
+        processRanges(pointer, ranges, newRefs);
+        references.put(pointer, newRefs);
+    }
+
+    public void processRanges(CellPointer pointer, Set<CellRange> ranges, Set<CellPointer> newReferences) {
+        for (CellRange range : ranges) {
+            processRange(pointer, range, newReferences);
+        }
+    }
+
+    private void processCellPointers(CellPointer pointer, Set<CellPointer> referenced, Set<CellPointer> newReferences) {
         for (CellPointer cellPointer : referenced) {
             processReference(pointer, cellPointer, newReferences);
         }
-        this.references.put(pointer, newReferences);
     }
 
     private void processReference(CellPointer mainPointer, CellPointer cellPointer, Set<CellPointer> references) {

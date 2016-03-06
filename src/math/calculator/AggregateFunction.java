@@ -10,16 +10,16 @@ import cells.CellRange;
 public enum AggregateFunction {
     SUM("SUM") {
         @Override
-        public double calculate(CellRange range, SpreadSheetModel model) {
+        public String calculate(CellRange range, SpreadSheetModel model) {
             double result = 0;
             for (CellPointer pointer : range) {
                 result += model.getNumber(pointer.getRow(), pointer.getColumn());
             }
-            return result;
+            return String.valueOf(result);
         }
     }, MEAN("MEAN") {
         @Override
-        public double calculate(CellRange range, SpreadSheetModel model) {
+        public String calculate(CellRange range, SpreadSheetModel model) {
             double result = 0;
             int count = 0;
             for (CellPointer cellPointer : range) {
@@ -27,7 +27,7 @@ public enum AggregateFunction {
                 result += model.getNumber(cellPointer.getRow(), cellPointer.getColumn());
             }
             result /= count;
-            return result;
+            return String.valueOf(result);
         }
     };
 
@@ -49,5 +49,5 @@ public enum AggregateFunction {
         throw new IllegalArgumentException();
     }
 
-    public abstract double calculate(CellRange range, SpreadSheetModel model);
+    public abstract String calculate(CellRange range, SpreadSheetModel model);
 }

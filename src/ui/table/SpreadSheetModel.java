@@ -1,7 +1,7 @@
 package ui.table;
 
 import cells.CellValue;
-import cells.CellsModel;
+import cells.CellsConnectionModel;
 import math.calculator.ExpressionCalculator;
 import cells.CellPointer;
 import cells.CellRange;
@@ -12,6 +12,7 @@ import javax.swing.table.TableModel;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Dmitriy Tseyler
@@ -21,7 +22,7 @@ public class SpreadSheetModel implements TableModel {
 
     private final List<TableModelListener> tableModelListeners;
     private final CellValue[][] values; //// TODO: 06.03.16 Variable length of rows and columns
-    private final CellsModel cellsModel; // TODO: 06.03.16 Should be one model for cells
+    private final CellsConnectionModel cellsConnectionModel; // TODO: 06.03.16 Should be one model for cells
     private final ExpressionCalculator calculator;
 
     private int rowCount;
@@ -30,7 +31,7 @@ public class SpreadSheetModel implements TableModel {
     public SpreadSheetModel(int rowCount, int columnCount) {
         rowCount++;
         columnCount++;
-        cellsModel = new CellsModel(this);
+        cellsConnectionModel = new CellsConnectionModel(this);
         calculator = new ExpressionCalculator(this);
         values = new CellValue[rowCount][columnCount];
         for (int i = 0; i < rowCount; i++) {
@@ -57,8 +58,10 @@ public class SpreadSheetModel implements TableModel {
     }
 
     public void recalculate(CellPointer pointer) {
-        CellValue value = values[pointer.getRow()][pointer.getColumn()];
-        setValueAt(value, pointer.getRow(), pointer.getColumn());
+        int row = pointer.getRow();
+        int column = pointer.getColumn();
+        CellValue value = values[row][column];
+        setValueAt(value, row, column);
     }
 
     @Override
@@ -83,21 +86,18 @@ public class SpreadSheetModel implements TableModel {
         } catch (ParseException e) {
             cellValue.setErrorState(true);
         }
-        List<CellPointer> pointers = calculator.getPointers();
-        if (!pointers.isEmpty()) {
-            cellsModel.subscribe(new CellPointer(rowIndex, columnIndex), pointers.toArray(new CellPointer[pointers.size()]));
-        }
-        List<CellRange> ranges = calculator.getRanges();
-        if (!ranges.isEmpty()) {
-            cellsModel.subscribe(new CellPointer(rowIndex, columnIndex), ranges.toArray(new CellRange[ranges.size()]));
-        }
-        cellsModel.cellChanged(new CellPointer(rowIndex, columnIndex));
+        Set<CellPointer> pointers = calculator.getPointers();
+        Set<CellRange> ranges = calculator.getRanges();
+        CellPointer pointer = new CellPointer(rowIndex, columnIndex);
+        cellsConnectionModel.subscribe(pointer, pointers, ranges);
+        cellsConnectionModel.cellChanged(new CellPointer(rowIndex, columnIndex));
     }
 
     private String evaluate(String s) throws ParseException {
         calculator.reset();
-        if (!s.isEmpty() && s.charAt(0) == '=')
-            return String.valueOf(calculator.calculate(Util.addSpecialCharacters(s.replaceFirst("=", ""))));
+        if (!s.isEmpty() && s.charAt(0) == '=') {
+            return calculator.calculate(Util.addSpecialCharacters(s.substring(1)));
+        }
         return s;
     }
 

@@ -44,4 +44,40 @@ public class Util {
         }
         return result;
     }
+
+    public static String stringAbs(String value) { //// TODO: 06.03.16 remove
+        return String.valueOf(Math.abs(Double.parseDouble(value)));
+    }
+
+    public static String inverse(String value) {
+        return String.valueOf(-Double.parseDouble(value));
+    }
+
+    public static String cos(String value) {
+        return String.valueOf(Math.cos(Double.parseDouble(value)));
+    }
+
+    public static String sin(String value) {
+        return String.valueOf(Math.sin(Double.parseDouble(value)));
+    }
+
+    public static String plus(String a, String b) {
+        double result = Double.parseDouble(a) + Double.parseDouble(b);
+        return String.valueOf(result);
+    }
+
+    public static String power(String e, String pow) {
+        double result = Math.pow(Double.parseDouble(e), Double.parseDouble(pow));
+        return String.valueOf(result);
+    }
+
+    public static String multiply(String a, String b) {
+        double result = Double.parseDouble(a) * Double.parseDouble(b);
+        return String.valueOf(result);
+    }
+
+    public static String div(String a, String b) {
+        double result = Double.parseDouble(a) / Double.parseDouble(b);
+        return String.valueOf(result);
+    }
 }

@@ -105,7 +105,7 @@ public class Lexer {
         return cellPointer;
     }
 
-    public double getNumber(){
-        return Double.parseDouble(number);
+    public String getNumber(){
+        return number;
     }
 }

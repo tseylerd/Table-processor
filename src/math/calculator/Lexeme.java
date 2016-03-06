@@ -1,5 +1,7 @@
 package math.calculator;
 
+import util.Util;
+
 /**
  * @author Dmitriy Tseyler
  */
@@ -13,51 +15,43 @@ public enum Lexeme {
     CLOSE(null,')',1),
     COS (FUNC,'C', 4){
         @Override
-        public double getResult(double value){
-            double result = Math.cos(value);
-            return result;
+        public String getResult(String value) {
+            return Util.cos(value);
         }
     },
     SIN (FUNC,'S',4){
         @Override
-        public double getResult(double value){
-            double result = Math.sin(value);
-            return result;
+        public String getResult(String value) {
+            return Util.sin(value);
         }
     },
     NUM (NUMBERS, '0', 0),
     OPEN(FUNC, '(',1),
     POW(null, '^',1),
     OPERATION,
-    PLUS(OPERATION,'+',1){
-        @Override
-        public double getResult(double value){
-            return value;
-        }
-    },
+    PLUS(OPERATION,'+',1),
     MINUS(OPERATION,'-',1){
         @Override
-        public double getResult(double value){
-            return -value;
+        public String getResult(String value){
+            return Util.inverse(value);
         }
     },
     DIV(OPERATION,'/',1){
         @Override
-        public double getResult(double a, double b){
-            return a/b;
+        public String getResult(String a, String b){
+            return Util.div(a, b);
         }
     },
     MULT(OPERATION,'*',1){
         @Override
-        public double getResult(double a, double b){
-            return a*b;
+        public String getResult(String a, String b){
+            return Util.multiply(a, b);
         }
     },
     ABS(FUNC, 'A',4){
         @Override
-        public double getResult(double value){
-            double result = Math.abs(value);
-            return result;
+        public String getResult(String value){
+            return Util.stringAbs(value);
         }
     };
     private char value;
@@ -89,11 +83,11 @@ public enum Lexeme {
     public int getOffset(){
         return pointerPlus;
     }
-    public  double getResult(double value){
+    public String getResult(String value){
         return value;
     }
 
-    public  double getResult(double a, double b){
+    public String getResult(String a, String b){
         return a;
     };
 }
