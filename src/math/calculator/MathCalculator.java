@@ -13,7 +13,7 @@ import java.util.Scanner;
  */
 
 public class MathCalculator implements Calculator {
-    private Lexem lexem;
+    private Lexeme lexeme;
     private Lexer lexer;
     private final SpreadSheetModel model;
     private final List<CellPointer> pointers;
@@ -34,17 +34,17 @@ public class MathCalculator implements Calculator {
     public double calculate(String expression) {
         lexer = new Lexer(expression.toUpperCase(), model);
         pointers.clear();
-        lexem = lexer.nextLexem();
+        lexeme = lexer.nextLexem();
         return expression();
     }
 
     private double expression() {
         double result = composed();
 
-        while (lexem == Lexem.PLUS || lexem == Lexem.MINUS) {
-            Lexem tempLexem = lexem;
-            lexem = lexer.nextLexem();
-            result += tempLexem.getResult(composed());
+        while (lexeme == Lexeme.PLUS || lexeme == Lexeme.MINUS) {
+            Lexeme tempLexeme = lexeme;
+            lexeme = lexer.nextLexem();
+            result += tempLexeme.getResult(composed());
         }
         return result;
     }
@@ -59,54 +59,54 @@ public class MathCalculator implements Calculator {
 
     private double composed() {
         double result = sign();
-        while (lexem == Lexem.DIV || lexem == Lexem.MULT) {
-            Lexem tempLexem = lexem;
-            lexem = lexer.nextLexem();
-            result = tempLexem.getResult(result, sign());
+        while (lexeme == Lexeme.DIV || lexeme == Lexeme.MULT) {
+            Lexeme tempLexeme = lexeme;
+            lexeme = lexer.nextLexem();
+            result = tempLexeme.getResult(result, sign());
         }
         return result;
     }
 
     private double power() {
         double result = multiplier();
-        while (lexem == Lexem.POW) {
-            lexem = lexer.nextLexem();
+        while (lexeme == Lexeme.POW) {
+            lexeme = lexer.nextLexem();
             result = Math.pow(result, power());
         }
         return result;
     }
 
     private double sign() {
-        if (lexem == Lexem.PLUS || lexem == Lexem.MINUS){
-            Lexem tempLexem = lexem;
-            lexem = lexer.nextLexem();
-            return tempLexem.getResult(power());
+        if (lexeme == Lexeme.PLUS || lexeme == Lexeme.MINUS){
+            Lexeme tempLexeme = lexeme;
+            lexeme = lexer.nextLexem();
+            return tempLexeme.getResult(power());
         } else {
             return power();
         }
     }
 
     private double multiplier() {
-        Lexem tempLexem = lexem;
-        switch (lexem.getType()) {
+        Lexeme tempLexeme = lexeme;
+        switch (lexeme.getType()) {
             case C: {
                 CellPointer pointer = lexer.getCellPointer();
                 pointers.add(pointer);
-                lexem = lexer.nextLexem();
+                lexeme = lexer.nextLexem();
                 CellValue value = (CellValue)model.getValueAt(pointer.getRow(), pointer.getColumn());
                 return Double.parseDouble(value.getRendererValue());
             } case NUMBERS: {
                 double num = lexer.getNumber();
-                lexem = lexer.nextLexem();
+                lexeme = lexer.nextLexem();
                 return num;
             } case FUNC:{
-                lexem = lexer.nextLexem();
-                double temp = tempLexem.getResult(expression());
-                lexem = lexer.nextLexem();
+                lexeme = lexer.nextLexem();
+                double temp = tempLexeme.getResult(expression());
+                lexeme = lexer.nextLexem();
                 return temp;
             } case OPERATION:{
-                lexem = lexer.nextLexem();
-                return tempLexem.getResult(multiplier());
+                lexeme = lexer.nextLexem();
+                return tempLexeme.getResult(multiplier());
             }
         }
         return 0;

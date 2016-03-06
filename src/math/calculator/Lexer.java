@@ -21,11 +21,11 @@ public class Lexer {
         number = "";
     }
 
-    public Lexem nextLexem(){
+    public Lexeme nextLexem(){
         if (pointer < expression.length()){
             char flow = expression.charAt(pointer);
-            Lexem lexem = Lexem.getLexem(flow);
-            if (lexem == Lexem.NUM){
+            Lexeme lexeme = Lexeme.getLexem(flow);
+            if (lexeme == Lexeme.NUM){
                 number = "";
                 while (Character.isDigit(flow) || flow=='.'|| flow == 'E' || number.charAt(number.length()-1) =='E' && (flow == '-' || flow=='+')) {
                     number += flow;
@@ -34,7 +34,7 @@ public class Lexer {
                         flow = expression.charAt(pointer);
                     else break;
                 }
-            } else if (lexem == Lexem.CELL) {
+            } else if (lexeme == Lexeme.CELL) {
                 flow = expression.charAt(++pointer);
                 String column = "";
                 String row = "";
@@ -53,9 +53,9 @@ public class Lexer {
                 }
                 cellPointer = new CellPointer(Integer.parseInt(row), Util.getColumnFromString(column));
             } else {
-                pointer += lexem.getOffset();
+                pointer += lexeme.getOffset();
             }
-            return lexem;
+            return lexeme;
         }
         return null;
     }

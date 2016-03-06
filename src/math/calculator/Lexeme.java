@@ -3,7 +3,7 @@ package math.calculator;
 /**
  * @author Dmitriy Tseyler
  */
-public enum Lexem {
+public enum Lexeme {
     FUNC(),
     NUMBERS(),
     C,
@@ -60,28 +60,28 @@ public enum Lexem {
     };
     private char value;
     private int pointerPlus=1;
-    private Lexem type = null;
-    private Lexem(Lexem parent, char value, int pointerPlus){
+    private Lexeme type = null;
+    private Lexeme(Lexeme parent, char value, int pointerPlus){
         this.value = value;
         this.pointerPlus = pointerPlus;
         this.type = parent;
     }
-    private Lexem(){
+    private Lexeme(){
         this.value = 'R';
         this.pointerPlus = 0;
     }
-    public static Lexem getLexem(char value) {
+    public static Lexeme getLexem(char value) {
         if (Character.isDigit(value)) {
             return NUM;
         } else {
-            for (Lexem lexem : Lexem.values()){
-                if (lexem.value == value)
-                    return lexem;
+            for (Lexeme lexeme : Lexeme.values()){
+                if (lexeme.value == value)
+                    return lexeme;
             }
         }
         return null;
     }
-    public Lexem getType(){
+    public Lexeme getType(){
         return type;
     }
     public int getOffset(){

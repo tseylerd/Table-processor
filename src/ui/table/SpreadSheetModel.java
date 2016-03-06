@@ -75,9 +75,12 @@ public class SpreadSheetModel implements TableModel {
         cellValue.setValue(eval);
         cellValue.setExpression(cellValue.getEditorValue());
         values[rowIndex][columnIndex] = (cellValue);
-        cellsModel.subscribe(new CellPointer(rowIndex, columnIndex), ((MathCalculator)calculator).getPointers().toArray(new CellPointer[]{}));
+        List<CellPointer> pointers = ((MathCalculator)calculator).getPointers();
+        if (!pointers.isEmpty()) {
+            cellsModel.subscribe(new CellPointer(rowIndex, columnIndex), ((MathCalculator) calculator).getPointers().toArray(new CellPointer[]{}));
+        }
         cellsModel.cellChanged(new CellPointer(rowIndex, columnIndex));
-        fireTableModelListeners();
+        //fireTableModelListeners();
     }
 
     private String evaluate(String s) {
