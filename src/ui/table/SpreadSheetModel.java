@@ -9,17 +9,23 @@ import java.util.List;
  * @author Dmitriy Tseyler
  */
 public class SpreadSheetModel implements TableModel {
+    private static final int ENGLISH_CHARACTERS_COUNT = 26;
+
     private final List<TableModelListener> tableModelListeners;
-    private final List<List<Entity>> values;
+    private final CellValue[][] values;
     private int rowCount;
     private int columnCount;
 
     public SpreadSheetModel(int rowCount, int columnCount) {
-        values = new ArrayList<>();
+        rowCount++;
+        columnCount++;
+        values = new CellValue[rowCount][columnCount];
         for (int i = 0; i < rowCount; i++) {
-            values.add(new ArrayList<>());
-            for (int j = 0; j < columnCount; j++) {
-                values.get(i).add(new Entity());
+            values[i][0] = new CellValue(String.valueOf(i));
+        }
+        for (int i = 0; i < rowCount; i++) {
+            for (int j = 1; j < columnCount; j++) {
+                values[i][j] = new CellValue();
             }
         }
         tableModelListeners = new ArrayList<>();
@@ -34,7 +40,7 @@ public class SpreadSheetModel implements TableModel {
 
     @Override
     public Class<?> getColumnClass(int columnIndex) {
-        return Entity.class;
+        return CellValue.class;
     }
 
     @Override
@@ -44,18 +50,34 @@ public class SpreadSheetModel implements TableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        return values.get(rowIndex).get(columnIndex);
+        return values[rowIndex][columnIndex];
     }
 
     @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-        values.get(rowIndex).remove(columnIndex);
-        values.get(rowIndex).add(columnIndex, (Entity)aValue);
+        CellValue cellValue = (CellValue)aValue;
+        values[rowIndex][columnIndex] = (cellValue);
+        fireTableModelListeners();
     }
 
     @Override
     public String getColumnName(int columnIndex) {
-        return null;
+        if (columnIndex == 0)
+            return "";
+
+        columnIndex--;
+        int count = columnIndex / ENGLISH_CHARACTERS_COUNT;
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < count; i++) {
+            builder.append('A');
+        }
+
+        builder.append((char)((columnIndex % ENGLISH_CHARACTERS_COUNT) + 65));
+        return builder.toString();
+    }
+
+    private void fireTableModelListeners() {
+        tableModelListeners.forEach(tableModelListener -> tableModelListener.tableChanged(null));
     }
 
     @Override
@@ -70,7 +92,7 @@ public class SpreadSheetModel implements TableModel {
 
     @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
-        return true;
+        return columnIndex != 0;
     }
 }
 
