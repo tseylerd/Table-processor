@@ -1,6 +1,7 @@
-package util;
+package main.java.util;
 
-import math.calculator.AggregateFunction;
+import main.java.math.calculator.AggregateFunction;
+import main.java.math.calculator.LexerValue;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -45,39 +46,35 @@ public class Util {
         return result;
     }
 
-    public static String stringAbs(String value) { //// TODO: 06.03.16 remove
-        return String.valueOf(Math.abs(Double.parseDouble(value)));
+    public static LexerValue abs(LexerValue value) {
+        return new LexerValue(Math.abs(value.getDoubleValue()));
     }
 
-    public static String inverse(String value) {
-        return String.valueOf(-Double.parseDouble(value));
+    public static LexerValue inverse(LexerValue value) {
+        return new LexerValue(-value.getDoubleValue());
     }
 
-    public static String cos(String value) {
-        return String.valueOf(Math.cos(Double.parseDouble(value)));
+    public static LexerValue cos(LexerValue value) {
+        return new LexerValue(Math.cos(value.getDoubleValue()));
     }
 
-    public static String sin(String value) {
-        return String.valueOf(Math.sin(Double.parseDouble(value)));
+    public static LexerValue sin(LexerValue value) {
+        return new LexerValue(Math.sin(value.getDoubleValue()));
     }
 
-    public static String plus(String a, String b) {
-        double result = Double.parseDouble(a) + Double.parseDouble(b);
-        return String.valueOf(result);
+    public static LexerValue plus(LexerValue a, LexerValue b) {
+        return new LexerValue(a.getDoubleValue() + b.getDoubleValue());
     }
 
-    public static String power(String e, String pow) {
-        double result = Math.pow(Double.parseDouble(e), Double.parseDouble(pow));
-        return String.valueOf(result);
+    public static LexerValue power(LexerValue e, LexerValue pow) {
+        return new LexerValue(Math.pow(e.getDoubleValue(), pow.getDoubleValue()));
     }
 
-    public static String multiply(String a, String b) {
-        double result = Double.parseDouble(a) * Double.parseDouble(b);
-        return String.valueOf(result);
+    public static LexerValue multiply(LexerValue a, LexerValue b) {
+        return new LexerValue(a.getDoubleValue() * b.getDoubleValue());
     }
 
-    public static String div(String a, String b) {
-        double result = Double.parseDouble(a) / Double.parseDouble(b);
-        return String.valueOf(result);
+    public static LexerValue div(LexerValue a, LexerValue b) {
+        return new LexerValue(a.getDoubleValue() / b.getDoubleValue());
     }
 }

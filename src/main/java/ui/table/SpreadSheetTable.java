@@ -1,6 +1,6 @@
-package ui.table;
+package main.java.ui.table;
 
-import cells.CellValue;
+import main.java.cells.CellValue;
 
 import javax.swing.*;
 import java.awt.*;

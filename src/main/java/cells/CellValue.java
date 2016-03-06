@@ -1,4 +1,4 @@
-package cells;
+package main.java.cells;
 
 /**
  * @author Dmitriy Tseyler

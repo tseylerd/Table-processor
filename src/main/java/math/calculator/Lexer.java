@@ -1,9 +1,8 @@
-package math.calculator;
+package main.java.math.calculator;
 
-import ui.table.SpreadSheetModel;
-import cells.CellPointer;
-import cells.CellRange;
-import util.Util;
+import main.java.cells.CellPointer;
+import main.java.cells.CellRange;
+import main.java.util.Util;
 
 import java.text.ParseException;
 
@@ -14,13 +13,11 @@ public class Lexer {
     private String expression;
     private int pointer;
     private String number;
-    private final SpreadSheetModel model;
     private CellPointer cellPointer;
     private CellRange range;
     private AggregateFunction function;
 
-    public Lexer(String expression, SpreadSheetModel model){
-        this.model = model;
+    public Lexer(String expression){
         this.expression = expression.replaceAll(" ", "");
         pointer = 0;
         number = "";

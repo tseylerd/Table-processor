@@ -1,4 +1,4 @@
-package cells;
+package main.java.cells;
 
 import java.util.Iterator;
 

@@ -1,6 +1,6 @@
-package cells;
+package main.java.cells;
 
-import ui.table.SpreadSheetModel;
+import main.java.ui.table.SpreadSheetModel;
 
 import java.util.*;
 

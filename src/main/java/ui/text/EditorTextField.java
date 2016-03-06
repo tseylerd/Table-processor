@@ -1,6 +1,6 @@
-package ui.text;
+package main.java.ui.text;
 
-import cells.CellValue;
+import main.java.cells.CellValue;
 
 import javax.swing.*;
 

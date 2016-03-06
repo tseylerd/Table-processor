@@ -1,10 +1,10 @@
-package math.calculator;
+package main.java.math.calculator;
 
-import cells.CellValue;
-import ui.table.SpreadSheetModel;
-import cells.CellPointer;
-import cells.CellRange;
-import util.Util;
+import main.java.cells.CellValue;
+import main.java.ui.table.SpreadSheetModel;
+import main.java.cells.CellPointer;
+import main.java.cells.CellRange;
+import main.java.util.Util;
 
 import java.text.ParseException;
 import java.util.HashSet;
@@ -14,12 +14,13 @@ import java.util.Set;
  * @author Dmitriy Tseyler
  */
 
-public class ExpressionCalculator { // TODO: 06.03.16 remove multiple string conversions
-    private Lexeme lexeme;
-    private Lexer lexer;
+public class ExpressionCalculator {
     private final SpreadSheetModel model;
     private final Set<CellPointer> pointers;
     private final Set<CellRange> ranges;
+
+    private Lexeme lexeme;
+    private Lexer lexer;
 
     public ExpressionCalculator(SpreadSheetModel model) {
         pointers = new HashSet<>();
@@ -29,16 +30,16 @@ public class ExpressionCalculator { // TODO: 06.03.16 remove multiple string con
 
     public String calculate(String expression) throws ParseException {
         try {
-            lexer = new Lexer(expression.toUpperCase(), model);
+            lexer = new Lexer(expression.toUpperCase());
             lexeme = lexer.nextLexem();
-            return expression();
-        } catch (NumberFormatException e) {
+            return expression().toString();
+        } catch (Exception e) {
             throw new ParseException("", 0);
         }
     }
 
-    private String expression() throws ParseException {
-        String result = composed();
+    private LexerValue expression() throws ParseException {
+        LexerValue result = composed();
 
         while (lexeme == Lexeme.PLUS || lexeme == Lexeme.MINUS) {
             Lexeme tempLexeme = lexeme;
@@ -61,8 +62,8 @@ public class ExpressionCalculator { // TODO: 06.03.16 remove multiple string con
         return ranges;
     }
 
-    private String composed() throws ParseException {
-        String result = sign();
+    private LexerValue composed() throws ParseException {
+        LexerValue result = sign();
         while (lexeme == Lexeme.DIV || lexeme == Lexeme.MULT) {
             Lexeme tempLexeme = lexeme;
             lexeme = lexer.nextLexem();
@@ -71,8 +72,8 @@ public class ExpressionCalculator { // TODO: 06.03.16 remove multiple string con
         return result;
     }
 
-    private String power() throws ParseException {
-        String result = multiplier();
+    private LexerValue power() throws ParseException {
+        LexerValue result = multiplier();
         while (lexeme == Lexeme.POW) {
             lexeme = lexer.nextLexem();
             result = Util.power(result, power());
@@ -80,7 +81,7 @@ public class ExpressionCalculator { // TODO: 06.03.16 remove multiple string con
         return result;
     }
 
-    private String sign() throws ParseException {
+    private LexerValue sign() throws ParseException {
         if (lexeme == Lexeme.PLUS || lexeme == Lexeme.MINUS){
             Lexeme tempLexeme = lexeme;
             lexeme = lexer.nextLexem();
@@ -90,7 +91,7 @@ public class ExpressionCalculator { // TODO: 06.03.16 remove multiple string con
         }
     }
 
-    private String multiplier() throws ParseException {
+    private LexerValue multiplier() throws ParseException {
         Lexeme tempLexeme = lexeme;
         switch (lexeme.getType()) {
             case AGGREGATE_FUNCTION: {
@@ -104,14 +105,14 @@ public class ExpressionCalculator { // TODO: 06.03.16 remove multiple string con
                 pointers.add(pointer);
                 lexeme = lexer.nextLexem();
                 CellValue value = (CellValue)model.getValueAt(pointer.getRow(), pointer.getColumn());
-                return value.getRendererValue();
+                return new LexerValue(value.getRendererValue());
             } case NUMBERS: {
                 String num = lexer.getNumber();
                 lexeme = lexer.nextLexem();
-                return num;
+                return new LexerValue(num);
             } case FUNC:{
                 lexeme = lexer.nextLexem();
-                String result = tempLexeme.getResult(expression());
+                LexerValue result = tempLexeme.getResult(expression());
                 lexeme = lexer.nextLexem();
                 return result;
             } case OPERATION:{
@@ -119,6 +120,6 @@ public class ExpressionCalculator { // TODO: 06.03.16 remove multiple string con
                 return tempLexeme.getResult(multiplier());
             }
         }
-        return "0";
+        return LexerValue.NOTHING;
     }
 }

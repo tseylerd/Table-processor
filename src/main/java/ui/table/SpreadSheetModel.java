@@ -1,11 +1,11 @@
-package ui.table;
+package main.java.ui.table;
 
-import cells.CellValue;
-import cells.CellsConnectionModel;
-import math.calculator.ExpressionCalculator;
-import cells.CellPointer;
-import cells.CellRange;
-import util.Util;
+import main.java.cells.CellValue;
+import main.java.cells.CellsConnectionModel;
+import main.java.math.calculator.ExpressionCalculator;
+import main.java.cells.CellPointer;
+import main.java.cells.CellRange;
+import main.java.util.Util;
 
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
@@ -22,7 +22,7 @@ public class SpreadSheetModel implements TableModel {
 
     private final List<TableModelListener> tableModelListeners;
     private final CellValue[][] values; //// TODO: 06.03.16 Variable length of rows and columns
-    private final CellsConnectionModel cellsConnectionModel; // TODO: 06.03.16 Should be one model for cells
+    private final CellsConnectionModel cellsConnectionModel; // TODO: 06.03.16 Should be one model for main.java.cells
     private final ExpressionCalculator calculator;
 
     private int rowCount;

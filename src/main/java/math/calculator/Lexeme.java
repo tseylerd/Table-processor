@@ -1,6 +1,6 @@
-package math.calculator;
+package main.java.math.calculator;
 
-import util.Util;
+import main.java.util.Util;
 
 /**
  * @author Dmitriy Tseyler
@@ -15,13 +15,13 @@ public enum Lexeme {
     CLOSE(null,')',1),
     COS (FUNC,'C', 4){
         @Override
-        public String getResult(String value) {
+        public LexerValue getResult(LexerValue value) {
             return Util.cos(value);
         }
     },
     SIN (FUNC,'S',4){
         @Override
-        public String getResult(String value) {
+        public LexerValue getResult(LexerValue value) {
             return Util.sin(value);
         }
     },
@@ -32,26 +32,26 @@ public enum Lexeme {
     PLUS(OPERATION,'+',1),
     MINUS(OPERATION,'-',1){
         @Override
-        public String getResult(String value){
+        public LexerValue getResult(LexerValue value){
             return Util.inverse(value);
         }
     },
     DIV(OPERATION,'/',1){
         @Override
-        public String getResult(String a, String b){
+        public LexerValue getResult(LexerValue a, LexerValue b){
             return Util.div(a, b);
         }
     },
     MULT(OPERATION,'*',1){
         @Override
-        public String getResult(String a, String b){
+        public LexerValue getResult(LexerValue a, LexerValue b){
             return Util.multiply(a, b);
         }
     },
     ABS(FUNC, 'A',4){
         @Override
-        public String getResult(String value){
-            return Util.stringAbs(value);
+        public LexerValue getResult(LexerValue value){
+            return Util.abs(value);
         }
     };
     private char value;
@@ -83,11 +83,11 @@ public enum Lexeme {
     public int getOffset(){
         return pointerPlus;
     }
-    public String getResult(String value){
+    public LexerValue getResult(LexerValue value){
         return value;
     }
 
-    public String getResult(String a, String b){
+    public LexerValue getResult(LexerValue a, LexerValue b){
         return a;
     };
 }
