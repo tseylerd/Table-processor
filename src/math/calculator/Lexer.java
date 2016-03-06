@@ -1,4 +1,4 @@
-package ui.math.calculator;
+package math.calculator;
 
 import ui.table.SpreadSheetModel;
 import ui.util.CellPointer;

@@ -1,7 +1,7 @@
 package ui.table;
 
-import ui.math.calculator.Calculator;
-import ui.math.calculator.MathCalculator;
+import math.calculator.Calculator;
+import math.calculator.MathCalculator;
 import ui.util.CellPointer;
 import ui.util.Util;
 

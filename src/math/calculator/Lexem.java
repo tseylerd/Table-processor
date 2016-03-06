@@ -1,4 +1,4 @@
-package ui.math.calculator;
+package math.calculator;
 
 /**
  * @author Dmitriy Tseyler

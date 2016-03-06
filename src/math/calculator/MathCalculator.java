@@ -1,6 +1,5 @@
-package ui.math.calculator;
+package math.calculator;
 
-import javafx.scene.control.Cell;
 import ui.table.CellValue;
 import ui.table.SpreadSheetModel;
 import ui.util.CellPointer;
