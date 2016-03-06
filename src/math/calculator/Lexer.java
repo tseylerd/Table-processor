@@ -5,6 +5,8 @@ import cells.CellPointer;
 import cells.CellRange;
 import util.Util;
 
+import java.text.ParseException;
+
 /**
  * @author Dmitriy Tseyler
  */
@@ -24,7 +26,7 @@ public class Lexer {
         number = "";
     }
 
-    public Lexeme nextLexem(){
+    public Lexeme nextLexem() throws ParseException {
         if (pointer < expression.length()){
             char flow = expression.charAt(pointer);
             Lexeme lexeme = Lexeme.getLexem(flow);

@@ -22,10 +22,10 @@ public class CellsModel {
     }
 
     public void cellChanged(CellPointer pointer) {
-        Set<CellPointer> refs = toRecalculate.get(pointer);
-        if (refs == null)
+        if (toRecalculate.get(pointer) == null)
             return;
 
+        Set<CellPointer> refs = new HashSet<>(toRecalculate.get(pointer));
         for (CellPointer ref : refs) {
             model.recalculate(ref);
         }

@@ -6,6 +6,7 @@ package cells;
 public class CellValue {
     private String value;
     private String expression;
+    private boolean errorState;
 
     public CellValue() {
         this("");
@@ -16,7 +17,7 @@ public class CellValue {
     }
 
     public String getRendererValue() {
-        return value;
+        return isErrorState() ? "Error" : value;
     }
 
     public String getEditorValue() {
@@ -29,5 +30,13 @@ public class CellValue {
 
     public void setExpression(String expression) {
         this.expression = expression;
+    }
+
+    public void setErrorState(boolean errorState) {
+        this.errorState = errorState;
+    }
+
+    public boolean isErrorState() {
+        return errorState;
     }
 }

@@ -5,6 +5,7 @@ import ui.table.SpreadSheetModel;
 import cells.CellPointer;
 import cells.CellRange;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,15 +26,17 @@ public class ExpressionCalculator {
         this.model = model;
     }
 
-    public double calculate(String expression) {
-        lexer = new Lexer(expression.toUpperCase(), model);
-        pointers.clear();
-        ranges.clear();
-        lexeme = lexer.nextLexem();
-        return expression();
+    public double calculate(String expression) throws ParseException {
+        try {
+            lexer = new Lexer(expression.toUpperCase(), model);
+            lexeme = lexer.nextLexem();
+            return expression();
+        } catch (Exception e) {
+            throw new ParseException("", 0);
+        }
     }
 
-    private double expression() {
+    private double expression() throws ParseException {
         double result = composed();
 
         while (lexeme == Lexeme.PLUS || lexeme == Lexeme.MINUS) {
@@ -57,7 +60,7 @@ public class ExpressionCalculator {
         return ranges;
     }
 
-    private double composed() {
+    private double composed() throws ParseException {
         double result = sign();
         while (lexeme == Lexeme.DIV || lexeme == Lexeme.MULT) {
             Lexeme tempLexeme = lexeme;
@@ -67,7 +70,7 @@ public class ExpressionCalculator {
         return result;
     }
 
-    private double power() {
+    private double power() throws ParseException {
         double result = multiplier();
         while (lexeme == Lexeme.POW) {
             lexeme = lexer.nextLexem();
@@ -76,7 +79,7 @@ public class ExpressionCalculator {
         return result;
     }
 
-    private double sign() {
+    private double sign() throws ParseException {
         if (lexeme == Lexeme.PLUS || lexeme == Lexeme.MINUS){
             Lexeme tempLexeme = lexeme;
             lexeme = lexer.nextLexem();
@@ -86,7 +89,7 @@ public class ExpressionCalculator {
         }
     }
 
-    private double multiplier() {
+    private double multiplier() throws ParseException {
         Lexeme tempLexeme = lexeme;
         switch (lexeme.getType()) {
             case AGGREGATE_FUNCTION: {

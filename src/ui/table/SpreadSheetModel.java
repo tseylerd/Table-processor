@@ -9,6 +9,7 @@ import util.Util;
 
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -73,28 +74,30 @@ public class SpreadSheetModel implements TableModel {
     @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
         CellValue cellValue = (CellValue)aValue;
-        String eval = evaluate(cellValue.getEditorValue());
-        cellValue.setValue(eval);
-        cellValue.setExpression(cellValue.getEditorValue());
-        values[rowIndex][columnIndex] = (cellValue);
-        List<CellPointer> pointers = ((ExpressionCalculator)calculator).getPointers();
+        try {
+            String eval = evaluate(cellValue.getEditorValue());
+            cellValue.setValue(eval);
+            cellValue.setExpression(cellValue.getEditorValue());
+            cellValue.setErrorState(false);
+            values[rowIndex][columnIndex] = cellValue;
+        } catch (ParseException e) {
+            cellValue.setErrorState(true);
+        }
+        List<CellPointer> pointers = calculator.getPointers();
         if (!pointers.isEmpty()) {
             cellsModel.subscribe(new CellPointer(rowIndex, columnIndex), pointers.toArray(new CellPointer[pointers.size()]));
         }
-        List<CellRange> ranges = ((ExpressionCalculator)calculator).getRanges();
+        List<CellRange> ranges = calculator.getRanges();
         if (!ranges.isEmpty()) {
             cellsModel.subscribe(new CellPointer(rowIndex, columnIndex), ranges.toArray(new CellRange[ranges.size()]));
         }
         cellsModel.cellChanged(new CellPointer(rowIndex, columnIndex));
-        //fireTableModelListeners();
     }
 
-    private String evaluate(String s) {
-        if (!s.isEmpty() && s.charAt(0) == '=') {
+    private String evaluate(String s) throws ParseException {
+        calculator.reset();
+        if (!s.isEmpty() && s.charAt(0) == '=')
             return String.valueOf(calculator.calculate(Util.addSpecialCharacters(s.replaceFirst("=", ""))));
-        } else {
-            ((ExpressionCalculator)calculator).reset();
-        }
         return s;
     }
 
