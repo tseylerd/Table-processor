@@ -1,39 +1,34 @@
 package math.calculator;
 
-import ui.table.CellValue;
+import cells.CellValue;
 import ui.table.SpreadSheetModel;
-import ui.util.CellPointer;
+import cells.CellPointer;
+import cells.CellRange;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 /**
  * @author Dmitriy Tseyler
  */
 
-public class MathCalculator implements Calculator {
+public class ExpressionCalculator {
     private Lexeme lexeme;
     private Lexer lexer;
     private final SpreadSheetModel model;
     private final List<CellPointer> pointers;
+    private final List<CellRange> ranges;
 
-    public MathCalculator(SpreadSheetModel model) {
+    public ExpressionCalculator(SpreadSheetModel model) {
         pointers = new ArrayList<>();
+        ranges = new ArrayList<>();
         this.model = model;
-    }
-
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        String expression = scanner.nextLine();
-        MathCalculator mathCalculator = new MathCalculator(new SpreadSheetModel(10, 10));
-        double d = mathCalculator.calculate(expression);
-        System.out.println(d);
     }
 
     public double calculate(String expression) {
         lexer = new Lexer(expression.toUpperCase(), model);
         pointers.clear();
+        ranges.clear();
         lexeme = lexer.nextLexem();
         return expression();
     }
@@ -55,6 +50,11 @@ public class MathCalculator implements Calculator {
 
     public void reset() {
         pointers.clear();
+        ranges.clear();
+    }
+
+    public List<CellRange> getRanges() {
+        return ranges;
     }
 
     private double composed() {
@@ -89,7 +89,13 @@ public class MathCalculator implements Calculator {
     private double multiplier() {
         Lexeme tempLexeme = lexeme;
         switch (lexeme.getType()) {
-            case C: {
+            case AGGREGATE_FUNCTION: {
+                CellRange range = lexer.getRange();
+                ranges.add(range);
+                AggregateFunction function = lexer.getFunction();
+                lexeme = lexer.nextLexem();
+                return function.calculate(range, model);
+            } case CELL_POINTER: {
                 CellPointer pointer = lexer.getCellPointer();
                 pointers.add(pointer);
                 lexeme = lexer.nextLexem();

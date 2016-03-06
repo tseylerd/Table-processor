@@ -1,5 +1,6 @@
 package ui.table;
 
+import cells.CellValue;
 import ui.text.EditorTextField;
 
 import javax.swing.*;

@@ -1,5 +1,7 @@
 package ui.table;
 
+import cells.CellValue;
+
 import javax.swing.table.DefaultTableCellRenderer;
 
 /**

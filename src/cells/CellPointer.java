@@ -1,4 +1,4 @@
-package ui.util;
+package cells;
 
 /**
  * @author Dmitriy Tseyler

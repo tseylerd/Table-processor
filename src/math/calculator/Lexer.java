@@ -1,8 +1,9 @@
 package math.calculator;
 
 import ui.table.SpreadSheetModel;
-import ui.util.CellPointer;
-import ui.util.Util;
+import cells.CellPointer;
+import cells.CellRange;
+import util.Util;
 
 /**
  * @author Dmitriy Tseyler
@@ -13,6 +14,8 @@ public class Lexer {
     private String number;
     private final SpreadSheetModel model;
     private CellPointer cellPointer;
+    private CellRange range;
+    private AggregateFunction function;
 
     public Lexer(String expression, SpreadSheetModel model){
         this.model = model;
@@ -35,29 +38,65 @@ public class Lexer {
                     else break;
                 }
             } else if (lexeme == Lexeme.CELL) {
-                flow = expression.charAt(++pointer);
-                String column = "";
-                String row = "";
-                while (Character.isAlphabetic(flow)) {
-                    column += flow;
-                    flow = expression.charAt(++pointer);
-                }
-                while (Character.isDigit(flow)) {
-                    row += flow;
-                    if (pointer + 1 < expression.length()) {
-                        flow = expression.charAt(++pointer);
-                    } else {
-                        pointer++;
-                        break;
-                    }
-                }
-                cellPointer = new CellPointer(Integer.parseInt(row), Util.getColumnFromString(column));
+                pointer++;
+                cellPointer = readCellPointer();
+            } else if (lexeme == Lexeme.AMPERSAND) {
+                pointer++;
+                String function = readLiteral();
+                pointer++;
+                pointer++;
+                CellPointer begin = readCellPointer();
+                pointer++;
+                pointer++;
+                CellPointer end = readCellPointer();
+                range = new CellRange(begin, end);
+                this.function = AggregateFunction.getFunction(function);
+                pointer++;
+                return lexeme;
             } else {
                 pointer += lexeme.getOffset();
             }
             return lexeme;
         }
         return null;
+    }
+
+    public CellRange getRange() {
+        return range;
+    }
+
+    public AggregateFunction getFunction() {
+        return function;
+    }
+
+    private CellPointer readCellPointer() {
+        char flow = expression.charAt(pointer);
+        StringBuilder column = new StringBuilder();
+        StringBuilder row = new StringBuilder();
+        while (Character.isAlphabetic(flow)) {
+            column.append(flow);
+            flow = expression.charAt(++pointer);
+        }
+        while (Character.isDigit(flow)) {
+            row.append(flow);
+            if (pointer + 1 < expression.length()) {
+                flow = expression.charAt(++pointer);
+            } else {
+                pointer++;
+                break;
+            }
+        }
+        return new CellPointer(Integer.parseInt(row.toString()), Util.getColumnFromString(column.toString()));
+    }
+
+    private String readLiteral() {
+        char flow = expression.charAt(pointer);
+        StringBuilder builder = new StringBuilder();
+        while (Character.isAlphabetic(flow) && pointer + 1 < expression.length()) {
+            builder.append(flow);
+            flow = expression.charAt(++pointer);
+        }
+        return builder.toString();
     }
 
     public CellPointer getCellPointer() {

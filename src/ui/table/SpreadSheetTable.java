@@ -1,5 +1,7 @@
 package ui.table;
 
+import cells.CellValue;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -17,7 +19,7 @@ public class SpreadSheetTable extends JTable {
         setDefaultRenderer(CellValue.class, new SpreadSheetRenderer());
         setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         setAutoResizeMode(AUTO_RESIZE_OFF);
-        setGridColor(Color.BLACK);
+        setGridColor(Color.GRAY);
     }
 
     public SpreadSheetTable(int rowCount, int columnCount) {

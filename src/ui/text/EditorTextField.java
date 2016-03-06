@@ -1,6 +1,6 @@
 package ui.text;
 
-import ui.table.CellValue;
+import cells.CellValue;
 
 import javax.swing.*;
 

@@ -1,4 +1,4 @@
-package ui.table;
+package cells;
 
 /**
  * @author Dmitriy Tseyler

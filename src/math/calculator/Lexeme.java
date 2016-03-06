@@ -6,8 +6,10 @@ package math.calculator;
 public enum Lexeme {
     FUNC(),
     NUMBERS(),
-    C,
-    CELL(C, '@', 1),
+    AGGREGATE_FUNCTION,
+    CELL_POINTER,
+    AMPERSAND(AGGREGATE_FUNCTION, '&', 1),
+    CELL(CELL_POINTER, '@', 1),
     CLOSE(null,')',1),
     COS (FUNC,'C', 4){
         @Override

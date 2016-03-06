@@ -1,9 +1,11 @@
 package ui.table;
 
-import math.calculator.Calculator;
-import math.calculator.MathCalculator;
-import ui.util.CellPointer;
-import ui.util.Util;
+import cells.CellValue;
+import cells.CellsModel;
+import math.calculator.ExpressionCalculator;
+import cells.CellPointer;
+import cells.CellRange;
+import util.Util;
 
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
@@ -19,7 +21,7 @@ public class SpreadSheetModel implements TableModel {
     private final List<TableModelListener> tableModelListeners;
     private final CellValue[][] values; //// TODO: 06.03.16 Variable length of rows and columns
     private final CellsModel cellsModel; // TODO: 06.03.16 Should be one model for cells
-    private final Calculator calculator;
+    private final ExpressionCalculator calculator;
 
     private int rowCount;
     private int columnCount;
@@ -28,7 +30,7 @@ public class SpreadSheetModel implements TableModel {
         rowCount++;
         columnCount++;
         cellsModel = new CellsModel(this);
-        calculator = new MathCalculator(this);
+        calculator = new ExpressionCalculator(this);
         values = new CellValue[rowCount][columnCount];
         for (int i = 0; i < rowCount; i++) {
             values[i][0] = new CellValue(String.valueOf(i));
@@ -75,9 +77,13 @@ public class SpreadSheetModel implements TableModel {
         cellValue.setValue(eval);
         cellValue.setExpression(cellValue.getEditorValue());
         values[rowIndex][columnIndex] = (cellValue);
-        List<CellPointer> pointers = ((MathCalculator)calculator).getPointers();
+        List<CellPointer> pointers = ((ExpressionCalculator)calculator).getPointers();
         if (!pointers.isEmpty()) {
-            cellsModel.subscribe(new CellPointer(rowIndex, columnIndex), ((MathCalculator) calculator).getPointers().toArray(new CellPointer[]{}));
+            cellsModel.subscribe(new CellPointer(rowIndex, columnIndex), pointers.toArray(new CellPointer[pointers.size()]));
+        }
+        List<CellRange> ranges = ((ExpressionCalculator)calculator).getRanges();
+        if (!ranges.isEmpty()) {
+            cellsModel.subscribe(new CellPointer(rowIndex, columnIndex), ranges.toArray(new CellRange[ranges.size()]));
         }
         cellsModel.cellChanged(new CellPointer(rowIndex, columnIndex));
         //fireTableModelListeners();
@@ -85,9 +91,9 @@ public class SpreadSheetModel implements TableModel {
 
     private String evaluate(String s) {
         if (!s.isEmpty() && s.charAt(0) == '=') {
-            return String.valueOf(calculator.calculate(Util.addCellSymbol(s.replaceFirst("=", ""))));
+            return String.valueOf(calculator.calculate(Util.addSpecialCharacters(s.replaceFirst("=", ""))));
         } else {
-            ((MathCalculator)calculator).reset();
+            ((ExpressionCalculator)calculator).reset();
         }
         return s;
     }
@@ -110,6 +116,11 @@ public class SpreadSheetModel implements TableModel {
 
     private void fireTableModelListeners() {
         tableModelListeners.forEach(tableModelListener -> tableModelListener.tableChanged(null));
+    }
+
+    public double getNumber(int row, int column) {
+        CellValue value = (CellValue) getValueAt(row, column);
+        return Double.parseDouble(value.getRendererValue());
     }
 
     @Override
