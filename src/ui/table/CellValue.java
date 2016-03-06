@@ -28,11 +28,6 @@ public class CellValue {
     }
 
     public void setExpression(String expression) {
-        setValue(evaluate(expression));
         this.expression = expression;
-    }
-
-    private String evaluate(String expression) {
-        return expression;
     }
 }

@@ -4,6 +4,7 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringJoiner;
 
 /**
  * @author Dmitriy Tseyler
@@ -56,8 +57,14 @@ public class SpreadSheetModel implements TableModel {
     @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
         CellValue cellValue = (CellValue)aValue;
+        String eval = evaluate(cellValue.getEditorValue());
+        cellValue.setValue(eval);
         values[rowIndex][columnIndex] = (cellValue);
         fireTableModelListeners();
+    }
+
+    private String evaluate(String s) {
+        return s;
     }
 
     @Override
