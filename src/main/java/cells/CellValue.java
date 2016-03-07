@@ -1,4 +1,4 @@
-package main.java.cells;
+package cells;
 
 /**
  * @author Dmitriy Tseyler
@@ -38,5 +38,15 @@ public class CellValue {
 
     public boolean isErrorState() {
         return errorState;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof CellValue)) {
+            return false;
+        }
+
+        CellValue toCompare = (CellValue)obj;
+        return this.value.equals(toCompare.value) && this.expression.equals(toCompare.expression);
     }
 }

@@ -1,10 +1,10 @@
-package main.java.math.calculator;
+package math.calculator;
 
-import main.java.cells.CellValue;
-import main.java.ui.table.SpreadSheetModel;
-import main.java.cells.CellPointer;
-import main.java.cells.CellRange;
-import main.java.util.Util;
+import cells.CellValue;
+import ui.table.SpreadSheetModel;
+import cells.CellPointer;
+import cells.CellRange;
+import util.Util;
 
 import java.text.ParseException;
 import java.util.HashSet;
@@ -32,7 +32,7 @@ public class ExpressionCalculator {
         try {
             lexer = new Lexer(expression.toUpperCase());
             lexeme = lexer.nextLexem();
-            return expression().toString();
+            return expression().getStringValue();
         } catch (Exception e) {
             throw new ParseException("", 0);
         }

@@ -1,7 +1,7 @@
-package main.java.ui.table;
+package ui.table;
 
-import main.java.cells.CellValue;
-import main.java.ui.text.EditorTextField;
+import cells.CellValue;
+import ui.text.EditorTextField;
 
 import javax.swing.*;
 import java.awt.*;

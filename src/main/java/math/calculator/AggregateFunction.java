@@ -1,8 +1,8 @@
-package main.java.math.calculator;
+package math.calculator;
 
-import main.java.ui.table.SpreadSheetModel;
-import main.java.cells.CellPointer;
-import main.java.cells.CellRange;
+import ui.table.SpreadSheetModel;
+import cells.CellPointer;
+import cells.CellRange;
 
 /**
  * @author Dmitriy Tseyler

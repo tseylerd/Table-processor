@@ -1,4 +1,4 @@
-package main.java.math.calculator;
+package math.calculator;
 
 /**
  * @author Dmitriy Tseyler

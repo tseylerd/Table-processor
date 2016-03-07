@@ -1,6 +1,6 @@
-package main.java.math.calculator;
+package math.calculator;
 
-import main.java.util.Util;
+import util.Util;
 
 /**
  * @author Dmitriy Tseyler

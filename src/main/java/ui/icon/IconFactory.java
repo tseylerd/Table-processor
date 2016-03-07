@@ -1,8 +1,6 @@
-package main.java.ui.icon;
+package ui.icon;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
-import java.io.File;
 import java.util.EnumMap;
 import java.util.Map;
 

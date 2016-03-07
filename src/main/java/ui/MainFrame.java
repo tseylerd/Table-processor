@@ -1,6 +1,6 @@
-package main.java.ui;
+package ui;
 
-import main.java.ui.table.SpreadSheetTable;
+import ui.table.SpreadSheetTable;
 
 import javax.swing.*;
 import java.awt.*;

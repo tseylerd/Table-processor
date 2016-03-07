@@ -1,8 +1,8 @@
-package main.java.math.calculator;
+package math.calculator;
 
-import main.java.cells.CellPointer;
-import main.java.cells.CellRange;
-import main.java.util.Util;
+import cells.CellPointer;
+import cells.CellRange;
+import util.Util;
 
 import java.text.ParseException;
 

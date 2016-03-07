@@ -1,4 +1,4 @@
-package main.java.ui.icon;
+package ui.icon;
 
 /**
  * @author Dmitriy Tseyler
