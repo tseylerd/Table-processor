@@ -85,7 +85,7 @@ public class Lexer {
                 break;
             }
         }
-        return new CellPointer(Integer.parseInt(row.toString()), Util.getColumnFromString(column.toString()));
+        return new CellPointer(Integer.parseInt(row.toString()), Util.indexByColumnName(column.toString()));
     }
 
     private String readLiteral() {

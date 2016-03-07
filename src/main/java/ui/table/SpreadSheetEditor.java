@@ -20,8 +20,9 @@ public class SpreadSheetEditor extends DefaultCellEditor {
     @Override
     public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
         CellValue cellValue = (CellValue)value;
+        Component component = super.getTableCellEditorComponent(table, value, isSelected, row, column);
         field.setValue(cellValue);
-        return field;
+        return component;
     }
 
     @Override

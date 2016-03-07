@@ -18,8 +18,6 @@ import java.util.Set;
  * @author Dmitriy Tseyler
  */
 public class SpreadSheetModel implements TableModel {
-    private static final int ENGLISH_CHARACTERS_COUNT = 26;
-
     private final List<TableModelListener> tableModelListeners;
     private final CellValue[][] values; //// TODO: 06.03.16 Variable length of rows and columns
     private final CellsConnectionModel cellsConnectionModel; // TODO: 06.03.16 Should be one model for cells
@@ -35,7 +33,7 @@ public class SpreadSheetModel implements TableModel {
         calculator = new ExpressionCalculator(this);
         values = new CellValue[rowCount][columnCount];
         for (int i = 0; i < rowCount; i++) {
-            values[i][0] = new CellValue(String.valueOf(i));
+            values[i][0] = new CellValue(String.valueOf(i)); // TODO: 07.03.16 Move row number to ui
         }
         for (int i = 0; i < rowCount; i++) {
             for (int j = 1; j < columnCount; j++) {
@@ -103,18 +101,7 @@ public class SpreadSheetModel implements TableModel {
 
     @Override
     public String getColumnName(int columnIndex) {
-        if (columnIndex == 0) //// TODO: 06.03.16 Cache
-            return "";
-
-        columnIndex--;
-        int count = columnIndex / ENGLISH_CHARACTERS_COUNT;
-        StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < count; i++) {
-            builder.append('A');
-        }
-
-        builder.append((char)((columnIndex % ENGLISH_CHARACTERS_COUNT) + 65));
-        return builder.toString();
+        return Util.columnNameByIndex(columnIndex); //// TODO: 07.03.16 cache
     }
 
     private void fireTableModelListeners() {

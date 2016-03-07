@@ -9,6 +9,11 @@ public class CellPointer {
     private final int row;
     private final int column;
 
+    public CellPointer(CellPointer pointer, int rowOffset, int columnOffset) {
+        this.row = pointer.row + rowOffset;
+        this.column = pointer.column + columnOffset;
+    }
+
     public CellPointer(int row, int column) {
         this.row = row;
         this.column = column;

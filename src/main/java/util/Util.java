@@ -10,7 +10,8 @@ import java.util.regex.Pattern;
  * @author Dmitriy Tseyler
  */
 public class Util {
-    private static final Pattern CELL_PATTERN =  Pattern.compile("[A-Z]+\\d+");
+    private static final int ENGLISH_CHARACTERS_COUNT = 26;
+    private static final Pattern CELL_PATTERN =  Pattern.compile("[A-Z]+\\d+"); // TODO: 07.03.16 remove
     private static final Pattern AGGREGATE_FUNCTION_PATTERN;
 
     static {
@@ -42,6 +43,27 @@ public class Util {
         while (matcher.find()) {
             String group = matcher.group();
             result = result.replace(group, "&" + group);
+        }
+        return result;
+    }
+
+    public static String columnNameByIndex(int column) {
+        int dividend = column;
+        StringBuilder builder = new StringBuilder();
+
+        while (dividend > 0) {
+            int mod = (dividend - 1) % 26;
+            builder.insert(0, (char)(65 + mod));
+            dividend = (dividend - mod) / 26;
+        }
+
+        return builder.toString();
+    }
+
+    public static int indexByColumnName(String columnName) {
+        int result = 0;
+        for (int i = 0; i < columnName.length(); i++) {
+            result = result * 26 + columnName.charAt(i) - 'A' + 1;
         }
         return result;
     }
