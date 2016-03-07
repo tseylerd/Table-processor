@@ -1,4 +1,4 @@
-package math.calculator;
+package math.calculator.Lexer;
 
 import util.Util;
 

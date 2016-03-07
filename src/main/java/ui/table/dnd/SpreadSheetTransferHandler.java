@@ -1,11 +1,11 @@
-package ui.table;
+package ui.table.dnd;
 
 import cells.CellPointer;
 import cells.CellRange;
 import cells.CellValue;
+import ui.table.SpreadSheetTable;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;

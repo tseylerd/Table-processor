@@ -2,6 +2,7 @@ package ui.table;
 
 import cells.CellPointer;
 import cells.CellValue;
+import ui.table.dnd.SpreadSheetTransferHandler;
 
 import javax.swing.*;
 import java.awt.*;

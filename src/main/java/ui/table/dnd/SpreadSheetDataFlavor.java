@@ -1,4 +1,4 @@
-package ui.table;
+package ui.table.dnd;
 
 import cells.CellRange;
 

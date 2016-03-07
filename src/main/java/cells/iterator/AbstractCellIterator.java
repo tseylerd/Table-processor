@@ -1,4 +1,7 @@
-package cells;
+package cells.iterator;
+
+import cells.CellPointer;
+import cells.CellRange;
 
 import java.util.Iterator;
 

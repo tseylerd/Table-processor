@@ -1,6 +1,8 @@
 package cells;
 
-import ui.table.SpreadSheetDataFlavor;
+import cells.iterator.CellIterator;
+import cells.iterator.InverseCellIterator;
+import ui.table.dnd.SpreadSheetDataFlavor;
 
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;

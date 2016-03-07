@@ -1,6 +1,9 @@
 package math.calculator;
 
 import cells.CellValue;
+import math.calculator.Lexer.Lexeme;
+import math.calculator.Lexer.Lexer;
+import math.calculator.Lexer.LexerValue;
 import ui.table.SpreadSheetModel;
 import cells.CellPointer;
 import cells.CellRange;

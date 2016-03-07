@@ -1,7 +1,6 @@
 package util;
 
-import math.calculator.AggregateFunction;
-import math.calculator.LexerValue;
+import math.calculator.Lexer.LexerValue;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
