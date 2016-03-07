@@ -1,5 +1,7 @@
 package util;
 
+import cells.CellPointer;
+import cells.CellValue;
 import math.calculator.Lexer.LexerValue;
 
 import java.util.regex.Matcher;
@@ -10,16 +12,39 @@ import java.util.regex.Pattern;
  */
 public class Util {
     private static final int ENGLISH_CHARACTERS_COUNT = 26;
-    private static final Pattern CELL_PATTERN =  Pattern.compile("[A-Z]+\\d+"); // TODO: 07.03.16 remove
+    private static final Pattern CELL_PATTERN =  Pattern.compile("[A-Z]+\\d+");
 
-    public static String addSpecialCharacters(String expression) { // TODO: 06.03.16 More effective
-        String result = expression;
-        Matcher matcher = CELL_PATTERN.matcher(expression);
+    public static void move(CellValue value, int rowOffset, int columnOffset) { // TODO: 07.03.16 build and not replace;
+        String expression = value.getEditorValue();
+        Matcher matcher = CELL_PATTERN.matcher(value.getEditorValue());
         while (matcher.find()) {
             String group = matcher.group();
-            result = result.replace(group, "@" + group);
+            CellPointer pointer = readCellPointer(group);
+            CellPointer newPointer = new CellPointer(pointer, rowOffset, columnOffset);
+            expression = expression.replace(group, newPointer.toString());
         }
-        return result;
+        value.setExpression(expression);
+    }
+
+    private static CellPointer readCellPointer(String full) {
+        if (full.isEmpty()) {
+            return null;
+        }
+
+        int index = 0;
+        StringBuilder column = new StringBuilder();
+        StringBuilder row = new StringBuilder();
+        while (index < full.length() && Character.isLetter(full.charAt(index))) {
+            column.append(full.charAt(index));
+            index++;
+        }
+        while (index < full.length() && Character.isDigit(full.charAt(index))) {
+            row.append(full.charAt(index));
+            index++;
+        }
+        int rowIndex = Integer.parseInt(row.toString());
+        int colIndex = indexByColumnName(column.toString());
+        return new CellPointer(rowIndex, colIndex);
     }
 
     public static String columnNameByIndex(int column) {

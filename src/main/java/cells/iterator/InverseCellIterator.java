@@ -8,7 +8,7 @@ import cells.CellRange;
  */
 public class InverseCellIterator extends AbstractCellIterator {
 
-    InverseCellIterator(CellRange range) {
+    public InverseCellIterator(CellRange range) {
         super(range);
     }
 

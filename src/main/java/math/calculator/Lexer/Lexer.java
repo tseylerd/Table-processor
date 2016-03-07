@@ -117,6 +117,7 @@ public class Lexer {
         }
         return builder.toString();
     }
+
     public CellPointer getCellPointer() {
         return cellPointer;
     }

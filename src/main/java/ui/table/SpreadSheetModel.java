@@ -73,7 +73,7 @@ public class SpreadSheetModel implements TableModel {
     }
 
     @Override
-    public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+    public void setValueAt(Object aValue, int rowIndex, int columnIndex) { // TODO: 07.03.16 Cyclic references
         CellValue cellValue = (CellValue)aValue;
         try {
             String eval = evaluate(cellValue.getEditorValue());

@@ -1,5 +1,7 @@
 package cells;
 
+import util.Util;
+
 /**
  * @author Dmitriy Tseyler
  */
@@ -39,5 +41,10 @@ public class CellPointer {
 
         CellPointer toCompare = (CellPointer)obj;
         return toCompare.column == column && toCompare.row == row;
+    }
+
+    @Override
+    public String toString() {
+        return Util.columnNameByIndex(column) + row;
     }
 }

@@ -1,14 +1,11 @@
 package cells;
 
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.Transferable;
-import java.awt.datatransfer.UnsupportedFlavorException;
-import java.io.IOException;
-
 /**
  * @author Dmitriy Tseyler
  */
-public class CellValue implements Transferable {
+public class CellValue {
+    private static final int MULTIPLIER = 31;
+
     private String value;
     private String expression;
     private boolean errorState;
@@ -60,22 +57,8 @@ public class CellValue implements Transferable {
         return this.value.equals(toCompare.value) && this.expression.equals(toCompare.expression);
     }
 
-    /* ================== Transferable ================== */
-
     @Override
-    public boolean isDataFlavorSupported(DataFlavor flavor) {
-        return true;
-    }
-
-    @Override
-    public DataFlavor[] getTransferDataFlavors() {
-        DataFlavor[] flavors = new DataFlavor[1];
-        flavors[0] = new DataFlavor(this.getClass(), getRendererValue());
-        return flavors;
-    }
-
-    @Override
-    public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException {
-        return this;
+    public int hashCode() {
+        return value.hashCode() * MULTIPLIER + expression.hashCode() * MULTIPLIER * MULTIPLIER;
     }
 }

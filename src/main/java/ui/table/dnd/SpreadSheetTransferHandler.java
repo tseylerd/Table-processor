@@ -4,6 +4,7 @@ import cells.CellPointer;
 import cells.CellRange;
 import cells.CellValue;
 import ui.table.SpreadSheetTable;
+import util.Util;
 
 import javax.swing.*;
 import java.awt.datatransfer.DataFlavor;
@@ -33,7 +34,6 @@ public class SpreadSheetTransferHandler extends TransferHandler {
 
     @Override
     protected Transferable createTransferable(JComponent c) {
-        SpreadSheetTable table = (SpreadSheetTable)c;
         int[] rows = table.getSelectedRows();
         int[] columns = table.getSelectedColumns();
         CellPointer begin = new CellPointer(rows[0], columns[0]);
@@ -49,7 +49,6 @@ public class SpreadSheetTransferHandler extends TransferHandler {
 
     @Override
     public boolean importData(TransferSupport support) {
-        SpreadSheetTable table = (SpreadSheetTable)support.getComponent();
         int row = table.getSelectedRow();
         int column = table.getSelectedColumn();
         try{
@@ -83,6 +82,7 @@ public class SpreadSheetTransferHandler extends TransferHandler {
             CellValue value = table.getValueAt(pointer);
             CellPointer newPointer = new CellPointer(pointer, rowOffset, columnOffset);
             table.setValueAt(new CellValue(), pointer);
+            Util.move(value, rowOffset, columnOffset);
             table.setValueAt(value, newPointer);
         }
     }
