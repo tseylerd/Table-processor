@@ -106,11 +106,11 @@ public class ExpressionCalculator {
                 lexeme = lexer.nextLexem();
                 CellValue value = (CellValue)model.getValueAt(pointer.getRow(), pointer.getColumn());
                 return new LexerValue(value.getRendererValue());
-            } case NUMBERS: {
+            } case NUMBER: {
                 String num = lexer.getNumber();
                 lexeme = lexer.nextLexem();
                 return new LexerValue(num);
-            } case FUNC:{
+            } case FUNCTION:{
                 lexeme = lexer.nextLexem();
                 LexerValue result = tempLexeme.getResult(expression());
                 lexeme = lexer.nextLexem();

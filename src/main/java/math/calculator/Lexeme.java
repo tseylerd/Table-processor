@@ -6,66 +6,60 @@ import util.Util;
  * @author Dmitriy Tseyler
  */
 public enum Lexeme {
-    FUNC(),
-    NUMBERS(),
-    AGGREGATE_FUNCTION,
-    CELL_POINTER,
-    AMPERSAND(AGGREGATE_FUNCTION, '&', 1),
-    CELL(CELL_POINTER, '@', 1),
+    AMPERSAND(LexemeType.AGGREGATE_FUNCTION, '&', 1),
+    CELL(LexemeType.CELL_POINTER, '@', 1),
     CLOSE(null,')',1),
-    COS (FUNC,'C', 4){
+    COS (LexemeType.FUNCTION,'C', 4){
         @Override
         public LexerValue getResult(LexerValue value) {
             return Util.cos(value);
         }
     },
-    SIN (FUNC,'S',4){
+    SIN (LexemeType.FUNCTION,'S',4){
         @Override
         public LexerValue getResult(LexerValue value) {
             return Util.sin(value);
         }
     },
-    NUM (NUMBERS, '0', 0),
-    OPEN(FUNC, '(',1),
+    NUM (LexemeType.NUMBER, '0', 0),
+    OPEN(LexemeType.FUNCTION, '(',1),
     POW(null, '^',1),
-    OPERATION,
-    PLUS(OPERATION,'+',1),
-    MINUS(OPERATION,'-',1){
+    PLUS(LexemeType.OPERATION,'+',1),
+    MINUS(LexemeType.OPERATION,'-',1){
         @Override
         public LexerValue getResult(LexerValue value){
             return Util.inverse(value);
         }
     },
-    DIV(OPERATION,'/',1){
+    DIV(LexemeType.OPERATION,'/',1){
         @Override
         public LexerValue getResult(LexerValue a, LexerValue b){
             return Util.div(a, b);
         }
     },
-    MULT(OPERATION,'*',1){
+    MULT(LexemeType.OPERATION,'*',1){
         @Override
         public LexerValue getResult(LexerValue a, LexerValue b){
             return Util.multiply(a, b);
         }
     },
-    ABS(FUNC, 'A',4){
+    ABS(LexemeType.OPERATION, 'A',4){
         @Override
         public LexerValue getResult(LexerValue value){
             return Util.abs(value);
         }
     };
+
     private char value;
-    private int pointerPlus=1;
-    private Lexeme type = null;
-    private Lexeme(Lexeme parent, char value, int pointerPlus){
+    private int offset;
+    private LexemeType type = null;
+
+    Lexeme(LexemeType type, char value, int offset){
         this.value = value;
-        this.pointerPlus = pointerPlus;
-        this.type = parent;
+        this.offset = offset;
+        this.type = type;
     }
-    private Lexeme(){
-        this.value = 'R';
-        this.pointerPlus = 0;
-    }
+
     public static Lexeme getLexem(char value) {
         if (Character.isDigit(value)) {
             return NUM;
@@ -77,11 +71,11 @@ public enum Lexeme {
         }
         return null;
     }
-    public Lexeme getType(){
+    public LexemeType getType(){
         return type;
     }
     public int getOffset(){
-        return pointerPlus;
+        return offset;
     }
     public LexerValue getResult(LexerValue value){
         return value;
