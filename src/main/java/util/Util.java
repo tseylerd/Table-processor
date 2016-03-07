@@ -12,25 +12,6 @@ import java.util.regex.Pattern;
 public class Util {
     private static final int ENGLISH_CHARACTERS_COUNT = 26;
     private static final Pattern CELL_PATTERN =  Pattern.compile("[A-Z]+\\d+"); // TODO: 07.03.16 remove
-    private static final Pattern AGGREGATE_FUNCTION_PATTERN;
-
-    static {
-        StringBuilder builder = new StringBuilder();
-        builder.append('(');
-        AggregateFunction[] functions = AggregateFunction.values();
-        for (int i = 0; i < functions.length; i++) {
-            if (i > 0) {
-                builder.append("|");
-            }
-            builder.append(functions[i].getName());
-        }
-        builder.append(')');
-        AGGREGATE_FUNCTION_PATTERN = Pattern.compile(builder.toString());
-    }
-
-    public static int getColumnFromString(String column) {
-        return 1; //// TODO: 06.03.16
-    }
 
     public static String addSpecialCharacters(String expression) { // TODO: 06.03.16 More effective
         String result = expression;
@@ -38,11 +19,6 @@ public class Util {
         while (matcher.find()) {
             String group = matcher.group();
             result = result.replace(group, "@" + group);
-        }
-        matcher = AGGREGATE_FUNCTION_PATTERN.matcher(expression);
-        while (matcher.find()) {
-            String group = matcher.group();
-            result = result.replace(group, "&" + group);
         }
         return result;
     }

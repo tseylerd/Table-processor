@@ -3,12 +3,11 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.text.ParseException;
 
 /**
  * @author Dmitriy Tseyler
  */
-public class CalculatorTest {
+public class CalculatorTest extends AbstractExpressionTest {
     private ExpressionCalculator calculator;
 
     @Before
@@ -16,9 +15,8 @@ public class CalculatorTest {
         calculator = new ExpressionCalculator(null);
     }
 
-    private void test(String expression, double result) throws Exception {
-        double calculatorResult = Double.parseDouble(calculator.calculate(expression));
-        Assert.assertTrue(Double.compare(calculatorResult, result) == 0);
+    private String calculate(String expression) throws Exception {
+        return calculator.calculate(expression);
     }
 
     @Test
@@ -32,29 +30,36 @@ public class CalculatorTest {
     public void testAdditionAndSubstitution() throws Exception {
         String expression = "1+2+3+4+5+6+(2+1)";
         double result = 1+2+3+4+5+6+(2+1);
-        test(expression, result);
+        test(calculate(expression), result);
 
         expression = "1-2-3";
         result = 1 - 2 - 3;
-        test(expression, result);
+        test(calculate(expression), result);
     }
 
     @Test
     public void testMultiplyDivision() throws Exception {
         String expression = " 2 * 3 * 4 * 5";
         double result = 2 * 3 * 4 * 5;
-        test(expression, result);
+        test(calculate(expression), result);
 
         expression = "1/5/4";
         result = 1. / 5. / 4.;
-        test(expression, result);
+        test(calculate(expression), result);
     }
 
     @Test
     public void testPower() throws Exception {
         String expression = "3^5";
         double result = Math.pow(3, 5);
-        test(expression, result);
+        test(calculate(expression), result);
+    }
+
+    @Test
+    public void testBraces() throws Exception {
+        String expression = "(1+452+(600+4)*2^5/10)*50";
+        double result = (1+452+(600+4)*Math.pow(2, 5)/10)*50;
+        test(calculate(expression), result);
     }
 
 }

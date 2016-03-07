@@ -32,11 +32,6 @@ public class SpreadSheetTransferHandler extends TransferHandler {
     }
 
     @Override
-    protected void exportDone(JComponent source, Transferable data, int action) {
-        super.exportDone(source, data, action);
-    }
-
-    @Override
     protected Transferable createTransferable(JComponent c) {
         SpreadSheetTable table = (SpreadSheetTable)c;
         int[] rows = table.getSelectedRows();
@@ -49,7 +44,7 @@ public class SpreadSheetTransferHandler extends TransferHandler {
 
     @Override
     public boolean canImport(JComponent comp, DataFlavor[] transferFlavors) {
-        return true;
+        return true; //// TODO: 07.03.16 What the ...
     }
 
     @Override
@@ -62,12 +57,13 @@ public class SpreadSheetTransferHandler extends TransferHandler {
             processRangeImport(range, row, column);
         } catch (IOException | UnsupportedFlavorException e) {
             logger.warning("Can't import data. " + e.getMessage());
+            return false;
         }
         table.repaint(50);
-        return super.importData(support) || true;
+        return true;
     }
 
-    private void processRangeImport(CellRange range, int selectedRow, int selectedColumn) { // TODO: 07.03.16 Cross ranges
+    private void processRangeImport(CellRange range, int selectedRow, int selectedColumn) {
         int rowOffset =  selectedRow - beginPointer.getRow();
         int columnOffset = selectedColumn - beginPointer.getColumn();
         Iterator<CellPointer> iterator;

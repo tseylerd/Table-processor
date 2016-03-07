@@ -7,7 +7,7 @@ import ui.table.SpreadSheetModel;
 /**
  * @author Dmitriy Tseyler
  */
-public class SpreadSheetModelTest {
+public class SpreadSheetModelTest extends AbstractExpressionTest {
     private static final int DEFAULT_ROWS = 40;
     private static final int DEFAULT_COLS = 40;
 
@@ -42,12 +42,29 @@ public class SpreadSheetModelTest {
         sheetModel.setValueAt(value, 3, 1);
 
         CellValue resultCellValue = (CellValue) sheetModel.getValueAt(3, 1);
-        Assert.assertEquals(Double.compare(Double.parseDouble(resultCellValue.getRendererValue()), result), 0);
+        test(resultCellValue.getRendererValue(), result);
 
         CellValue value11New = new CellValue();
         value11New.setExpression("50");
         result = 50./20 + 3 + 5 + 42;
         sheetModel.setValueAt(value11New, 1, 1);
-        Assert.assertEquals(Double.compare(Double.parseDouble(resultCellValue.getRendererValue()), result), 0);
+        test(resultCellValue.getRendererValue(), result);
+    }
+
+    @Test
+    public void testRange() {
+        String expression = "=SUM(A1:A2)";
+        double result = 32 + 54;
+        CellValue value = new CellValue(expression);
+        CellValue valueA1 = new CellValue("32");
+        CellValue valueA2 = new CellValue("54");
+        sheetModel.setValueAt(value, 3, 1);
+
+        Assert.assertTrue(((CellValue)sheetModel.getValueAt(3, 1)).isErrorState());
+
+        sheetModel.setValueAt(valueA1, 1, 1);
+        sheetModel.setValueAt(valueA2, 2, 1);
+        CellValue resultValue = (CellValue) sheetModel.getValueAt(3, 1);
+        test(resultValue.getRendererValue(), result);
     }
 }

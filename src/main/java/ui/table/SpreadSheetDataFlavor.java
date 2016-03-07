@@ -9,7 +9,7 @@ import java.awt.datatransfer.DataFlavor;
  */
 public class SpreadSheetDataFlavor extends DataFlavor {
 
-    private static SpreadSheetDataFlavor instance;
+    private static SpreadSheetDataFlavor instance; // TODO: 07.03.16 what the
 
     private SpreadSheetDataFlavor() {
         super(CellRange.class, "Range");

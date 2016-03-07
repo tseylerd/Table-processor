@@ -8,7 +8,7 @@ import cells.CellRange;
  * @author Dmitriy Tseyler
  */
 public enum AggregateFunction {
-    SUM("SUM") {
+    SUM(Lexeme.SUM) {
         @Override
         public LexerValue calculate(CellRange range, SpreadSheetModel model) {
             double result = 0;
@@ -17,7 +17,7 @@ public enum AggregateFunction {
             }
             return new LexerValue(result);
         }
-    }, MEAN("MEAN") {
+    }, MEAN(Lexeme.MEAN) {
         @Override
         public LexerValue calculate(CellRange range, SpreadSheetModel model) {
             double result = 0;
@@ -31,19 +31,15 @@ public enum AggregateFunction {
         }
     };
 
-    private final String name;
+    private final Lexeme lexeme;
 
-    AggregateFunction(String name) {
-        this.name = name;
+    AggregateFunction(Lexeme lexeme) {
+        this.lexeme = lexeme;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public static AggregateFunction getFunction(String name) {
+    public static AggregateFunction getFunction(Lexeme lexeme) {
         for (AggregateFunction aggregateFunction : AggregateFunction.values()) {
-            if (aggregateFunction.name.equals(name))
+            if (aggregateFunction.lexeme == lexeme)
                 return aggregateFunction;
         }
         throw new IllegalArgumentException();

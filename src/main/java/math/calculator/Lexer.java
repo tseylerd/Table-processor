@@ -23,37 +23,58 @@ public class Lexer {
         number = "";
     }
 
+    private boolean notEnd() {
+        return pointer < expression.length();
+    }
+
+    private char currentChar() {
+        return expression.charAt(pointer);
+    }
+
+    private void incrementPointer() {
+        pointer++;
+    }
+
+    private boolean needReadDigit(StringBuilder builder) {
+        char current = currentChar();
+        return Character.isDigit(current) ||
+                current == '.' ||
+                current == 'E' ||
+                !(builder.length() == 0) && builder.charAt(builder.length() - 1) == 'E' && (current == '-' || current == '+');
+    }
+
     public Lexeme nextLexem() throws ParseException {
-        if (pointer < expression.length()){
-            char flow = expression.charAt(pointer);
-            Lexeme lexeme = Lexeme.getLexem(flow);
-            if (lexeme == Lexeme.NUM){
-                number = "";
-                while (Character.isDigit(flow) || flow=='.'|| flow == 'E' || number.charAt(number.length()-1) =='E' && (flow == '-' || flow=='+')) {
-                    number += flow;
-                    pointer++;
-                    if (pointer < expression.length())
-                        flow = expression.charAt(pointer);
-                    else break;
-                }
-            } else if (lexeme == Lexeme.CELL) {
-                pointer++;
-                cellPointer = readCellPointer();
-            } else if (lexeme == Lexeme.AMPERSAND) {
-                pointer++;
-                String function = readLiteral();
-                pointer++;
-                pointer++;
+        if (pointer < expression.length()) {
+            StringBuilder builder = new StringBuilder();
+            while (notEnd() && needReadDigit(builder)) {
+                builder.append(currentChar());
+                incrementPointer();
+            }
+            if (builder.length() > 0) {
+                number = builder.toString();
+                return Lexeme.NUM;
+            }
+            while (notEnd() && Character.isAlphabetic(currentChar())) {
+                builder.append(currentChar());
+                incrementPointer();
+            }
+            if (notEnd() && Character.isDigit(currentChar())) {
+                cellPointer = readCellPointer(builder.toString());
+                return Lexeme.CELL;
+            }
+            Lexeme lexeme = Lexeme.getLexem(builder.toString());
+            while (lexeme == null && notEnd()) {
+                builder.append(currentChar());
+                incrementPointer();
+                lexeme = Lexeme.getLexem(builder.toString());
+            }
+            if (lexeme.getType() == LexemeType.AGGREGATE_FUNCTION) {
+                incrementPointer();
                 CellPointer begin = readCellPointer();
-                pointer++;
-                pointer++;
+                incrementPointer();
                 CellPointer end = readCellPointer();
                 range = new CellRange(begin, end);
-                this.function = AggregateFunction.getFunction(function);
-                pointer++;
-                return lexeme;
-            } else {
-                pointer += lexeme.getOffset();
+                function = AggregateFunction.getFunction(lexeme);
             }
             return lexeme;
         }
@@ -68,36 +89,33 @@ public class Lexer {
         return function;
     }
 
+    private CellPointer readCellPointer(String column) {
+        return new CellPointer(Integer.parseInt(readNumber()), Util.indexByColumnName(column));
+    }
+
     private CellPointer readCellPointer() {
-        char flow = expression.charAt(pointer);
-        StringBuilder column = new StringBuilder();
-        StringBuilder row = new StringBuilder();
-        while (Character.isAlphabetic(flow)) {
-            column.append(flow);
-            flow = expression.charAt(++pointer);
-        }
-        while (Character.isDigit(flow)) {
-            row.append(flow);
-            if (pointer + 1 < expression.length()) {
-                flow = expression.charAt(++pointer);
-            } else {
-                pointer++;
-                break;
-            }
-        }
-        return new CellPointer(Integer.parseInt(row.toString()), Util.indexByColumnName(column.toString()));
+        String column = readLiteral();
+        String row = readNumber();
+        return new CellPointer(Integer.parseInt(row), Util.indexByColumnName(column));
     }
 
     private String readLiteral() {
-        char flow = expression.charAt(pointer);
         StringBuilder builder = new StringBuilder();
-        while (Character.isAlphabetic(flow) && pointer + 1 < expression.length()) {
-            builder.append(flow);
-            flow = expression.charAt(++pointer);
+        while (notEnd() && Character.isAlphabetic(currentChar())) {
+            builder.append(currentChar());
+            incrementPointer();
         }
         return builder.toString();
     }
 
+    private String readNumber() {
+        StringBuilder builder = new StringBuilder();
+        while (notEnd() && Character.isDigit(currentChar())) {
+            builder.append(currentChar());
+            incrementPointer();
+        }
+        return builder.toString();
+    }
     public CellPointer getCellPointer() {
         return cellPointer;
     }

@@ -17,8 +17,8 @@ public class CellValue implements Transferable {
         this("");
     }
 
-    public CellValue(String value) {
-        this(value, "");
+    public CellValue(String expression) {
+        this(expression, expression);
     }
 
     public CellValue(String value, String expression) {

@@ -80,10 +80,10 @@ public class SpreadSheetModel implements TableModel {
             cellValue.setValue(eval);
             cellValue.setExpression(cellValue.getEditorValue());
             cellValue.setErrorState(false);
-            values[rowIndex][columnIndex] = cellValue;
         } catch (ParseException e) {
             cellValue.setErrorState(true);
         }
+        values[rowIndex][columnIndex] = cellValue;
         Set<CellPointer> pointers = calculator.getPointers();
         Set<CellRange> ranges = calculator.getRanges();
         CellPointer pointer = new CellPointer(rowIndex, columnIndex);
@@ -94,7 +94,7 @@ public class SpreadSheetModel implements TableModel {
     private String evaluate(String s) throws ParseException {
         calculator.reset();
         if (s != null && !s.isEmpty() && s.charAt(0) == '=') {
-            return calculator.calculate(Util.addSpecialCharacters(s.substring(1)));
+            return calculator.calculate(s.substring(1));
         }
         return s;
     }
