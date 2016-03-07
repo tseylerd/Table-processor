@@ -16,14 +16,19 @@ public class Util {
 
     public static void move(CellValue value, int rowOffset, int columnOffset) { // TODO: 07.03.16 build and not replace;
         String expression = value.getEditorValue();
+        StringBuilder movedValue = new StringBuilder();
         Matcher matcher = CELL_PATTERN.matcher(value.getEditorValue());
+        int beginIndex = 0;
         while (matcher.find()) {
             String group = matcher.group();
             CellPointer pointer = readCellPointer(group);
             CellPointer newPointer = new CellPointer(pointer, rowOffset, columnOffset);
-            expression = expression.replace(group, newPointer.toString());
+            movedValue.append(expression.substring(beginIndex, matcher.start()));
+            movedValue.append(newPointer);
+            beginIndex = matcher.end();
         }
-        value.setExpression(expression);
+        movedValue.append(expression.substring(beginIndex, expression.length()));
+        value.setExpression(movedValue.toString());
     }
 
     private static CellPointer readCellPointer(String full) {
@@ -52,9 +57,9 @@ public class Util {
         StringBuilder builder = new StringBuilder();
 
         while (dividend > 0) {
-            int mod = (dividend - 1) % 26;
+            int mod = (dividend - 1) % ENGLISH_CHARACTERS_COUNT;
             builder.insert(0, (char)(65 + mod));
-            dividend = (dividend - mod) / 26;
+            dividend = (dividend - mod) / ENGLISH_CHARACTERS_COUNT;
         }
 
         return builder.toString();
@@ -63,7 +68,7 @@ public class Util {
     public static int indexByColumnName(String columnName) {
         int result = 0;
         for (int i = 0; i < columnName.length(); i++) {
-            result = result * 26 + columnName.charAt(i) - 'A' + 1;
+            result = result * ENGLISH_CHARACTERS_COUNT + columnName.charAt(i) - 'A' + 1;
         }
         return result;
     }
