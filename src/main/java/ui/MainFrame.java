@@ -1,5 +1,6 @@
 package ui;
 
+import ui.laf.ProcessorLookAndFeel;
 import ui.table.SpreadSheetTable;
 
 import javax.swing.*;
@@ -23,7 +24,8 @@ public class MainFrame extends JFrame {
         pack();
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws UnsupportedLookAndFeelException {
+        UIManager.setLookAndFeel(new ProcessorLookAndFeel());
         MainFrame frame = new MainFrame();
         SwingUtilities.invokeLater(() -> frame.setVisible(true));
     }

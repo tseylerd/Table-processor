@@ -2,6 +2,7 @@ package ui.table;
 
 import cells.CellPointer;
 import cells.CellValue;
+import ui.laf.GridModel;
 import ui.table.dnd.SpreadSheetTransferHandler;
 
 import javax.swing.*;
@@ -15,6 +16,8 @@ import java.awt.event.MouseEvent;
 public class SpreadSheetTable extends JTable {
     private static final int DEFAULT_ROW_COUNT = 40;
     private static final int DEFAULT_COLUMN_COUNT = 40;
+
+    private final GridModel gridModel;
     private CellPointer pointer;
 
     public SpreadSheetTable() {
@@ -39,12 +42,13 @@ public class SpreadSheetTable extends JTable {
         });
     }
 
-    public CellPointer getPointer() {
-        return pointer;
-    }
-
     public SpreadSheetTable(int rowCount, int columnCount) {
         super(new SpreadSheetModel(rowCount, columnCount));
+        gridModel = new GridModel();
+    }
+
+    public CellPointer getPointer() {
+        return pointer;
     }
 
     public CellValue getValueAt(CellPointer pointer) {
@@ -54,4 +58,13 @@ public class SpreadSheetTable extends JTable {
     public void setValueAt(CellValue value, CellPointer pointer) {
         setValueAt(value, pointer.getRow(), pointer.getColumn());
     }
+
+    public GridModel getGridModel() {
+        return gridModel;
+    }
+
+    //@Override
+    //public int columnAtPoint(Point point) {
+    //    return super.columnAtPoint(point) - 1;
+    //}
 }

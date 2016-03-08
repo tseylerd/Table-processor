@@ -9,6 +9,8 @@ public enum Lexeme {
     SUM(LexemeType.AGGREGATE_FUNCTION, "SUM"),
     MEAN(LexemeType.AGGREGATE_FUNCTION, "MEAN"),
     CELL(LexemeType.CELL_POINTER, "@"),
+    MIN(LexemeType.AGGREGATE_FUNCTION, "MIN"),
+    MAX(LexemeType.AGGREGATE_FUNCTION, "MAX"),
     CLOSE(null,")"),
     COS (LexemeType.FUNCTION,"COS"){
         @Override

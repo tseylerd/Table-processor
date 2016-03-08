@@ -11,7 +11,7 @@ import java.text.ParseException;
  * @author Dmitriy Tseyler
  */
 public class Lexer {
-    private String expression;
+    private final String expression;
     private int pointer;
     private String number;
     private CellPointer cellPointer;

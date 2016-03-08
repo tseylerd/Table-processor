@@ -2,6 +2,7 @@ package math.calculator.Lexer;
 
 /**
  * @author Dmitriy Tseyler
+ * For lazy conversions
  */
 public class LexerValue {
     public static final LexerValue NOTHING = new LexerValue(0);

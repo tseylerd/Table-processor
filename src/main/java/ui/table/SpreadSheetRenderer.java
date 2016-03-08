@@ -12,9 +12,6 @@ public class SpreadSheetRenderer extends DefaultTableCellRenderer {
     @Override
     protected void setValue(Object value) {
         CellValue cellValue = (CellValue)value;
-        if (cellValue.isErrorState()) {
-
-        }
         setText(cellValue.getRendererValue());
     }
 }

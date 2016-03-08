@@ -53,13 +53,12 @@ public class Util {
     }
 
     public static String columnNameByIndex(int column) {
-        int dividend = column;
         StringBuilder builder = new StringBuilder();
 
-        while (dividend > 0) {
-            int mod = (dividend - 1) % ENGLISH_CHARACTERS_COUNT;
+        while (column > 0) {
+            int mod = (column - 1) % ENGLISH_CHARACTERS_COUNT;
             builder.insert(0, (char)(65 + mod));
-            dividend = (dividend - mod) / ENGLISH_CHARACTERS_COUNT;
+            column = (column - mod) / ENGLISH_CHARACTERS_COUNT;
         }
 
         return builder.toString();

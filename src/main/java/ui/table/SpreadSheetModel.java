@@ -88,7 +88,7 @@ public class SpreadSheetModel implements TableModel {
         Set<CellRange> ranges = calculator.getRanges();
         CellPointer pointer = new CellPointer(rowIndex, columnIndex);
         cellsConnectionModel.subscribe(pointer, pointers, ranges);
-        cellsConnectionModel.cellChanged(new CellPointer(rowIndex, columnIndex));
+        cellsConnectionModel.cellChanged(pointer);
     }
 
     private String evaluate(String s) throws ParseException {
@@ -111,6 +111,10 @@ public class SpreadSheetModel implements TableModel {
     public double getNumber(int row, int column) {
         CellValue value = (CellValue) getValueAt(row, column);
         return Double.parseDouble(value.getRendererValue());
+    }
+
+    public double getNumber(CellPointer pointer) {
+        return getNumber(pointer.getRow(), pointer.getColumn());
     }
 
     @Override

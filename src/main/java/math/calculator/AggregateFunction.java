@@ -31,6 +31,30 @@ public enum AggregateFunction {
             result /= count;
             return new LexerValue(result);
         }
+    }, MAX(Lexeme.MAX) {
+        @Override
+        public LexerValue calculate(CellRange range, SpreadSheetModel model) {
+            double max = Double.MIN_VALUE;
+            for (CellPointer pointer : range) {
+                double cellValue = model.getNumber(pointer);
+                if (Double.compare(max, cellValue) < 0) {
+                    max = cellValue;
+                }
+            }
+            return new LexerValue(max);
+        }
+    }, MIN(Lexeme.MIN) {
+        @Override
+        public LexerValue calculate(CellRange range, SpreadSheetModel model) {
+            double min = Double.MAX_VALUE;
+            for (CellPointer pointer : range) {
+                double cellValue = model.getNumber(pointer);
+                if (Double.compare(min, cellValue) > 0) {
+                    min = cellValue;
+                }
+            }
+            return new LexerValue(min);
+        }
     };
 
     private final Lexeme lexeme;
