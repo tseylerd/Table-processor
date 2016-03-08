@@ -71,6 +71,7 @@ public class SpreadSheetUI extends BasicTableUI {
             cMax = table.getColumnCount()-1;
         }
 
+
         // Paint the grid.
         paintGrid(g, rMin, rMax, cMin, cMax);
 
@@ -113,11 +114,10 @@ public class SpreadSheetUI extends BasicTableUI {
             rendererPane.paintComponent(g, component, table, cellRect.x, cellRect.y,
                     cellRect.width, cellRect.height, true);
         }
+
     }
 
     private void paintGrid(Graphics g, int rMin, int rMax, int cMin, int cMax) {
-        g.setColor(Color.BLACK);
-
         Rectangle minCell = table.getCellRect(rMin, cMin, true);
         Rectangle maxCell = table.getCellRect(rMax, cMax, true);
         Rectangle damagedArea = minCell.union(maxCell);
@@ -125,44 +125,31 @@ public class SpreadSheetUI extends BasicTableUI {
 
         TableColumnModel columnModel = table.getColumnModel();
 
-        int tableWidth = damagedArea.x + damagedArea.width;
         int y = damagedArea.y;
         for (int row = rMin; row <= rMax; row++) {
             int x = damagedArea.x;
             y += table.getRowHeight(row);
-
             for (int column = cMin; column <= cMax; column++) {
-                g.setColor(Color.BLACK);
-                g.drawLine(x, y - 1, x + columnModel.getColumn(column).getWidth() - 1, y - 1);
+                if (gridModel.needLowerLine(row, column)) {
+                    Color color = gridModel.getLowerLineColor(row, column);
+                    g.setColor(color);
+                    g.drawLine(x, y - 1, x + columnModel.getColumn(column).getWidth() - 1, y - 1);
+                }
                 x += columnModel.getColumn(column).getWidth();
             }
-            /*for (int i = damagedArea.x, column = cMin; i < tableWidth; i += columnModel.getColumn(column).getWidth(), column++) {
-                if (gridModel.needUpperLine(row, column)) {
-                    Color color = gridModel.getRightLineColor(row, column);
-                    g.setColor(color);
-                    g.drawLine(i, y - 1, i + columnModel.getColumn(column).getWidth(), y - 1);
-                }
-            }*/
         }
-        TableColumnModel cm = table.getColumnModel();
-        int tableHeight = damagedArea.y + damagedArea.height;
         int x = damagedArea.x;
         for (int column = cMin; column <= cMax; column++) {
-            int w = cm.getColumn(column).getWidth();
-            x += w;
-            y = damagedArea.y;
-            for (int row = rMin; row <= rMax; row++) {
-                g.setColor(Color.BLACK);
-                g.drawLine(x - 1, y, x - 1, y + table.getRowHeight(row) - 1);
+            y = 0;
+            x += columnModel.getColumn(column).getWidth();
+            for (int row = 0; row <= rMax; row++) {
+                if (gridModel.needRightLine(row, column)) {
+                    Color color = gridModel.getRightLineColor(row, column);
+                    g.setColor(color);
+                    g.drawLine(x - 1, y, x - 1, y + table.getRowHeight(row) - 1);
+                }
                 y += table.getRowHeight();
             }
-            /*for (int i = damagedArea.y, row = rMin; i < tableHeight; i += table.getRowHeight(row), row++) {
-                if (gridModel.needLeftLine(row, column)) {
-                    Color color = gridModel.getLeftLineColor(row, column);
-                    g.setColor(color);
-                    g.drawLine(x - 1, i, x - 1, i + table.getRowHeight(row));
-                }
-            }*/
         }
     }
 

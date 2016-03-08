@@ -7,19 +7,19 @@ import java.awt.*;
  */
 public class GridModel {
 
-    public boolean needUpperLine(int row, int column) {
+    public boolean needLowerLine(int row, int column) {
         return true;
     }
 
-    public boolean needLeftLine(int row, int column) {
+    public boolean needRightLine(int row, int column) {
         return true;
-    }
-
-    public Color getLeftLineColor(int row, int column) {
-        return Color.BLACK;
     }
 
     public Color getRightLineColor(int row, int column) {
+        return Color.BLACK;
+    }
+
+    public Color getLowerLineColor(int row, int column) {
         return Color.BLACK;
     }
 }

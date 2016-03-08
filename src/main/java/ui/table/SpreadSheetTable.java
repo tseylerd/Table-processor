@@ -22,6 +22,11 @@ public class SpreadSheetTable extends JTable {
 
     public SpreadSheetTable() {
         this(DEFAULT_ROW_COUNT, DEFAULT_COLUMN_COUNT);
+    }
+
+    public SpreadSheetTable(int rowCount, int columnCount) {
+        super(new SpreadSheetModel(rowCount, columnCount));
+        gridModel = new GridModel();
         setCellSelectionEnabled(true);
         setDefaultEditor(CellValue.class, new SpreadSheetEditor());
         setDefaultRenderer(CellValue.class, new SpreadSheetRenderer());
@@ -42,11 +47,6 @@ public class SpreadSheetTable extends JTable {
         });
     }
 
-    public SpreadSheetTable(int rowCount, int columnCount) {
-        super(new SpreadSheetModel(rowCount, columnCount));
-        gridModel = new GridModel();
-    }
-
     public CellPointer getPointer() {
         return pointer;
     }
@@ -62,9 +62,4 @@ public class SpreadSheetTable extends JTable {
     public GridModel getGridModel() {
         return gridModel;
     }
-
-    //@Override
-    //public int columnAtPoint(Point point) {
-    //    return super.columnAtPoint(point) - 1;
-    //}
 }
