@@ -32,7 +32,6 @@ public class SpreadSheetTable extends JTable {
         setDefaultRenderer(CellValue.class, new SpreadSheetRenderer());
         setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         setAutoResizeMode(AUTO_RESIZE_OFF);
-        setGridColor(Color.GRAY);
         setDragEnabled(true);
         setDropMode(DropMode.USE_SELECTION);
         setTransferHandler(new SpreadSheetTransferHandler(this));

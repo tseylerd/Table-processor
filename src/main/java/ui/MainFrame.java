@@ -16,9 +16,7 @@ public class MainFrame extends JFrame {
     public MainFrame() {
         setLayout(new BorderLayout());
         setTitle(TITLE);
-        JScrollPane scrollPane = new JScrollPane(new SpreadSheetTable(),
-                ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        add(scrollPane, BorderLayout.CENTER);
+        add(new SpreadSheetPanel(), BorderLayout.CENTER);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setPreferredSize(DEFAULT_SIZE);
         pack();

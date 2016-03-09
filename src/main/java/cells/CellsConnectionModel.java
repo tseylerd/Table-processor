@@ -1,6 +1,7 @@
 package cells;
 
 import ui.table.SpreadSheetModel;
+import ui.table.exceptions.CyclicReferenceException;
 
 import java.util.*;
 
@@ -11,28 +12,41 @@ public class CellsConnectionModel {
     private final HashMap<CellPointer, Set<CellPointer>> toRecalculate;
     private final HashMap<CellPointer, Set<CellPointer>> references;
 
+    private final HashSet<CellPointer> visited;
     private final SpreadSheetModel model;
+
+    private boolean cycle;
 
     public CellsConnectionModel(SpreadSheetModel model) {
         toRecalculate = new HashMap<>();
         references = new HashMap<>();
+        visited = new HashSet<>();
         this.model = model;
     }
 
-    public void cellChanged(CellPointer pointer) {
-        if (toRecalculate.get(pointer) == null)
+    public void cellChanged(CellPointer pointer) throws CyclicReferenceException {
+        if (toRecalculate.get(pointer) == null) {
             return;
+        }
 
+        if (visited.contains(pointer)) {
+            cycle = true;
+            throw new CyclicReferenceException();
+        }
+
+        visited.add(pointer);
         Set<CellPointer> refs = new HashSet<>(toRecalculate.get(pointer));
-        for (CellPointer ref : refs) {
-            model.recalculate(ref);
+        refs.forEach(model::recalculate);
+        visited.remove(pointer);
+
+        if (cycle) {
+            throw new CyclicReferenceException();
         }
     }
 
-    private void processRange(CellPointer pointer, CellRange range, Set<CellPointer> newRefs) {
-        for (CellPointer cellPointer : range) {
-            processReference(pointer, cellPointer, newRefs);
-        }
+
+    public void resetErrors() {
+        cycle = false;
     }
 
     private void clearOldReferences(CellPointer pointer) { //// TODO: 06.03.16 more effective (store only ranges for ranges, not clearing references that we should add later)
@@ -55,6 +69,12 @@ public class CellsConnectionModel {
     public void processRanges(CellPointer pointer, Set<CellRange> ranges, Set<CellPointer> newReferences) {
         for (CellRange range : ranges) {
             processRange(pointer, range, newReferences);
+        }
+    }
+
+    private void processRange(CellPointer pointer, CellRange range, Set<CellPointer> newRefs) {
+        for (CellPointer cellPointer : range) {
+            processReference(pointer, cellPointer, newRefs);
         }
     }
 

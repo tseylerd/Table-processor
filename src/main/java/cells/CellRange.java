@@ -30,6 +30,14 @@ public class CellRange implements Iterable<CellPointer>, Transferable {
         return end;
     }
 
+    public boolean isInside(CellPointer pointer) {
+        return  pointer != null &&
+                begin.getColumn() <= pointer.getColumn() &&
+                begin.getRow() <= pointer.getRow() &&
+                end.getRow() >= pointer.getRow() &&
+                end.getColumn() >= pointer.getColumn();
+    }
+
     public Iterator<CellPointer> inverseIterator() {
         return new InverseCellIterator(this);
     }

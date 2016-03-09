@@ -31,17 +31,13 @@ public class ExpressionCalculator {
         this.model = model;
     }
 
-    public String calculate(String expression) throws ParseException {
-        try {
-            lexer = new Lexer(expression.toUpperCase());
-            lexeme = lexer.nextLexem();
-            return expression().getStringValue();
-        } catch (Exception e) {
-            throw new ParseException("", 0);
-        }
+    public String calculate(String expression) {
+        lexer = new Lexer(expression.toUpperCase());
+        lexeme = lexer.nextLexem();
+        return expression().getStringValue();
     }
 
-    private LexerValue expression() throws ParseException {
+    private LexerValue expression() {
         LexerValue result = composed();
 
         while (lexeme == Lexeme.PLUS || lexeme == Lexeme.MINUS) {
@@ -65,7 +61,7 @@ public class ExpressionCalculator {
         return ranges;
     }
 
-    private LexerValue composed() throws ParseException {
+    private LexerValue composed() {
         LexerValue result = sign();
         while (lexeme == Lexeme.DIV || lexeme == Lexeme.MULT) {
             Lexeme tempLexeme = lexeme;
@@ -75,7 +71,7 @@ public class ExpressionCalculator {
         return result;
     }
 
-    private LexerValue power() throws ParseException {
+    private LexerValue power() {
         LexerValue result = multiplier();
         while (lexeme == Lexeme.POW) {
             lexeme = lexer.nextLexem();
@@ -84,7 +80,7 @@ public class ExpressionCalculator {
         return result;
     }
 
-    private LexerValue sign() throws ParseException {
+    private LexerValue sign() {
         if (lexeme == Lexeme.PLUS || lexeme == Lexeme.MINUS){
             Lexeme tempLexeme = lexeme;
             lexeme = lexer.nextLexem();
@@ -94,7 +90,7 @@ public class ExpressionCalculator {
         }
     }
 
-    private LexerValue multiplier() throws ParseException {
+    private LexerValue multiplier() {
         Lexeme tempLexeme = lexeme;
         switch (lexeme.getType()) {
             case AGGREGATE_FUNCTION: {

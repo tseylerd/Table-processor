@@ -44,7 +44,7 @@ public class Lexer {
                 !(builder.length() == 0) && builder.charAt(builder.length() - 1) == 'E' && (current == '-' || current == '+');
     }
 
-    public Lexeme nextLexem() throws ParseException {
+    public Lexeme nextLexem() {
         if (pointer < expression.length()) {
             StringBuilder builder = new StringBuilder();
             while (notEnd() && needReadDigit(builder)) {
@@ -91,13 +91,13 @@ public class Lexer {
     }
 
     private CellPointer readCellPointer(String column) {
-        return new CellPointer(Integer.parseInt(readNumber()), Util.indexByColumnName(column));
+        return new CellPointer(Integer.parseInt(readNumber()) - 1, Util.indexByColumnName(column));
     }
 
     private CellPointer readCellPointer() {
         String column = readLiteral();
         String row = readNumber();
-        return new CellPointer(Integer.parseInt(row), Util.indexByColumnName(column));
+        return new CellPointer(Integer.parseInt(row) - 1, Util.indexByColumnName(column));
     }
 
     private String readLiteral() {

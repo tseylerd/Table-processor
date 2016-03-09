@@ -54,6 +54,7 @@ public class Util {
 
     public static String columnNameByIndex(int column) {
         StringBuilder builder = new StringBuilder();
+        column++;
 
         while (column > 0) {
             int mod = (column - 1) % ENGLISH_CHARACTERS_COUNT;
@@ -69,7 +70,7 @@ public class Util {
         for (int i = 0; i < columnName.length(); i++) {
             result = result * ENGLISH_CHARACTERS_COUNT + columnName.charAt(i) - 'A' + 1;
         }
-        return result;
+        return result - 1;
     }
 
     public static LexerValue abs(LexerValue value) {

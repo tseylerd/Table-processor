@@ -15,11 +15,23 @@ import java.awt.*;
  */
 public class SpreadSheetUI extends BasicTableUI {
 
-    @SuppressWarnings("unused")
-    public static ComponentUI createUI(JComponent c) {
-        return new SpreadSheetUI();
+    private final SpreadSheetTable spreadSheetTable;
+
+    private SpreadSheetUI(SpreadSheetTable spreadSheetTable) {
+        this.spreadSheetTable = spreadSheetTable;
     }
 
+    @SuppressWarnings("unused")
+    public static ComponentUI createUI(JComponent c) {
+        if (c instanceof SpreadSheetTable) {
+            return new SpreadSheetUI((SpreadSheetTable) c);
+        }
+        return new BasicTableUI();
+    }
+
+    /**
+     * Copy of {@link BasicTableUI} paint
+     */
     @Override
     public void paint(Graphics g, JComponent c) {
         Rectangle clip = g.getClipBounds();
@@ -74,13 +86,14 @@ public class SpreadSheetUI extends BasicTableUI {
 
         // Paint the grid.
         paintGrid(g, rMin, rMax, cMin, cMax);
-
         // Paint the cells.
         paintCells(g, rMin, rMax, cMin, cMax);
-
         paintDropLines(g);
     }
 
+    /**
+     * Copy of {@link BasicTableUI}
+     */
     private void paintCells(Graphics g, int rMin, int rMax, int cMin, int cMax) {
         TableColumnModel cm = table.getColumnModel();
         int columnMargin = cm.getColumnMargin();
@@ -102,6 +115,9 @@ public class SpreadSheetUI extends BasicTableUI {
         rendererPane.removeAll();
     }
 
+    /**
+     * Copy of {@link BasicTableUI}
+     */
     private void paintCell(Graphics g, Rectangle cellRect, int row, int column) {
         if (table.isEditing() && table.getEditingRow()==row &&
                 table.getEditingColumn()==column) {
@@ -117,11 +133,14 @@ public class SpreadSheetUI extends BasicTableUI {
 
     }
 
+    /**
+     * Copy of {@link BasicTableUI}, except one moment: we want to draw line depends on grid model values
+     */
     private void paintGrid(Graphics g, int rMin, int rMax, int cMin, int cMax) {
         Rectangle minCell = table.getCellRect(rMin, cMin, true);
         Rectangle maxCell = table.getCellRect(rMax, cMax, true);
         Rectangle damagedArea = minCell.union(maxCell);
-        GridModel gridModel = ((SpreadSheetTable)table).getGridModel();
+        GridModel gridModel = spreadSheetTable.getGridModel();
 
         TableColumnModel columnModel = table.getColumnModel();
 
@@ -153,6 +172,9 @@ public class SpreadSheetUI extends BasicTableUI {
         }
     }
 
+    /**
+     * Copy of {@link BasicTableUI}
+     */
     private void paintDropLines(Graphics g) {
         JTable.DropLocation loc = table.getDropLocation();
         if (loc == null) {
@@ -198,6 +220,9 @@ public class SpreadSheetUI extends BasicTableUI {
         }
     }
 
+    /**
+     * Copy of {@link BasicTableUI}
+     */
     private Rectangle getHDropLineRect(JTable.DropLocation loc) {
         if (!loc.isInsertRow()) {
             return null;
@@ -258,9 +283,12 @@ public class SpreadSheetUI extends BasicTableUI {
         return rect;
     }
 
+    /**
+     * Copy of {@link BasicTableUI}
+     */
     private Rectangle extendRect(Rectangle rect, boolean horizontal) {
         if (rect == null) {
-            return rect;
+            return null;
         }
 
         if (horizontal) {
