@@ -37,8 +37,8 @@ public class SpreadSheetModelTest extends AbstractExpressionTest {
         CellValue value21 = new CellValue();
         value21.setExpression("20");
         value.setExpression(expression);
-        sheetModel.setValueAt(value11, 1, 1);
-        sheetModel.setValueAt(value21, 2, 1);
+        sheetModel.setValueAt(value11, 0, 0);
+        sheetModel.setValueAt(value21, 1, 0);
         sheetModel.setValueAt(value, 3, 1);
 
         CellValue resultCellValue = (CellValue) sheetModel.getValueAt(3, 1);
@@ -47,7 +47,7 @@ public class SpreadSheetModelTest extends AbstractExpressionTest {
         CellValue value11New = new CellValue();
         value11New.setExpression("50");
         result = 50./20 + 3 + 5 + 42;
-        sheetModel.setValueAt(value11New, 1, 1);
+        sheetModel.setValueAt(value11New, 0, 0);
         test(resultCellValue.getRendererValue(), result);
     }
 
@@ -62,8 +62,8 @@ public class SpreadSheetModelTest extends AbstractExpressionTest {
 
         Assert.assertTrue(((CellValue)sheetModel.getValueAt(3, 1)).isErrorState());
 
-        sheetModel.setValueAt(valueA1, 1, 1);
-        sheetModel.setValueAt(valueA2, 2, 1);
+        sheetModel.setValueAt(valueA1, 0, 0);
+        sheetModel.setValueAt(valueA2, 1, 0);
         CellValue resultValue = (CellValue) sheetModel.getValueAt(3, 1);
         test(resultValue.getRendererValue(), result);
     }
