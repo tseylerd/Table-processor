@@ -3,6 +3,7 @@ package util;
 import cells.CellPointer;
 import cells.CellValue;
 import math.calculator.Lexer.LexerValue;
+import ui.table.exceptions.EmptyValueException;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -103,5 +104,12 @@ public class Util {
 
     public static LexerValue div(LexerValue a, LexerValue b) {
         return new LexerValue(a.getDoubleValue() / b.getDoubleValue());
+    }
+
+    public static String check(String value) {
+        if (value.isEmpty()) {
+            throw new EmptyValueException();
+        }
+        return value;
     }
 }

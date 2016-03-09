@@ -1,5 +1,6 @@
 package cells;
 
+import ui.table.exceptions.InvalidCellPointerException;
 import util.Util;
 
 /**
@@ -12,11 +13,13 @@ public class CellPointer {
     private final int column;
 
     public CellPointer(CellPointer pointer, int rowOffset, int columnOffset) {
-        this.row = pointer.row + rowOffset;
-        this.column = pointer.column + columnOffset;
+        this(pointer.row + rowOffset, pointer.column + columnOffset);
     }
 
     public CellPointer(int row, int column) {
+        if (row < 0 || column < 0) {
+            throw new InvalidCellPointerException();
+        }
         this.row = row;
         this.column = column;
     }

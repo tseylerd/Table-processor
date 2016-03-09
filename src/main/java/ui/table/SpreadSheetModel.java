@@ -6,6 +6,8 @@ import math.calculator.ExpressionCalculator;
 import cells.CellPointer;
 import cells.CellRange;
 import ui.table.exceptions.CyclicReferenceException;
+import ui.table.exceptions.EmptyValueException;
+import ui.table.exceptions.InvalidCellPointerException;
 import util.Util;
 
 import javax.swing.event.TableModelEvent;
@@ -104,7 +106,7 @@ public class SpreadSheetModel implements TableModel {
             String eval = evaluate(cellValue.getEditorValue());
             cellValue.setValue(eval);
             cellValue.setErrorState(false);
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException | InvalidCellPointerException | EmptyValueException e) { // todo reduce exceptions count
             cellValue.setErrorState(true);
         }
         return cellValue;
@@ -112,7 +114,7 @@ public class SpreadSheetModel implements TableModel {
     private String evaluate(String s) {
         calculator.reset();
         if (s != null && !s.isEmpty() && s.charAt(0) == '=') {
-            return calculator.calculate(s.substring(1));
+            return Util.check(calculator.calculate(s.substring(1)));
         }
         return s;
     }
