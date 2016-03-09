@@ -4,8 +4,6 @@ package cells;
  * @author Dmitriy Tseyler
  */
 public class CellValue {
-    private static final int MULTIPLIER = 31;
-
     private String value;
     private String expression;
     private boolean errorState;
@@ -59,6 +57,6 @@ public class CellValue {
 
     @Override
     public int hashCode() {
-        return value.hashCode() * MULTIPLIER + expression.hashCode() * MULTIPLIER * MULTIPLIER;
+        return value.hashCode() + expression.hashCode();
     }
 }
