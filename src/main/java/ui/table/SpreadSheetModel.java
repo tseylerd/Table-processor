@@ -2,9 +2,11 @@ package ui.table;
 
 import cells.CellValue;
 import cells.CellsConnectionModel;
-import math.calculator.ExpressionCalculator;
+import math.calculator.ExpressionParser;
 import cells.CellPointer;
 import cells.CellRange;
+import math.calculator.Lexer.LexerValue;
+import math.calculator.expression.Expression;
 import ui.table.exceptions.CyclicReferenceException;
 import ui.table.exceptions.EmptyValueException;
 import ui.table.exceptions.InvalidCellPointerException;
@@ -13,7 +15,6 @@ import util.Util;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -25,14 +26,14 @@ public class SpreadSheetModel implements TableModel {
     private final List<TableModelListener> tableModelListeners;
     private final CellValue[][] values; //// TODO: 06.03.16 Variable length of rows and columns
     private final CellsConnectionModel cellsConnectionModel; // TODO: 06.03.16 Should be one model for cells
-    private final ExpressionCalculator calculator;
+    private final ExpressionParser calculator;
 
     private int rowCount;
     private int columnCount;
 
     public SpreadSheetModel(int rowCount, int columnCount) {
         cellsConnectionModel = new CellsConnectionModel(this);
-        calculator = new ExpressionCalculator(this);
+        calculator = new ExpressionParser(this);
         values = new CellValue[rowCount][columnCount];
         for (int i = 0; i < rowCount; i++) {
             for (int j = 0; j < columnCount; j++) {
@@ -111,10 +112,13 @@ public class SpreadSheetModel implements TableModel {
         }
         return cellValue;
     }
+
     private String evaluate(String s) {
         calculator.reset();
         if (s != null && !s.isEmpty() && s.charAt(0) == '=') {
-            return Util.check(calculator.calculate(s.substring(1)));
+            Expression expression = calculator.calculate(s.substring(1));
+            LexerValue value = expression.calculate();
+            return value.getStringValue();
         }
         return s;
     }

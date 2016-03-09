@@ -4,6 +4,7 @@ import cells.CellValue;
 import math.calculator.Lexer.Lexeme;
 import math.calculator.Lexer.Lexer;
 import math.calculator.Lexer.LexerValue;
+import math.calculator.expression.*;
 import ui.table.SpreadSheetModel;
 import cells.CellPointer;
 import cells.CellRange;
@@ -17,7 +18,7 @@ import java.util.Set;
  * @author Dmitriy Tseyler
  */
 
-public class ExpressionCalculator {
+public class ExpressionParser {
     private final SpreadSheetModel model;
     private final Set<CellPointer> pointers;
     private final Set<CellRange> ranges;
@@ -25,25 +26,25 @@ public class ExpressionCalculator {
     private Lexeme lexeme;
     private Lexer lexer;
 
-    public ExpressionCalculator(SpreadSheetModel model) {
+    public ExpressionParser(SpreadSheetModel model) {
         pointers = new HashSet<>();
         ranges = new HashSet<>();
         this.model = model;
     }
 
-    public String calculate(String expression) {
+    public Expression calculate(String expression) {
         lexer = new Lexer(expression.toUpperCase());
         lexeme = lexer.nextLexem();
-        return expression().getStringValue();
+        return expression();
     }
 
-    private LexerValue expression() {
-        LexerValue result = composed();
+    private Expression expression() {
+        Expression result = composed();
 
         while (lexeme == Lexeme.PLUS || lexeme == Lexeme.MINUS) {
             Lexeme tempLexeme = lexeme;
             lexeme = lexer.nextLexem();
-            result = Util.plus(result, tempLexeme.getResult(composed()));
+            result = new PlusExpression(tempLexeme, result, composed());
         }
         return result;
     }
@@ -61,36 +62,36 @@ public class ExpressionCalculator {
         return ranges;
     }
 
-    private LexerValue composed() {
-        LexerValue result = sign();
+    private Expression composed() {
+        Expression result = sign();
         while (lexeme == Lexeme.DIV || lexeme == Lexeme.MULT) {
             Lexeme tempLexeme = lexeme;
             lexeme = lexer.nextLexem();
-            result = tempLexeme.getResult(result, sign());
+            result = new BinaryOperationExpression(tempLexeme, result, sign());
         }
         return result;
     }
 
-    private LexerValue power() {
-        LexerValue result = multiplier();
+    private Expression power() {
+        Expression result = multiplier();
         while (lexeme == Lexeme.POW) {
             lexeme = lexer.nextLexem();
-            result = Util.power(result, power());
+            result = new PowerExpression(result, power());
         }
         return result;
     }
 
-    private LexerValue sign() {
+    private Expression sign() {
         if (lexeme == Lexeme.PLUS || lexeme == Lexeme.MINUS){
             Lexeme tempLexeme = lexeme;
             lexeme = lexer.nextLexem();
-            return tempLexeme.getResult(power());
+            return new OperationExpression(tempLexeme, power());
         } else {
             return power();
         }
     }
 
-    private LexerValue multiplier() {
+    private Expression multiplier() {
         Lexeme tempLexeme = lexeme;
         switch (lexeme.getType()) {
             case AGGREGATE_FUNCTION: {
@@ -98,27 +99,26 @@ public class ExpressionCalculator {
                 ranges.add(range);
                 AggregateFunction function = lexer.getFunction();
                 lexeme = lexer.nextLexem();
-                return function.calculate(range, model);
+                return new AggregateExpression(function, range, model);
             } case CELL_POINTER: {
                 CellPointer pointer = lexer.getCellPointer();
                 pointers.add(pointer);
                 lexeme = lexer.nextLexem();
-                CellValue value = (CellValue)model.getValueAt(pointer.getRow(), pointer.getColumn());
-                return new LexerValue(value.getRendererValue());
+                return new CellPointerExpression(pointer, model);
             } case NUMBER: {
                 String num = lexer.getNumber();
                 lexeme = lexer.nextLexem();
-                return new LexerValue(num);
+                return new NumberExpression(new LexerValue(num));
             } case FUNCTION:{
                 lexeme = lexer.nextLexem();
-                LexerValue result = tempLexeme.getResult(expression());
+                Expression result = new OperationExpression(tempLexeme, expression());
                 lexeme = lexer.nextLexem();
                 return result;
             } case OPERATION:{
                 lexeme = lexer.nextLexem();
-                return tempLexeme.getResult(multiplier());
+                return new OperationExpression(tempLexeme, multiplier());
             }
         }
-        return LexerValue.NOTHING;
+        return null;
     }
 }

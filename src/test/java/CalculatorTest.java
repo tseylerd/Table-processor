@@ -1,5 +1,4 @@
-import math.calculator.ExpressionCalculator;
-import org.junit.Assert;
+import math.calculator.ExpressionParser;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -8,21 +7,21 @@ import org.junit.Test;
  * @author Dmitriy Tseyler
  */
 public class CalculatorTest extends AbstractExpressionTest {
-    private ExpressionCalculator calculator;
+    private ExpressionParser calculator;
 
     @Before
     public void init() {
-        calculator = new ExpressionCalculator(null);
+        calculator = new ExpressionParser(null);
     }
 
     private String calculate(String expression) throws Exception {
-        return calculator.calculate(expression);
+        return calculator.calculate(expression).calculate().getStringValue();
     }
 
     @Test
     public void testNumber() throws Exception {
         for (int i = 0; i < 10; i++) {
-            Assert.assertEquals(calculator.calculate(String.valueOf(i)), String.valueOf(i));
+            test(String.valueOf(i), i);
         }
     }
 
