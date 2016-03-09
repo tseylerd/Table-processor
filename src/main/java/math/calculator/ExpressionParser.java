@@ -1,6 +1,5 @@
 package math.calculator;
 
-import cells.CellValue;
 import math.calculator.Lexer.Lexeme;
 import math.calculator.Lexer.Lexer;
 import math.calculator.Lexer.LexerValue;
@@ -8,9 +7,7 @@ import math.calculator.expression.*;
 import ui.table.SpreadSheetModel;
 import cells.CellPointer;
 import cells.CellRange;
-import util.Util;
 
-import java.text.ParseException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -67,7 +64,7 @@ public class ExpressionParser {
         while (lexeme == Lexeme.DIV || lexeme == Lexeme.MULT) {
             Lexeme tempLexeme = lexeme;
             lexeme = lexer.nextLexem();
-            result = new BinaryOperationExpression(tempLexeme, result, sign());
+            result = new BinaryExpression(tempLexeme::getResult, result, sign());
         }
         return result;
     }
@@ -85,7 +82,7 @@ public class ExpressionParser {
         if (lexeme == Lexeme.PLUS || lexeme == Lexeme.MINUS){
             Lexeme tempLexeme = lexeme;
             lexeme = lexer.nextLexem();
-            return new OperationExpression(tempLexeme, power());
+            return new UnaryExpression(tempLexeme::getResult, power());
         } else {
             return power();
         }
@@ -111,12 +108,12 @@ public class ExpressionParser {
                 return new NumberExpression(new LexerValue(num));
             } case FUNCTION:{
                 lexeme = lexer.nextLexem();
-                Expression result = new OperationExpression(tempLexeme, expression());
+                Expression result = new UnaryExpression(tempLexeme::getResult, expression());
                 lexeme = lexer.nextLexem();
                 return result;
             } case OPERATION:{
                 lexeme = lexer.nextLexem();
-                return new OperationExpression(tempLexeme, multiplier());
+                return new UnaryExpression(tempLexeme::getResult, multiplier());
             }
         }
         return null;
