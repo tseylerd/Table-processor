@@ -13,22 +13,22 @@ public class CellIterator extends AbstractCellIterator {
     }
 
     @Override
-    protected CellPointer getBegin() {
+    CellPointer getBegin() {
         return range.getBegin();
     }
 
     @Override
-    protected int getOffset() {
+    int getOffset() {
         return 1;
     }
 
     @Override
-    protected boolean needChangeColumn(int column) {
+    boolean needChangeColumn(int column) {
         return column < range.getEnd().getColumn();
     }
 
     @Override
-    protected boolean needChangeRow(int row) {
+    boolean needChangeRow(int row) {
         return row < range.getEnd().getRow();
     }
 }

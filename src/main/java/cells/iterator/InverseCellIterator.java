@@ -13,22 +13,22 @@ public class InverseCellIterator extends AbstractCellIterator {
     }
 
     @Override
-    protected int getOffset() {
+    int getOffset() {
         return -1;
     }
 
     @Override
-    protected boolean needChangeColumn(int column) {
+    boolean needChangeColumn(int column) {
         return column > range.getBegin().getColumn();
     }
 
     @Override
-    protected boolean needChangeRow(int row) {
+    boolean needChangeRow(int row) {
         return row > range.getBegin().getRow();
     }
 
     @Override
-    protected CellPointer getBegin() {
+    CellPointer getBegin() {
         return range.getEnd();
     }
 }

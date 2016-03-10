@@ -20,7 +20,6 @@ public class RightSpanManager extends SpanManager {
         return last != null && last.getLastColumn() > newPointer.getColumn();
     }
 
-
     @Override
     protected CellRange createNextRange() {
         CellRange range = getLast();

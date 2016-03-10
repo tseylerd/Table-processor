@@ -17,10 +17,10 @@ public abstract class AbstractCellIterator implements Iterator<CellPointer> {
         current = getBegin();
     }
 
-    protected abstract CellPointer getBegin();
-    protected abstract boolean needChangeColumn(int column);
-    protected abstract boolean needChangeRow(int row);
-    protected abstract int getOffset();
+    abstract CellPointer getBegin();
+    abstract boolean needChangeColumn(int column);
+    abstract boolean needChangeRow(int row);
+    abstract int getOffset();
 
     @Override
     public CellPointer next() {
