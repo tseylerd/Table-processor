@@ -8,6 +8,7 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Iterator;
 
 /**
@@ -64,6 +65,14 @@ public class CellRange implements Iterable<CellPointer>, Transferable {
 
     public boolean isOneRowRange() {
         return begin.getRow() == end.getRow();
+    }
+
+    public static CellRange createCellRange(int[] rows, int[] columns) {
+        Arrays.sort(rows);
+        Arrays.sort(columns);
+        CellPointer start = new CellPointer(rows[0], columns[0]);
+        CellPointer end = new CellPointer(rows[rows.length - 1], columns[columns.length - 1]);
+        return new CellRange(start, end);
     }
 
     public Iterator<CellPointer> inverseIterator() {
