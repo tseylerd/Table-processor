@@ -1,5 +1,6 @@
 package ui.laf;
 
+import ui.laf.span.SpanListener;
 import ui.table.SpreadSheetTable;
 
 import javax.swing.*;
@@ -13,20 +14,31 @@ import java.awt.*;
 /**
  * @author Dmitriy Tseyler
  */
-public class SpreadSheetUI extends BasicTableUI {
+public class SpreadSheetTableUI extends BasicTableUI {
 
     private final SpreadSheetTable spreadSheetTable;
+    private final SpanListener spanListener;
 
-    private SpreadSheetUI(SpreadSheetTable spreadSheetTable) {
+    private SpreadSheetTableUI(SpreadSheetTable spreadSheetTable) {
         this.spreadSheetTable = spreadSheetTable;
+        spanListener = new SpanListener();
     }
 
     @SuppressWarnings("unused")
     public static ComponentUI createUI(JComponent c) {
-        if (c instanceof SpreadSheetTable) {
-            return new SpreadSheetUI((SpreadSheetTable) c);
-        }
-        return new BasicTableUI();
+        return new SpreadSheetTableUI((SpreadSheetTable) c);
+    }
+
+    @Override
+    protected void installListeners() {
+        super.installListeners();
+        spanListener.install(spreadSheetTable);
+    }
+
+    @Override
+    protected void uninstallListeners() {
+        super.uninstallListeners();
+        spanListener.uninstall(spreadSheetTable);
     }
 
     /**
@@ -130,7 +142,24 @@ public class SpreadSheetUI extends BasicTableUI {
             rendererPane.paintComponent(g, component, table, cellRect.x, cellRect.y,
                     cellRect.width, cellRect.height, true);
         }
+        if (spanListener.isCellInside(row, column)) {
+            g.setColor(new Color(17, 17, 17, 50));
+            g.fillRect(cellRect.x, cellRect.y, cellRect.width, cellRect.height);
+        }
+    }
 
+    private void paintHover(Graphics g, Rectangle cellRect, int row, int column) {
+        Point point = table.getMousePosition();
+        if (point == null) {
+            return;
+        }
+
+        int hoveredRow = table.rowAtPoint(point);
+        int hoveredColumn = table.columnAtPoint(point);
+        if (hoveredRow == row && hoveredColumn == column) {
+            g.setColor(new Color(17, 17, 17, 50));
+            g.fillRect(cellRect.x, cellRect.y, cellRect.width, cellRect.height);
+        }
     }
 
     /**

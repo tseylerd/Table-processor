@@ -10,6 +10,6 @@ public class ProcessorLookAndFeel extends MetalLookAndFeel {
     @Override
     protected void initClassDefaults(UIDefaults table) {
         super.initClassDefaults(table);
-        table.put("TableUI", SpreadSheetUI.class.getName());
+        table.put("SpreadSheetTableUI", SpreadSheetTableUI.class.getName());
     }
 }

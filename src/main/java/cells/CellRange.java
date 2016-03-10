@@ -17,6 +17,10 @@ public class CellRange implements Iterable<CellPointer>, Transferable {
     private final CellPointer begin;
     private final CellPointer end;
 
+    public CellRange(int startRow, int startColumn, int endRow, int endColumn) {
+        this(new CellPointer(startRow, startColumn), new CellPointer(endRow, endColumn));
+    }
+
     public CellRange(CellPointer begin, CellPointer end) {
         this.begin = begin;
         this.end = end;
@@ -38,8 +42,37 @@ public class CellRange implements Iterable<CellPointer>, Transferable {
                 end.getColumn() >= pointer.getColumn();
     }
 
+    public int getFirstColumn() {
+        return begin.getColumn();
+    }
+
+    public int getLastColumn() {
+        return end.getColumn();
+    }
+
+    public int getFirstRow() {
+        return begin.getRow();
+    }
+
+    public int getLastRow() {
+        return end.getRow();
+    }
+
+    public boolean isOneColumnRange() {
+        return begin.getColumn() == end.getColumn();
+    }
+
+    public boolean isOneRowRange() {
+        return begin.getRow() == end.getRow();
+    }
+
     public Iterator<CellPointer> inverseIterator() {
         return new InverseCellIterator(this);
+    }
+
+    @Override
+    public String toString() {
+        return begin.toString() + ":" + end.toString();
     }
 
     /* ================== Iterable ================== */

@@ -14,6 +14,7 @@ import java.awt.event.MouseEvent;
  * @author Dmitriy Tseyler
  */
 public class SpreadSheetTable extends JTable {
+    private static final String UI_ID = "SpreadSheetTableUI";
     private static final int DEFAULT_ROW_COUNT = 40;
     private static final int DEFAULT_COLUMN_COUNT = 40;
 
@@ -44,6 +45,12 @@ public class SpreadSheetTable extends JTable {
                 pointer = new CellPointer(row, column);
             }
         });
+        enableEvents(AWTEvent.MOUSE_EVENT_MASK);
+    }
+
+    @Override
+    public String getUIClassID() {
+        return UI_ID;
     }
 
     public CellPointer getPointer() {
@@ -60,5 +67,11 @@ public class SpreadSheetTable extends JTable {
 
     public GridModel getGridModel() {
         return gridModel;
+    }
+
+    public CellPointer pointerAt(Point point) {
+        int row = rowAtPoint(point);
+        int column = columnAtPoint(point);
+        return new CellPointer(row, column);
     }
 }
