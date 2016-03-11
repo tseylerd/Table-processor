@@ -1,7 +1,8 @@
-package cells.iterator;
+package cells.iterator.cell;
 
 import cells.CellPointer;
 import cells.CellRange;
+import cells.iterator.IterationStrategy;
 
 /**
  * @author Dmitriy Tseyler
@@ -9,16 +10,15 @@ import cells.CellRange;
 public class InverseCellIterator extends AbstractCellIterator {
 
     public InverseCellIterator(CellRange range) {
-        super(range);
+        this(range, CellIterationStrategy.COLUMN_ROW);
     }
 
     public InverseCellIterator(CellRange range, IterationStrategy strategy) {
-        super(range, strategy);
+        this(range, strategy, -1);
     }
 
-    @Override
-    int getOffset() {
-        return -1;
+    public InverseCellIterator(CellRange range, IterationStrategy strategy, int offset) {
+        super(range, strategy, offset);
     }
 
     @Override
@@ -32,7 +32,7 @@ public class InverseCellIterator extends AbstractCellIterator {
     }
 
     @Override
-    CellPointer getBegin() {
+    public CellPointer getBegin() {
         return range.getEnd();
     }
 }

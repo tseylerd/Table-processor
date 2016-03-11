@@ -1,8 +1,11 @@
 package cells;
 
-import cells.iterator.CellIterator;
-import cells.iterator.InverseCellIterator;
-import cells.iterator.IterationStrategy;
+import cells.iterator.cell.CellIterator;
+import cells.iterator.cell.InverseCellIterator;
+import cells.iterator.cell.CellIterationStrategy;
+import cells.iterator.range.InverseRangeIterator;
+import cells.iterator.range.RangeIterationStrategy;
+import cells.iterator.range.RangeIterator;
 
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -16,6 +19,7 @@ import java.util.Iterator;
  */
 public class CellRange implements Iterable<CellPointer>, Transferable {
     public static final DataFlavor CELL_RANGE_DATA_FLAVOUR = new DataFlavor(CellRange.class, "Range");
+
     private final CellPointer begin;
     private final CellPointer end;
 
@@ -60,6 +64,22 @@ public class CellRange implements Iterable<CellPointer>, Transferable {
         return end.getRow();
     }
 
+    public CellRange getFirstRowRange() {
+        return new CellRange(getFirstRow(), getFirstColumn(), getFirstRow(), getLastColumn());
+    }
+
+    public CellRange getFirstColumnRange() {
+        return new CellRange(getFirstRow(), getFirstColumn(), getLastRow(), getFirstColumn());
+    }
+
+    public CellRange getLastColumnRange() {
+        return new CellRange(getFirstRow(), getLastColumn(), getLastRow(), getLastColumn());
+    }
+
+    public CellRange getLastRowRange() {
+        return new CellRange(getLastRow(), getFirstColumn(), getLastRow(), getLastColumn());
+    }
+
     public boolean isOneColumnRange() {
         return begin.getColumn() == end.getColumn();
     }
@@ -81,11 +101,27 @@ public class CellRange implements Iterable<CellPointer>, Transferable {
     }
 
     public Iterator<CellPointer> inverseRowColumnIterator() {
-        return new InverseCellIterator(this, IterationStrategy.ROW_COLUMN);
+        return new InverseCellIterator(this, CellIterationStrategy.ROW_COLUMN);
     }
 
     public Iterator<CellPointer> rowColumnIterator() {
-        return new CellIterator(this, IterationStrategy.ROW_COLUMN);
+        return new CellIterator(this, CellIterationStrategy.ROW_COLUMN);
+    }
+
+    public Iterator<CellRange> rangeIterator() {
+        return new RangeIterator(this);
+    }
+
+    public Iterator<CellRange> columnRangeIterator() {
+        return new RangeIterator(this, RangeIterationStrategy.COLUMN);
+    }
+
+    public Iterator<CellRange> inverseRangeIterator() {
+        return new InverseRangeIterator(this);
+    }
+
+    public Iterator<CellRange> inverseColumnIterator() {
+        return new InverseRangeIterator(this, RangeIterationStrategy.COLUMN);
     }
 
     @Override

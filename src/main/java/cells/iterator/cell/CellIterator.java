@@ -1,4 +1,4 @@
-package cells.iterator;
+package cells.iterator.cell;
 
 import cells.CellPointer;
 import cells.CellRange;
@@ -9,21 +9,11 @@ import cells.CellRange;
 public class CellIterator extends AbstractCellIterator {
 
     public CellIterator(CellRange range) {
-        super(range);
+        super(range, 1);
     }
 
-    public CellIterator(CellRange range, IterationStrategy strategy) {
-        super(range, strategy);
-    }
-
-    @Override
-    CellPointer getBegin() {
-        return range.getBegin();
-    }
-
-    @Override
-    int getOffset() {
-        return 1;
+    public CellIterator(CellRange range, CellIterationStrategy strategy) {
+        super(range, strategy, 1);
     }
 
     @Override
@@ -34,5 +24,10 @@ public class CellIterator extends AbstractCellIterator {
     @Override
     boolean needChangeRow(int row) {
         return row < range.getEnd().getRow();
+    }
+
+    @Override
+    public CellPointer getBegin() {
+        return range.getBegin();
     }
 }
