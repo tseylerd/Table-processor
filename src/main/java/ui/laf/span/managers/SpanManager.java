@@ -22,7 +22,6 @@ public abstract class SpanManager {
     }
 
     public void newCell(CellPointer pointer) {
-        CellRange last = ranges.peekLast() == null ? startRange : ranges.peekLast();
         while (shouldAdd(pointer)) {
             ranges.addLast(createNextRange());
         }
