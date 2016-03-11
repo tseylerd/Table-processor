@@ -75,7 +75,7 @@ public abstract class SpanManager {
 
     protected abstract CellRange createNextRange();
 
-    public void move(SpreadSheetModel model) {
+    public void span(SpreadSheetModel model) {
 
     }
 }

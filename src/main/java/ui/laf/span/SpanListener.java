@@ -116,7 +116,7 @@ public class SpanListener implements MouseListener, MouseMotionListener {
     @Override
     public void mouseReleased(MouseEvent e) {
         if (spanManager != null) {
-            spanManager.move((SpreadSheetModel) table.getModel());
+            spanManager.span((SpreadSheetModel) table.getModel());
             spanManager = null;
             turnOnTable();
         }

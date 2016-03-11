@@ -1,64 +1,39 @@
 package math.calculator.Lexer;
 
+import math.calculator.function.BinaryFunctionResolver;
+import math.calculator.function.FunctionResolver;
+import math.calculator.function.UnaryFunctionResolver;
 import util.Util;
 
 /**
  * @author Dmitriy Tseyler
  */
 public enum Lexeme {
-    SUM(LexemeType.AGGREGATE_FUNCTION, "SUM"),
-    MEAN(LexemeType.AGGREGATE_FUNCTION, "MEAN"),
-    CELL(LexemeType.CELL_POINTER, "@"),
-    MIN(LexemeType.AGGREGATE_FUNCTION, "MIN"),
-    MAX(LexemeType.AGGREGATE_FUNCTION, "MAX"),
-    CLOSE(null,")"),
-    COS (LexemeType.FUNCTION,"COS"){
-        @Override
-        public LexerValue getResult(LexerValue value) {
-            return Util.cos(value);
-        }
-    },
-    SIN (LexemeType.FUNCTION,"SIN"){
-        @Override
-        public LexerValue getResult(LexerValue value) {
-            return Util.sin(value);
-        }
-    },
-    NUM (LexemeType.NUMBER, "0"),
-    OPEN(LexemeType.FUNCTION, "("),
-    POW(null, "^"),
-    PLUS(LexemeType.OPERATION,"+"),
-    MINUS(LexemeType.OPERATION,"-"){
-        @Override
-        public LexerValue getResult(LexerValue value){
-            return Util.inverse(value);
-        }
-    },
-    DIV(LexemeType.OPERATION,"/"){
-        @Override
-        public LexerValue getResult(LexerValue a, LexerValue b){
-            return Util.div(a, b);
-        }
-    },
-    MULT(LexemeType.OPERATION,"*"){
-        @Override
-        public LexerValue getResult(LexerValue a, LexerValue b){
-            return Util.multiply(a, b);
-        }
-    },
-    ABS(LexemeType.OPERATION, "ABS"){
-        @Override
-        public LexerValue getResult(LexerValue value){
-            return Util.abs(value);
-        }
-    };
+    SUM(LexemeType.AGGREGATE_FUNCTION, "SUM", null),
+    MEAN(LexemeType.AGGREGATE_FUNCTION, "MEAN", null),
+    CELL(LexemeType.CELL_POINTER, "@", null),
+    MIN(LexemeType.AGGREGATE_FUNCTION, "MIN", null),
+    MAX(LexemeType.AGGREGATE_FUNCTION, "MAX", null),
+    CLOSE(null, ")", null),
+    COS (LexemeType.FUNCTION, "COS", new UnaryFunctionResolver(Util::cos)),
+    SIN (LexemeType.FUNCTION, "SIN", new UnaryFunctionResolver(Util::sin)),
+    NUM (LexemeType.NUMBER, "0", null),
+    OPEN(LexemeType.FUNCTION, "(", lexerValues -> lexerValues[0]),
+    POW(null, "^", null),
+    PLUS(LexemeType.OPERATION, "+", new UnaryFunctionResolver(lexerValue -> lexerValue)),
+    MINUS(LexemeType.OPERATION,"-", new UnaryFunctionResolver(Util::inverse)),
+    DIV(LexemeType.OPERATION,"/", new BinaryFunctionResolver(Util::div)),
+    MULT(LexemeType.OPERATION,"*", new BinaryFunctionResolver(Util::multiply)),
+    ABS(LexemeType.OPERATION, "ABS", new UnaryFunctionResolver(Util::abs));
 
     private final String value;
     private final LexemeType type;
+    private final FunctionResolver functionResolver;
 
-    Lexeme(LexemeType type, String value){
+    Lexeme(LexemeType type, String value, FunctionResolver functionResolver){
         this.value = value;
         this.type = type;
+        this.functionResolver = functionResolver;
     }
 
     public static Lexeme getLexem(String value) {
@@ -68,14 +43,12 @@ public enum Lexeme {
         }
         return null;
     }
+
     public LexemeType getType(){
         return type;
     }
-    public LexerValue getResult(LexerValue value){
-        return value;
-    }
 
-    public LexerValue getResult(LexerValue a, LexerValue b){
-        return a;
+    public LexerValue getResult(LexerValue... values){
+        return functionResolver.getValue(values);
     }
 }

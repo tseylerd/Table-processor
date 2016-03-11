@@ -61,4 +61,10 @@ public class CalculatorTest extends AbstractExpressionTest {
         test(calculate(expression), result);
     }
 
+    @Test
+    public void testFunc() throws Exception {
+        String expression = "sin(1)^4";
+        double result = Math.pow(Math.sin(1), 4);
+        test(calculate(expression), result);
+    }
 }

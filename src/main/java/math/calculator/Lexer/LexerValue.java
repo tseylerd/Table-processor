@@ -5,8 +5,6 @@ package math.calculator.Lexer;
  * For lazy conversions
  */
 public class LexerValue {
-    public static final LexerValue NOTHING = new LexerValue(0);
-
     private String stringValue;
     private Double doubleValue;
 
