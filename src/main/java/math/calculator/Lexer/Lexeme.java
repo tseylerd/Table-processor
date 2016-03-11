@@ -9,14 +9,14 @@ import util.Util;
  * @author Dmitriy Tseyler
  */
 public enum Lexeme {
-    SUM(LexemeType.AGGREGATE_FUNCTION, "SUM", null),
-    MEAN(LexemeType.AGGREGATE_FUNCTION, "MEAN", null),
+    SUM(LexemeType.AGGREGATE_FUNCTION, "SUM(", null),
+    MEAN(LexemeType.AGGREGATE_FUNCTION, "MEAN(", null),
     CELL(LexemeType.CELL_POINTER, "@", null),
-    MIN(LexemeType.AGGREGATE_FUNCTION, "MIN", null),
-    MAX(LexemeType.AGGREGATE_FUNCTION, "MAX", null),
+    MIN(LexemeType.AGGREGATE_FUNCTION, "MIN(", null),
+    MAX(LexemeType.AGGREGATE_FUNCTION, "MAX(", null),
     CLOSE(null, ")", null),
-    COS (LexemeType.FUNCTION, "COS", new UnaryFunctionResolver(Util::cos)),
-    SIN (LexemeType.FUNCTION, "SIN", new UnaryFunctionResolver(Util::sin)),
+    COS (LexemeType.FUNCTION, "COS(", new UnaryFunctionResolver(Util::cos)),
+    SIN (LexemeType.FUNCTION, "SIN(", new UnaryFunctionResolver(Util::sin)),
     NUM (LexemeType.NUMBER, "0", null),
     OPEN(LexemeType.FUNCTION, "(", lexerValues -> lexerValues[0]),
     POW(null, "^", null),
