@@ -11,8 +11,14 @@ import java.util.Iterator;
 public abstract class AbstractCellIterator implements Iterator<CellPointer> {
     protected final CellRange range;
     private CellPointer current;
+    private IterationStrategy strategy;
 
     protected AbstractCellIterator(CellRange range) {
+        this(range, IterationStrategy.COLUMN_ROW);
+    }
+
+    protected AbstractCellIterator(CellRange range, IterationStrategy strategy) {
+        this.strategy = strategy;
         this.range = range;
         current = getBegin();
     }
@@ -30,17 +36,7 @@ public abstract class AbstractCellIterator implements Iterator<CellPointer> {
     }
 
     private CellPointer nextOf(CellPointer previous) {
-        int row = previous.getRow();
-        int column = previous.getColumn();
-        if (needChangeColumn(column)) {
-            column += getOffset();
-        } else if (needChangeRow(row)) {
-            row += getOffset();
-            column = getBegin().getColumn();
-        } else {
-            return null;
-        }
-        return new CellPointer(row, column);
+        return strategy.nextOf(previous, this);
     }
 
     @Override

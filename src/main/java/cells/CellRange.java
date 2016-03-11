@@ -2,6 +2,7 @@ package cells;
 
 import cells.iterator.CellIterator;
 import cells.iterator.InverseCellIterator;
+import cells.iterator.IterationStrategy;
 
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -75,8 +76,16 @@ public class CellRange implements Iterable<CellPointer>, Transferable {
         return new CellRange(start, end);
     }
 
-    public Iterator<CellPointer> inverseIterator() {
+    public Iterator<CellPointer> inverseColumnRowIterator() {
         return new InverseCellIterator(this);
+    }
+
+    public Iterator<CellPointer> inverseRowColumnIterator() {
+        return new InverseCellIterator(this, IterationStrategy.ROW_COLUMN);
+    }
+
+    public Iterator<CellPointer> rowColumnIterator() {
+        return new CellIterator(this, IterationStrategy.ROW_COLUMN);
     }
 
     @Override

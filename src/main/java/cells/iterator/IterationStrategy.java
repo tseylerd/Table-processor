@@ -7,25 +7,25 @@ import java.util.function.BiFunction;
 /**
  * @author Dmitriy Tseyler
  */
-enum  IterationStrategy {
+public enum IterationStrategy {
     COLUMN_ROW(((pointer, iterator) -> iterator.needChangeColumn(pointer.getColumn())),
             (pointer, iterator) -> iterator.needChangeRow(pointer.getRow()),
             (cellPointer, iterator) -> new CellPointer(cellPointer, 0, iterator.getOffset()),
-            (cellPointer, iterator) -> new CellPointer(cellPointer, iterator.getOffset(), 0)),
+            (cellPointer, iterator) -> new CellPointer(iterator.getBegin().getRow() + iterator.getOffset(), iterator.getBegin().getColumn())),
     ROW_COLUMN((pointer, iterator) -> iterator.needChangeRow(pointer.getRow()),
             (pointer, iterator) -> iterator.needChangeColumn(pointer.getColumn()),
             (cellPointer, iterator) -> new CellPointer(cellPointer, iterator.getOffset(), 0),
-            (cellPointer, iterator) -> new CellPointer(cellPointer, 0, iterator.getOffset()));
+            (cellPointer, iterator) -> new CellPointer(iterator.getBegin().getRow(), iterator.getBegin().getColumn() + iterator.getOffset()));
 
-    private final BiFunction<CellPointer, CellIterator, Boolean> firstCheck;
-    private final BiFunction<CellPointer, CellIterator, Boolean> secondCheck;
-    private final BiFunction<CellPointer, CellIterator, CellPointer> firstFunction;
-    private final BiFunction<CellPointer, CellIterator, CellPointer> secondFunction;
+    private final BiFunction<CellPointer, AbstractCellIterator, Boolean> firstCheck;
+    private final BiFunction<CellPointer, AbstractCellIterator, Boolean> secondCheck;
+    private final BiFunction<CellPointer, AbstractCellIterator, CellPointer> firstFunction;
+    private final BiFunction<CellPointer, AbstractCellIterator, CellPointer> secondFunction;
 
-    IterationStrategy(BiFunction<CellPointer, CellIterator, Boolean> firstCheck,
-                      BiFunction<CellPointer, CellIterator, Boolean> secondCheck,
-                      BiFunction<CellPointer, CellIterator, CellPointer> firstFunction,
-                      BiFunction<CellPointer, CellIterator, CellPointer> secondFunction)
+    IterationStrategy(BiFunction<CellPointer, AbstractCellIterator, Boolean> firstCheck,
+                      BiFunction<CellPointer, AbstractCellIterator, Boolean> secondCheck,
+                      BiFunction<CellPointer, AbstractCellIterator, CellPointer> firstFunction,
+                      BiFunction<CellPointer, AbstractCellIterator, CellPointer> secondFunction)
     {
         this.firstCheck = firstCheck;
         this.secondCheck = secondCheck;
@@ -33,7 +33,7 @@ enum  IterationStrategy {
         this.secondFunction = secondFunction;
     }
 
-    CellPointer nextOf(CellPointer previous, CellIterator iterator) {
+    CellPointer nextOf(CellPointer previous, AbstractCellIterator iterator) {
         CellPointer next = null;
         if (firstCheck.apply(previous, iterator)) {
             next = firstFunction.apply(previous, iterator);

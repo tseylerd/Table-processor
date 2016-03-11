@@ -12,6 +12,10 @@ public class CellIterator extends AbstractCellIterator {
         super(range);
     }
 
+    public CellIterator(CellRange range, IterationStrategy strategy) {
+        super(range, strategy);
+    }
+
     @Override
     CellPointer getBegin() {
         return range.getBegin();

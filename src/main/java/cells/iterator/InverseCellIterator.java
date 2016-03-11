@@ -12,6 +12,10 @@ public class InverseCellIterator extends AbstractCellIterator {
         super(range);
     }
 
+    public InverseCellIterator(CellRange range, IterationStrategy strategy) {
+        super(range, strategy);
+    }
+
     @Override
     int getOffset() {
         return -1;

@@ -67,12 +67,12 @@ public class SpreadSheetTransferHandler extends TransferHandler {
         Iterator<CellPointer> iterator;
         if (rowOffset == 0) {
             if (columnOffset > 0) {
-                iterator = range.inverseIterator();
+                iterator = range.inverseColumnRowIterator();
             } else {
                 iterator = range.iterator();
             }
         } else if (rowOffset > 0) {
-            iterator = range.inverseIterator();
+            iterator = range.inverseColumnRowIterator();
         } else {
             iterator = range.iterator();
         }

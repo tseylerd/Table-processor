@@ -41,20 +41,20 @@ public class Util {
         value.setExpression(movedValue.toString());
     }
 
-    private static CellPointer readCellPointer(String full) {
-        if (full.isEmpty()) {
+    private static CellPointer readCellPointer(String representation) {
+        if (representation.isEmpty()) {
             return null;
         }
 
         int index = 0;
         StringBuilder column = new StringBuilder();
         StringBuilder row = new StringBuilder();
-        while (index < full.length() && Character.isLetter(full.charAt(index))) {
-            column.append(full.charAt(index));
+        while (index < representation.length() && Character.isLetter(representation.charAt(index))) {
+            column.append(representation.charAt(index));
             index++;
         }
-        while (index < full.length() && Character.isDigit(full.charAt(index))) {
-            row.append(full.charAt(index));
+        while (index < representation.length() && Character.isDigit(representation.charAt(index))) {
+            row.append(representation.charAt(index));
             index++;
         }
         int rowIndex = Integer.parseInt(row.toString());
