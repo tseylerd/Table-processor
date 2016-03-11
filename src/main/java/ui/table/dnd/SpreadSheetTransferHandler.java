@@ -7,7 +7,6 @@ import ui.table.SpreadSheetTable;
 import util.Util;
 
 import javax.swing.*;
-import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
@@ -18,7 +17,7 @@ import java.util.logging.Logger;
  * @author Dmitriy Tseyler
  */
 public class SpreadSheetTransferHandler extends TransferHandler {
-    private static final Logger logger = Logger.getLogger(SpreadSheetTransferHandler.class.getName());
+    private static final Logger log = Logger.getLogger(SpreadSheetTransferHandler.class.getName());
 
     private CellPointer beginPointer;
     private final SpreadSheetTable table;
@@ -43,8 +42,8 @@ public class SpreadSheetTransferHandler extends TransferHandler {
     }
 
     @Override
-    public boolean canImport(JComponent comp, DataFlavor[] transferFlavors) {
-        return true; //// TODO: 07.03.16 What the ...
+    public boolean canImport(TransferSupport support) {
+        return support.isDataFlavorSupported(CellRange.CELL_RANGE_DATA_FLAVOUR);
     }
 
     @Override
@@ -52,10 +51,10 @@ public class SpreadSheetTransferHandler extends TransferHandler {
         int row = table.getSelectedRow();
         int column = table.getSelectedColumn();
         try{
-            CellRange range = (CellRange) support.getTransferable().getTransferData(SpreadSheetDataFlavor.getInstance());
+            CellRange range = (CellRange) support.getTransferable().getTransferData(CellRange.CELL_RANGE_DATA_FLAVOUR);
             processRangeImport(range, row, column);
         } catch (IOException | UnsupportedFlavorException e) {
-            logger.warning("Can't import data. " + e.getMessage());
+            log.warning("Can't import data. " + e.getMessage());
             return false;
         }
         table.repaint(50);

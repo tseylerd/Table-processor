@@ -10,7 +10,6 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.util.Arrays;
 
 /**
  * @author Dmitriy Tseyler
@@ -116,9 +115,11 @@ public class SpanListener implements MouseListener, MouseMotionListener {
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        spanManager.move((SpreadSheetModel) table.getModel());
-        spanManager = null;
-        turnOnTable();
+        if (spanManager != null) {
+            spanManager.move((SpreadSheetModel) table.getModel());
+            spanManager = null;
+            turnOnTable();
+        }
     }
 
 

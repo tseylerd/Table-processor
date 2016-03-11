@@ -2,7 +2,6 @@ package cells;
 
 import cells.iterator.CellIterator;
 import cells.iterator.InverseCellIterator;
-import ui.table.dnd.SpreadSheetDataFlavor;
 
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -15,6 +14,7 @@ import java.util.Iterator;
  * @author Dmitriy Tseyler
  */
 public class CellRange implements Iterable<CellPointer>, Transferable {
+    public static final DataFlavor CELL_RANGE_DATA_FLAVOUR = new DataFlavor(CellRange.class, "Range");
     private final CellPointer begin;
     private final CellPointer end;
 
@@ -95,7 +95,7 @@ public class CellRange implements Iterable<CellPointer>, Transferable {
 
     @Override
     public DataFlavor[] getTransferDataFlavors() {
-        return new DataFlavor[] {SpreadSheetDataFlavor.getInstance()};
+        return new DataFlavor[] {CELL_RANGE_DATA_FLAVOUR};
     }
 
     @Override

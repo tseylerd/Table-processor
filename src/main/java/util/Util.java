@@ -4,14 +4,18 @@ import cells.CellPointer;
 import cells.CellValue;
 import math.calculator.Lexer.LexerValue;
 import ui.table.exceptions.EmptyValueException;
+import ui.table.exceptions.InvalidCellPointerException;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.logging.Logger;
 
 /**
  * @author Dmitriy Tseyler
  */
 public class Util {
+    private static final Logger log = Logger.getLogger(Util.class.getName());
+
     private static final int ENGLISH_CHARACTERS_COUNT = 26;
     private static final Pattern CELL_PATTERN =  Pattern.compile("[A-Z]+\\d+");
 
@@ -23,7 +27,12 @@ public class Util {
         while (matcher.find()) {
             String group = matcher.group();
             CellPointer pointer = readCellPointer(group);
-            CellPointer newPointer = new CellPointer(pointer, rowOffset, columnOffset);
+            CellPointer newPointer = pointer;
+            try {
+                newPointer = new CellPointer(pointer, rowOffset, columnOffset);
+            } catch (InvalidCellPointerException e) {
+                log.warning(String.format("Can't move pointer %s, column offset = %s, row offst = %s.", pointer, columnOffset, rowOffset));
+            }
             movedValue.append(expression.substring(beginIndex, matcher.start()));
             movedValue.append(newPointer);
             beginIndex = matcher.end();

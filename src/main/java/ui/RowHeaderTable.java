@@ -30,8 +30,11 @@ public class RowHeaderTable extends JTable {
             return;
         }
 
-        adjusting = true;
         int[] rows = table.getSelectedRows();
+        if (rows.length == 0)
+            return;
+
+        adjusting = true;
         clearSelection();
         addRowSelectionInterval(rows[0], rows[rows.length - 1]);
         adjusting = false;
@@ -42,8 +45,11 @@ public class RowHeaderTable extends JTable {
             return;
         }
 
-        adjusting = true;
         int[] rows = getSelectedRows();
+        if (rows.length == 0)
+            return;
+
+        adjusting = true;
         table.clearSelection();
         table.addRowSelectionInterval(rows[0], rows[rows.length - 1]);
         table.addColumnSelectionInterval(0, table.getColumnCount() - 1);

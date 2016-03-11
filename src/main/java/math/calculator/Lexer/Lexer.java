@@ -69,7 +69,7 @@ public class Lexer {
                 incrementPointer();
                 lexeme = Lexeme.getLexem(builder.toString());
             }
-            if (lexeme.getType() == LexemeType.AGGREGATE_FUNCTION) {
+            if (lexeme != null && lexeme.getType() == LexemeType.AGGREGATE_FUNCTION) {
                 incrementPointer();
                 CellPointer begin = readCellPointer();
                 incrementPointer();
