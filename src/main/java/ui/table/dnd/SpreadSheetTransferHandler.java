@@ -7,8 +7,11 @@ import ui.table.SpreadSheetTable;
 import util.Util;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.logging.Logger;
@@ -19,11 +22,15 @@ import java.util.logging.Logger;
 public class SpreadSheetTransferHandler extends TransferHandler {
     private static final Logger log = Logger.getLogger(SpreadSheetTransferHandler.class.getName());
 
-    private CellPointer beginPointer;
     private final SpreadSheetTable table;
+
+    private int row;
+    private int column;
+    private CellPointer beginPointer;
 
     public SpreadSheetTransferHandler(SpreadSheetTable table) {
         this.table = table;
+        table.addMouseListener(new BeginCellListener());
     }
 
     @Override
@@ -37,7 +44,7 @@ public class SpreadSheetTransferHandler extends TransferHandler {
         int[] columns = table.getSelectedColumns();
         CellPointer begin = new CellPointer(rows[0], columns[0]);
         CellPointer end = new CellPointer(rows[rows.length - 1], columns[columns.length - 1]);
-        beginPointer = table.getPointer();
+        beginPointer = new CellPointer(row, column);
         return new CellRange(begin, end);
     }
 
@@ -83,6 +90,15 @@ public class SpreadSheetTransferHandler extends TransferHandler {
             table.setValueAt(new CellValue(), pointer);
             Util.move(value, rowOffset, columnOffset);
             table.setValueAt(value, newPointer);
+        }
+    }
+
+    private class BeginCellListener extends MouseAdapter {
+        @Override
+        public void mousePressed(MouseEvent e) {
+            Point point = e.getPoint();
+            row = table.rowAtPoint(point);
+            column = table.columnAtPoint(point);
         }
     }
 }

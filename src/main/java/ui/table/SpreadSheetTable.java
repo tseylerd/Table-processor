@@ -1,6 +1,7 @@
 package ui.table;
 
 import cells.CellPointer;
+import cells.CellRange;
 import cells.CellValue;
 import ui.laf.GridModel;
 import ui.table.dnd.SpreadSheetTransferHandler;
@@ -19,7 +20,6 @@ public class SpreadSheetTable extends JTable {
     private static final int DEFAULT_COLUMN_COUNT = 40;
 
     private final GridModel gridModel;
-    private CellPointer pointer;
 
     public SpreadSheetTable() {
         this(DEFAULT_ROW_COUNT, DEFAULT_COLUMN_COUNT);
@@ -36,25 +36,13 @@ public class SpreadSheetTable extends JTable {
         setDragEnabled(true);
         setDropMode(DropMode.USE_SELECTION);
         setTransferHandler(new SpreadSheetTransferHandler(this));
-        addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) { // TODO: 07.03.16 Move to UI
-                Point point = e.getPoint();
-                int row = rowAtPoint(point);
-                int column = columnAtPoint(point);
-                pointer = new CellPointer(row, column);
-            }
-        });
+        getTableHeader().setReorderingAllowed(false);
         enableEvents(AWTEvent.MOUSE_EVENT_MASK);
     }
 
     @Override
     public String getUIClassID() {
         return UI_ID;
-    }
-
-    public CellPointer getPointer() {
-        return pointer;
     }
 
     public CellValue getValueAt(CellPointer pointer) {
@@ -73,5 +61,12 @@ public class SpreadSheetTable extends JTable {
         int row = rowAtPoint(point);
         int column = columnAtPoint(point);
         return new CellPointer(row, column);
+    }
+
+    public void clearSelectedCells() {
+        CellRange range = CellRange.createCellRange(getSelectedRows(), getSelectedColumns());
+        for (CellPointer cellPointer : range) {
+            setValueAt(new CellValue(), cellPointer);
+        }
     }
 }

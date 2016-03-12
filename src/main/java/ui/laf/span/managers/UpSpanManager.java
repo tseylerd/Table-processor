@@ -2,11 +2,16 @@ package ui.laf.span.managers;
 
 import cells.CellPointer;
 import cells.CellRange;
+import ui.laf.span.spanner.Spanner;
 
 /**
  * @author Dmitriy Tseyler
  */
 public class UpSpanManager extends SpanManager {
+
+    public UpSpanManager() {
+        super(Spanner.UP);
+    }
 
     protected boolean shouldAdd(CellPointer newPointer) {
         CellRange last = getLast();

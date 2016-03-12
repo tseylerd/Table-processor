@@ -48,6 +48,6 @@ public class CellPointer {
 
     @Override
     public String toString() {
-        return Util.columnNameByIndex(column) + row;
+        return Util.columnNameByIndex(column) + (row + 1);
     }
 }

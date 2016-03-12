@@ -13,7 +13,7 @@ public class RowResolver implements IterationStrategyCompareResolver {
 
     @Override
     public int getLast(CellRange range) {
-        return range.getLastColumn();
+        return range.getLastRow();
     }
 
     @Override

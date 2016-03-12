@@ -8,6 +8,10 @@ public class CellValue {
     private String expression;
     private boolean errorState;
 
+    public CellValue(CellValue value) {
+        this(value.value, value.expression);
+    }
+
     public CellValue() {
         this("");
     }
@@ -43,6 +47,10 @@ public class CellValue {
 
     public boolean isErrorState() {
         return errorState;
+    }
+
+    public boolean isExpression() {
+        return expression.charAt(0) == '=';
     }
 
     @Override

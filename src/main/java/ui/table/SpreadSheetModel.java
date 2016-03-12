@@ -142,6 +142,14 @@ public class SpreadSheetModel implements TableModel {
         return getNumber(pointer.getRow(), pointer.getColumn());
     }
 
+    public CellValue getValueAt(CellPointer pointer) {
+        return (CellValue)getValueAt(pointer.getRow(), pointer.getColumn());
+    }
+
+    public void setValueAt(CellValue value, CellPointer pointer) {
+        setValueAt(value, pointer.getRow(), pointer.getColumn());
+    }
+
     @Override
     public void addTableModelListener(TableModelListener l) {
         tableModelListeners.add(l);

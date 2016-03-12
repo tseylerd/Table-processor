@@ -13,8 +13,8 @@ import java.util.function.Supplier;
 public class IteratorsTest {
     private static final int START_ROW = 0;
     private static final int START_COLUMN = 0;
-    private static final int END_COLUMN = 2;
-    private static final int END_ROW = 2;
+    private static final int END_COLUMN = 100;
+    private static final int END_ROW = 100;
 
     private CellRange range;
 
@@ -107,7 +107,7 @@ public class IteratorsTest {
 
     @Test
     public void testInverseColumnRangeIterator() {
-        Iterator<CellRange> iterator = range.inverseColumnIterator();
+        Iterator<CellRange> iterator = range.inverseColumnRangeIterator();
         int start = END_COLUMN + 1;
         while (iterator.hasNext()) {
             CellRange range = iterator.next();

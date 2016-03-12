@@ -15,6 +15,7 @@ public abstract class AbstractCellIterator extends AbstractSpreadSheetIterator<C
     }
 
     protected AbstractCellIterator(CellRange range, IterationStrategy strategy, int offset) {
+        //noinspection unchecked
         super(range, strategy, offset);
     }
 

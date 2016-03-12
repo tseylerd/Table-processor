@@ -120,8 +120,12 @@ public class CellRange implements Iterable<CellPointer>, Transferable {
         return new InverseRangeIterator(this);
     }
 
-    public Iterator<CellRange> inverseColumnIterator() {
+    public Iterator<CellRange> inverseColumnRangeIterator() {
         return new InverseRangeIterator(this, RangeIterationStrategy.COLUMN);
+    }
+
+    public int size() {
+        return (end.getColumn() - begin.getColumn() + 1) * (end.getRow() - begin.getRow() + 1);
     }
 
     @Override

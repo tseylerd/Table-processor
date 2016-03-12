@@ -2,11 +2,16 @@ package ui.laf.span.managers;
 
 import cells.CellPointer;
 import cells.CellRange;
+import ui.laf.span.spanner.Spanner;
 
 /**
  * @author Dmitriy Tseyler
  */
 public class LeftSpanManager extends SpanManager {
+
+    public LeftSpanManager() {
+        super(Spanner.LEFT);
+    }
 
     @Override
     protected boolean shouldAdd(CellPointer newPointer) {

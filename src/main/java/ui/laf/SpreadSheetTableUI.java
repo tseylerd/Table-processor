@@ -10,6 +10,7 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 
 /**
  * @author Dmitriy Tseyler
@@ -18,10 +19,12 @@ public class SpreadSheetTableUI extends BasicTableUI {
 
     private final SpreadSheetTable spreadSheetTable;
     private final SpanListener spanListener;
+    private final Action deleteAction;
 
     private SpreadSheetTableUI(SpreadSheetTable spreadSheetTable) {
         this.spreadSheetTable = spreadSheetTable;
         spanListener = new SpanListener();
+        deleteAction = new DeleteAction(spreadSheetTable);
     }
 
     @SuppressWarnings("unused")
@@ -39,6 +42,18 @@ public class SpreadSheetTableUI extends BasicTableUI {
     protected void uninstallListeners() {
         super.uninstallListeners();
         spanListener.uninstall(spreadSheetTable);
+    }
+
+    @Override
+    protected void installKeyboardActions() {
+        super.installKeyboardActions();
+        spreadSheetTable.getActionMap().put(ProcessorUIDefaults.TABLE_BACK_SPACE_ACTION, deleteAction);
+    }
+
+    @Override
+    protected void uninstallKeyboardActions() {
+        super.uninstallKeyboardActions();
+        spreadSheetTable.getActionMap().remove(ProcessorUIDefaults.TABLE_BACK_SPACE_ACTION);
     }
 
     /**
@@ -337,4 +352,16 @@ public class SpreadSheetTableUI extends BasicTableUI {
         return rect;
     }
 
+    private static class DeleteAction extends AbstractAction {
+        private final SpreadSheetTable table;
+
+        DeleteAction(SpreadSheetTable table) {
+            this.table = table;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            table.clearSelectedCells();
+        }
+    }
 }

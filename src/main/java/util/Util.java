@@ -19,6 +19,12 @@ public class Util {
     private static final int ENGLISH_CHARACTERS_COUNT = 26;
     private static final Pattern CELL_PATTERN =  Pattern.compile("[A-Z]+\\d+");
 
+    public static CellValue moveImmutably(CellValue value, int rowOffset, int columnOffset) {
+        CellValue toMove = new CellValue(value);
+        move(toMove, rowOffset, columnOffset);
+        return toMove;
+    }
+
     public static void move(CellValue value, int rowOffset, int columnOffset) { // TODO: 07.03.16 build and not replace;
         String expression = value.getEditorValue();
         StringBuilder movedValue = new StringBuilder();
