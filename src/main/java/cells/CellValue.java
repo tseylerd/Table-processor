@@ -1,15 +1,19 @@
 package cells;
 
+import math.calculator.expression.Expression;
+import math.calculator.expression.StringExpression;
+
 /**
  * @author Dmitriy Tseyler
  */
 public class CellValue {
-    private String value;
-    private String expression;
+    private String rendererValue;
+    private String editorValue;
+    private Expression expression;
     private boolean errorState;
 
-    public CellValue(CellValue value) {
-        this(value.value, value.expression);
+    public CellValue(CellValue rendererValue) {
+        this(rendererValue.rendererValue, rendererValue.editorValue);
     }
 
     public CellValue() {
@@ -20,25 +24,25 @@ public class CellValue {
         this(expression, expression);
     }
 
-    public CellValue(String value, String expression) {
-        this.value = value;
-        this.expression = expression;
+    public CellValue(String rendererValue, String expression) {
+        this.rendererValue = rendererValue;
+        this.editorValue = expression;
     }
 
     public String getRendererValue() {
-        return isErrorState() ? "Error" : value;
+        return isErrorState() ? "Error" : rendererValue;
     }
 
     public String getEditorValue() {
-        return expression;
+        return editorValue;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public void setRendererValue(String valueString) {
+        this.rendererValue = valueString;
     }
 
-    public void setExpression(String expression) {
-        this.expression = expression;
+    public void setEditorValue(String expressionString) {
+        this.editorValue = expressionString;
     }
 
     public void setErrorState(boolean errorState) {
@@ -49,8 +53,16 @@ public class CellValue {
         return errorState;
     }
 
-    public boolean isExpression() {
-        return expression.charAt(0) == '=';
+    public boolean containsExpression() {
+        return !(expression instanceof StringExpression);
+    }
+
+    public void setExpression(Expression expression) {
+        this.expression = expression;
+    }
+
+    public Expression getExpression() {
+        return expression;
     }
 
     @Override
@@ -60,11 +72,11 @@ public class CellValue {
         }
 
         CellValue toCompare = (CellValue)obj;
-        return this.value.equals(toCompare.value) && this.expression.equals(toCompare.expression);
+        return this.rendererValue.equals(toCompare.rendererValue) && this.editorValue.equals(toCompare.editorValue);
     }
 
     @Override
     public int hashCode() {
-        return value.hashCode() + expression.hashCode();
+        return rendererValue.hashCode() + editorValue.hashCode();
     }
 }

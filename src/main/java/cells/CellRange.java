@@ -6,6 +6,7 @@ import cells.iterator.cell.CellIterationStrategy;
 import cells.iterator.range.InverseRangeIterator;
 import cells.iterator.range.RangeIterationStrategy;
 import cells.iterator.range.RangeIterator;
+import cells.pointer.CellPointer;
 
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -24,7 +25,7 @@ public class CellRange implements Iterable<CellPointer>, Transferable {
     private final CellPointer end;
 
     public CellRange(int startRow, int startColumn, int endRow, int endColumn) {
-        this(new CellPointer(startRow, startColumn), new CellPointer(endRow, endColumn));
+        this(CellPointer.getPointer(startRow, startColumn), CellPointer.getPointer(endRow, endColumn));
     }
 
     public CellRange(CellPointer begin, CellPointer end) {
@@ -80,19 +81,11 @@ public class CellRange implements Iterable<CellPointer>, Transferable {
         return new CellRange(getLastRow(), getFirstColumn(), getLastRow(), getLastColumn());
     }
 
-    public boolean isOneColumnRange() {
-        return begin.getColumn() == end.getColumn();
-    }
-
-    public boolean isOneRowRange() {
-        return begin.getRow() == end.getRow();
-    }
-
     public static CellRange createCellRange(int[] rows, int[] columns) {
         Arrays.sort(rows);
         Arrays.sort(columns);
-        CellPointer start = new CellPointer(rows[0], columns[0]);
-        CellPointer end = new CellPointer(rows[rows.length - 1], columns[columns.length - 1]);
+        CellPointer start = CellPointer.getPointer(rows[0], columns[0]);
+        CellPointer end = CellPointer.getPointer(rows[rows.length - 1], columns[columns.length - 1]);
         return new CellRange(start, end);
     }
 

@@ -19,6 +19,10 @@ public class LexerValue {
     public String getStringValue() {
         if (stringValue == null) {
             stringValue = String.valueOf(doubleValue);
+        } else try {
+            stringValue = String.valueOf(Double.parseDouble(stringValue));
+        } catch (NumberFormatException ignored) {
+
         }
         return stringValue;
     }

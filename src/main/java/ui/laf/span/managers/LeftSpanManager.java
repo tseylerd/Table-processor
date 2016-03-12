@@ -1,6 +1,6 @@
 package ui.laf.span.managers;
 
-import cells.CellPointer;
+import cells.pointer.CellPointer;
 import cells.CellRange;
 import ui.laf.span.spanner.Spanner;
 
@@ -28,8 +28,8 @@ public class LeftSpanManager extends SpanManager {
     @Override
     protected CellRange createNextRange() {
         CellRange range = getLast();
-        CellPointer start = new CellPointer(getFirstRow(), range.getFirstColumn() - 1);
-        CellPointer end = new CellPointer(getLastRow(), range.getFirstColumn() - 1);
+        CellPointer start = CellPointer.getPointer(getFirstRow(), range.getFirstColumn() - 1);
+        CellPointer end = CellPointer.getPointer(getLastRow(), range.getFirstColumn() - 1);
         return new CellRange(start, end);
     }
 }

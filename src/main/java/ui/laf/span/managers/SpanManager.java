@@ -1,6 +1,6 @@
 package ui.laf.span.managers;
 
-import cells.CellPointer;
+import cells.pointer.CellPointer;
 import cells.CellRange;
 import ui.laf.span.spanner.Spanner;
 import ui.table.SpreadSheetModel;
@@ -29,7 +29,7 @@ public abstract class SpanManager {
         while (shouldAdd(pointer)) {
             ranges.addLast(createNextRange());
         }
-        while (needRemove(pointer)){
+        while (!ranges.isEmpty() && needRemove(pointer)){
             ranges.removeLast();
         }
         log();

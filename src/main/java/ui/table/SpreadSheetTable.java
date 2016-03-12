@@ -1,6 +1,6 @@
 package ui.table;
 
-import cells.CellPointer;
+import cells.pointer.CellPointer;
 import cells.CellRange;
 import cells.CellValue;
 import ui.laf.GridModel;
@@ -8,8 +8,6 @@ import ui.table.dnd.SpreadSheetTransferHandler;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 /**
  * @author Dmitriy Tseyler
@@ -60,7 +58,7 @@ public class SpreadSheetTable extends JTable {
     public CellPointer pointerAt(Point point) {
         int row = rowAtPoint(point);
         int column = columnAtPoint(point);
-        return new CellPointer(row, column);
+        return CellPointer.getPointer(row, column);
     }
 
     public void clearSelectedCells() {

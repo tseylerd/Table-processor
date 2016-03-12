@@ -1,6 +1,6 @@
 package util;
 
-import cells.CellPointer;
+import cells.pointer.CellPointer;
 import cells.CellValue;
 import math.calculator.Lexer.LexerValue;
 import ui.table.exceptions.EmptyValueException;
@@ -35,7 +35,7 @@ public class Util {
             CellPointer pointer = readCellPointer(group);
             CellPointer newPointer = pointer;
             try {
-                newPointer = new CellPointer(pointer, rowOffset, columnOffset);
+                newPointer = CellPointer.getPointerWithOffset(pointer, rowOffset, columnOffset);
             } catch (InvalidCellPointerException e) {
                 log.warning(String.format("Can't move pointer %s, column offset = %s, row offst = %s.", pointer, columnOffset, rowOffset));
             }
@@ -44,7 +44,7 @@ public class Util {
             beginIndex = matcher.end();
         }
         movedValue.append(expression.substring(beginIndex, expression.length()));
-        value.setExpression(movedValue.toString());
+        value.setEditorValue(movedValue.toString());
     }
 
     private static CellPointer readCellPointer(String full) {
@@ -65,7 +65,7 @@ public class Util {
         }
         int rowIndex = Integer.parseInt(row.toString());
         int colIndex = indexByColumnName(column.toString());
-        return new CellPointer(rowIndex, colIndex);
+        return CellPointer.getPointer(rowIndex, colIndex);
     }
 
     public static String columnNameByIndex(int column) {

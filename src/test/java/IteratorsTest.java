@@ -1,4 +1,4 @@
-import cells.CellPointer;
+import cells.pointer.CellPointer;
 import cells.CellRange;
 import org.junit.Assert;
 import org.junit.Before;

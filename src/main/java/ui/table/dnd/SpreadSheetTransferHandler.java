@@ -1,6 +1,6 @@
 package ui.table.dnd;
 
-import cells.CellPointer;
+import cells.pointer.CellPointer;
 import cells.CellRange;
 import cells.CellValue;
 import ui.table.SpreadSheetTable;
@@ -42,9 +42,9 @@ public class SpreadSheetTransferHandler extends TransferHandler {
     protected Transferable createTransferable(JComponent c) {
         int[] rows = table.getSelectedRows();
         int[] columns = table.getSelectedColumns();
-        CellPointer begin = new CellPointer(rows[0], columns[0]);
-        CellPointer end = new CellPointer(rows[rows.length - 1], columns[columns.length - 1]);
-        beginPointer = new CellPointer(row, column);
+        CellPointer begin = CellPointer.getPointer(rows[0], columns[0]);
+        CellPointer end = CellPointer.getPointer(rows[rows.length - 1], columns[columns.length - 1]);
+        beginPointer = CellPointer.getPointer(row, column);
         return new CellRange(begin, end);
     }
 
@@ -86,7 +86,7 @@ public class SpreadSheetTransferHandler extends TransferHandler {
         while (iterator.hasNext()) {
             CellPointer pointer = iterator.next();
             CellValue value = table.getValueAt(pointer);
-            CellPointer newPointer = new CellPointer(pointer, rowOffset, columnOffset);
+            CellPointer newPointer = CellPointer.getPointerWithOffset(pointer, rowOffset, columnOffset);
             table.setValueAt(new CellValue(), pointer);
             Util.move(value, rowOffset, columnOffset);
             table.setValueAt(value, newPointer);

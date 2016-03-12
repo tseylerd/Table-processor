@@ -1,6 +1,6 @@
 package ui.laf.span.spanner;
 
-import cells.CellPointer;
+import cells.pointer.CellPointer;
 import cells.CellRange;
 import cells.CellValue;
 import ui.table.SpreadSheetModel;
@@ -89,19 +89,19 @@ public enum Spanner {
         Iterator<CellPointer> iterator = range.iterator();
         CellPointer first = iterator.next();
         CellValue firstValue = model.getValueAt(first);
-        if (firstValue.isExpression()) {
+        if (firstValue.containsExpression()) {
             return 0;
         }
         CellPointer second = iterator.next();
         CellValue secondValue = model.getValueAt(second);
-        if (secondValue.isExpression()) {
+        if (secondValue.containsExpression()) {
             return 0;
         }
         double offset = model.getNumber(second) - model.getNumber(first);
         while (iterator.hasNext()) {
             CellPointer pointer = iterator.next();
             CellValue value = model.getValueAt(pointer);
-            if (value.isExpression()) {
+            if (value.containsExpression()) {
                 return 0;
             }
             double newOffset = model.getNumber(pointer) - model.getNumber(second);

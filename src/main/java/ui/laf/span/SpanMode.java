@@ -1,6 +1,6 @@
 package ui.laf.span;
 
-import cells.CellPointer;
+import cells.pointer.CellPointer;
 import ui.laf.span.managers.*;
 
 import javax.swing.*;
@@ -34,7 +34,7 @@ public enum SpanMode {
 
         @Override
         public CellPointer getStartCell(CellPointer pointer) {
-            return new CellPointer(pointer, -1, 0);
+            return CellPointer.getPointerWithOffset(pointer, -1, 0);
         }
     },
     UP(UpSpanManager::new) {
@@ -59,7 +59,7 @@ public enum SpanMode {
 
         @Override
         public CellPointer getStartCell(CellPointer pointer) {
-            return new CellPointer(pointer, 1, 0);
+            return CellPointer.getPointerWithOffset(pointer, 1, 0);
         }
     },
     LEFT(LeftSpanManager::new) {
@@ -84,7 +84,7 @@ public enum SpanMode {
 
         @Override
         public CellPointer getStartCell(CellPointer pointer) {
-            return new CellPointer(pointer, 0, 1);
+            return CellPointer.getPointerWithOffset(pointer, 0, 1);
         }
     },
     RIGHT(RightSpanManager::new) {
@@ -109,7 +109,7 @@ public enum SpanMode {
 
         @Override
         public CellPointer getStartCell(CellPointer pointer) {
-            return new CellPointer(pointer, 0, -1);
+            return CellPointer.getPointerWithOffset(pointer, 0, -1);
         }
     };
 

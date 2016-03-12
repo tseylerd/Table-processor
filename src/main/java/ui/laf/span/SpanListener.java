@@ -1,6 +1,6 @@
 package ui.laf.span;
 
-import cells.CellPointer;
+import cells.pointer.CellPointer;
 import cells.CellRange;
 import ui.laf.span.managers.SpanManager;
 import ui.table.SpreadSheetModel;
@@ -59,7 +59,7 @@ public class SpanListener implements MouseListener, MouseMotionListener {
         int row = table.rowAtPoint(point);
         int column = table.columnAtPoint(point);
         Rectangle rect = table.getCellRect(row, column, true);
-        CellPointer pointer = new CellPointer(row, column);
+        CellPointer pointer = CellPointer.getPointer(row, column);
 
         spanMode = SpanMode.getSpanMode(point, rect, pointer, table);
         if (spanMode == null) {
@@ -127,7 +127,7 @@ public class SpanListener implements MouseListener, MouseMotionListener {
         if (spanManager == null)
             return false;
 
-        CellPointer pointer = new CellPointer(row, column);
+        CellPointer pointer = CellPointer.getPointer(row, column);
         return spanManager.isInside(pointer);
     }
 }

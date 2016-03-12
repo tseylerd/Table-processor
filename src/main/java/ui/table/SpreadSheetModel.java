@@ -1,9 +1,10 @@
 package ui.table;
 
 import cells.CellValue;
-import cells.CellsConnectionModel;
+import cells.connection.CellsConnectionModel;
+import cells.connection.PointerNode;
 import math.calculator.ExpressionParser;
-import cells.CellPointer;
+import cells.pointer.CellPointer;
 import cells.CellRange;
 import math.calculator.Lexer.LexerValue;
 import math.calculator.expression.Expression;
@@ -16,6 +17,7 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
@@ -23,23 +25,20 @@ import java.util.Set;
  * @author Dmitriy Tseyler
  */
 public class SpreadSheetModel implements TableModel {
+    public static final CellValue EMPTY = new CellValue();
+
     private final List<TableModelListener> tableModelListeners;
-    private final CellValue[][] values; //// TODO: 06.03.16 Variable length of rows and columns
+    private final HashMap<CellPointer, CellValue> values; //// TODO: 06.03.16 Variable length of rows and columns
     private final CellsConnectionModel cellsConnectionModel; // TODO: 06.03.16 Should be one model for cells
-    private final ExpressionParser calculator;
+    private final ExpressionParser parser;
 
     private int rowCount;
     private int columnCount;
 
     public SpreadSheetModel(int rowCount, int columnCount) {
         cellsConnectionModel = new CellsConnectionModel(this);
-        calculator = new ExpressionParser(this);
-        values = new CellValue[rowCount][columnCount];
-        for (int i = 0; i < rowCount; i++) {
-            for (int j = 0; j < columnCount; j++) {
-                values[i][j] = new CellValue();
-            }
-        }
+        parser = new ExpressionParser(this);
+        values = new HashMap<>();
         tableModelListeners = new ArrayList<>();
         this.rowCount = rowCount;
         this.columnCount = columnCount;
@@ -55,11 +54,9 @@ public class SpreadSheetModel implements TableModel {
         return CellValue.class;
     }
 
-    public void recalculate(CellPointer pointer) {
-        int row = pointer.getRow();
-        int column = pointer.getColumn();
-        CellValue value = values[row][column];
-        recalculateValue(value, row, column);
+    public void recalculate(PointerNode pointerNode) {
+        CellValue value = values.get(pointerNode.getPointer());
+        recalculateValue(value, pointerNode);
     }
 
     @Override
@@ -69,20 +66,24 @@ public class SpreadSheetModel implements TableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        return values[rowIndex][columnIndex];
+        CellValue value = values.get(CellPointer.getPointer(rowIndex, columnIndex));
+        if (value == null) {
+            value = EMPTY;
+        }
+        return value;
     }
 
     @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
         CellValue cellValue = (CellValue)aValue;
-        CellPointer pointer = new CellPointer(rowIndex, columnIndex);
+        CellPointer pointer = CellPointer.getPointer(rowIndex, columnIndex);
         cellValue = getTrueValue(cellValue);
-        values[rowIndex][columnIndex] = cellValue;
+        values.put(pointer, cellValue);
         try {
-            Set<CellPointer> pointers = calculator.getPointers();
-            Set<CellRange> ranges = calculator.getRanges();
+            Set<CellPointer> pointers = parser.getPointers();
+            Set<CellRange> ranges = parser.getRanges();
             cellsConnectionModel.subscribe(pointer, pointers, ranges);
-            cellsConnectionModel.cellChanged(pointer);
+            cellsConnectionModel.cellChanged(new PointerNode(pointer));
         } catch (CyclicReferenceException e) {
             cellValue.setErrorState(true);
         }
@@ -90,22 +91,23 @@ public class SpreadSheetModel implements TableModel {
         fireTableModelListeners(rowIndex);
     }
 
-    private void recalculateValue(CellValue cellValue, int rowIndex, int columnIndex) {
-        CellPointer pointer = new CellPointer(rowIndex, columnIndex);
+    private void recalculateValue(CellValue cellValue, PointerNode pointer) {
         cellValue = getTrueValue(cellValue);
-        values[rowIndex][columnIndex] = cellValue;
+        values.put(pointer.getPointer(), cellValue);
         try {
             cellsConnectionModel.cellChanged(pointer);
         } catch (CyclicReferenceException e) {
             cellValue.setErrorState(true);
         }
-        fireTableModelListeners(rowIndex);
+        fireTableModelListeners(pointer.getPointer().getRow());
     }
 
     private CellValue getTrueValue(CellValue cellValue) {
         try {
-            String eval = evaluate(cellValue.getEditorValue());
-            cellValue.setValue(eval);
+            Expression expression = evaluate(cellValue);
+            LexerValue value = expression.calculate();
+            cellValue.setRendererValue(value.getStringValue());
+            cellValue.setExpression(expression);
             cellValue.setErrorState(false);
         } catch (NumberFormatException | InvalidCellPointerException | EmptyValueException e) { // todo reduce exceptions count
             cellValue.setErrorState(true);
@@ -113,14 +115,11 @@ public class SpreadSheetModel implements TableModel {
         return cellValue;
     }
 
-    private String evaluate(String s) {
-        calculator.reset();
-        if (s != null && !s.isEmpty() && s.charAt(0) == '=') {
-            Expression expression = calculator.calculate(s.substring(1));
-            LexerValue value = expression.calculate();
-            return value.getStringValue();
+    private Expression evaluate(CellValue value) {
+        if (value.getExpression() != null) {
+            return value.getExpression();
         }
-        return s;
+        return parser.parse(value.getEditorValue());
     }
 
     @Override

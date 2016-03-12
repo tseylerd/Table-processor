@@ -1,11 +1,9 @@
 package math.calculator.Lexer;
 
-import cells.CellPointer;
+import cells.pointer.CellPointer;
 import cells.CellRange;
 import math.calculator.AggregateFunction;
 import util.Util;
-
-import java.text.ParseException;
 
 /**
  * @author Dmitriy Tseyler
@@ -19,7 +17,7 @@ public class Lexer {
     private AggregateFunction function;
 
     public Lexer(String expression){
-        this.expression = expression.replaceAll(" ", "");
+        this.expression = expression.substring(1).toUpperCase();
         pointer = 0;
         number = "";
     }
@@ -40,7 +38,7 @@ public class Lexer {
         char current = currentChar();
         return Character.isDigit(current) ||
                 current == '.' ||
-                current == 'E' ||
+                (current == 'E' && builder.length() > 0 && (Character.isDigit(builder.charAt(builder.length() - 1)) || builder.charAt(builder.length() - 1) == '.')) ||
                 !(builder.length() == 0) && builder.charAt(builder.length() - 1) == 'E' && (current == '-' || current == '+');
     }
 
@@ -90,13 +88,13 @@ public class Lexer {
     }
 
     private CellPointer readCellPointer(String column) {
-        return new CellPointer(Integer.parseInt(readNumber()) - 1, Util.indexByColumnName(column));
+        return CellPointer.getPointer(Integer.parseInt(readNumber()) - 1, Util.indexByColumnName(column));
     }
 
     private CellPointer readCellPointer() {
         String column = readLiteral();
         String row = readNumber();
-        return new CellPointer(Integer.parseInt(row) - 1, Util.indexByColumnName(column));
+        return CellPointer.getPointer(Integer.parseInt(row) - 1, Util.indexByColumnName(column));
     }
 
     private String readLiteral() {

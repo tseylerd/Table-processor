@@ -5,7 +5,7 @@ import math.calculator.Lexer.Lexer;
 import math.calculator.Lexer.LexerValue;
 import math.calculator.expression.*;
 import ui.table.SpreadSheetModel;
-import cells.CellPointer;
+import cells.pointer.CellPointer;
 import cells.CellRange;
 
 import java.util.HashSet;
@@ -29,8 +29,14 @@ public class ExpressionParser {
         this.model = model;
     }
 
-    public Expression calculate(String expression) {
-        lexer = new Lexer(expression.toUpperCase());
+    public Expression parse(String expression) {
+        pointers.clear();
+        ranges.clear();
+        expression = expression.replaceAll(" ", "");
+        if (expression.isEmpty() || expression.charAt(0) != '=') {
+            return new StringExpression(expression);
+        }
+        lexer = new Lexer(expression);
         lexeme = lexer.nextLexem();
         return expression();
     }

@@ -1,4 +1,4 @@
-package cells;
+package cells.pointer;
 
 import ui.table.exceptions.InvalidCellPointerException;
 import util.Util;
@@ -12,16 +12,17 @@ public class CellPointer {
     private final int row;
     private final int column;
 
-    public CellPointer(CellPointer pointer, int rowOffset, int columnOffset) {
+    private CellPointer(CellPointer pointer, int rowOffset, int columnOffset) {
         this(pointer.row + rowOffset, pointer.column + columnOffset);
     }
 
-    public CellPointer(int row, int column) {
+    private CellPointer(int row, int column) {
         if (row < 0 || column < 0) {
             throw new InvalidCellPointerException();
         }
         this.row = row;
         this.column = column;
+        CellPointerPool.tryCache(this);
     }
 
     public int getRow() {
@@ -48,6 +49,22 @@ public class CellPointer {
 
     @Override
     public String toString() {
-        return Util.columnNameByIndex(column) + (row + 1);
+        return Util.columnNameByIndex(column) + row;
+    }
+
+    public static CellPointer getPointer(int row, int column) {
+        CellPointer pointer = CellPointerPool.getPointer(row, column);
+        if (pointer == null) {
+            pointer = new CellPointer(row, column);
+        }
+        return pointer;
+    }
+
+    public static CellPointer getPointerWithOffset(CellPointer pointer, int rowOffset, int columnOffset) {
+        CellPointer pointerWithOffset = CellPointerPool.getPointer(pointer, rowOffset, columnOffset);
+        if (pointerWithOffset == null) {
+            pointerWithOffset = new CellPointer(pointer, rowOffset, columnOffset);
+        }
+        return pointerWithOffset;
     }
 }

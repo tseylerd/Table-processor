@@ -1,6 +1,6 @@
 package cells.iterator.cell;
 
-import cells.CellPointer;
+import cells.pointer.CellPointer;
 import cells.CellRange;
 
 /**
