@@ -11,20 +11,21 @@ import util.Util;
 public enum Lexeme {
     SUM(LexemeType.AGGREGATE_FUNCTION, "SUM(", null),
     MEAN(LexemeType.AGGREGATE_FUNCTION, "MEAN(", null),
-    CELL(LexemeType.CELL_POINTER, "@", null),
+    CELL(LexemeType.CELL_POINTER, null, null),
     MIN(LexemeType.AGGREGATE_FUNCTION, "MIN(", null),
     MAX(LexemeType.AGGREGATE_FUNCTION, "MAX(", null),
     CLOSE(null, ")", null),
     COS (LexemeType.FUNCTION, "COS(", new UnaryFunctionResolver(Util::cos)),
     SIN (LexemeType.FUNCTION, "SIN(", new UnaryFunctionResolver(Util::sin)),
-    NUM (LexemeType.NUMBER, "0", null),
+    NUM (LexemeType.NUMBER, null, null),
     OPEN(LexemeType.FUNCTION, "(", lexerValues -> lexerValues[0]),
     POW(null, "^", null),
     PLUS(LexemeType.OPERATION, "+", new UnaryFunctionResolver(lexerValue -> lexerValue)),
     MINUS(LexemeType.OPERATION,"-", new UnaryFunctionResolver(Util::inverse)),
     DIV(LexemeType.OPERATION,"/", new BinaryFunctionResolver(Util::div)),
     MULT(LexemeType.OPERATION,"*", new BinaryFunctionResolver(Util::multiply)),
-    ABS(LexemeType.OPERATION, "ABS", new UnaryFunctionResolver(Util::abs));
+    ABS(LexemeType.OPERATION, "ABS", new UnaryFunctionResolver(Util::abs)),
+    STRING(LexemeType.NUMBER, null, null);
 
     private final String value;
     private final LexemeType type;
@@ -38,7 +39,7 @@ public enum Lexeme {
 
     public static Lexeme getLexem(String value) {
         for (Lexeme lexeme : Lexeme.values()){
-            if (lexeme.value.equals(value))
+            if (value.equals(lexeme.value))
                 return lexeme;
         }
         return null;

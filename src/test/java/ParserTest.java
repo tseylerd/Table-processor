@@ -1,4 +1,5 @@
 import math.calculator.ExpressionParser;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -6,7 +7,7 @@ import org.junit.Test;
 /**
  * @author Dmitriy Tseyler
  */
-public class CalculatorTest extends AbstractExpressionTest {
+public class ParserTest extends AbstractExpressionTest {
     private ExpressionParser calculator;
 
     @Before
@@ -66,5 +67,24 @@ public class CalculatorTest extends AbstractExpressionTest {
         String expression = "= sin(1)^4";
         double result = Math.pow(Math.sin(1), 4);
         test(calculate(expression), result);
+    }
+
+    @Test
+    public void testStringExpression() throws Exception {
+        String expression = "=abdfgdg";
+        Assert.assertEquals(calculate(expression), expression.substring(1));
+        try {
+            expression = "=abdfgggg+1";
+            calculate(expression);
+        } catch (NumberFormatException e) {
+            try {
+                expression = "= 1 + abdfgggg";
+                calculate(expression);
+            } catch (NumberFormatException inner) {
+                Assert.assertTrue(true);
+                return;
+            }
+        }
+        Assert.assertTrue(false);
     }
 }
