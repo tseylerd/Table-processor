@@ -86,7 +86,7 @@ public class SpreadSheetTransferHandler extends TransferHandler {
         while (iterator.hasNext()) {
             CellPointer pointer = iterator.next();
             CellValue value = table.getValueAt(pointer);
-            CellPointer newPointer = CellPointer.getPointerWithOffset(pointer, rowOffset, columnOffset);
+            CellPointer newPointer = CellPointer.getPointer(pointer, rowOffset, columnOffset);
             table.setValueAt(new CellValue(), pointer);
             Util.move(value, rowOffset, columnOffset);
             table.setValueAt(value, newPointer);

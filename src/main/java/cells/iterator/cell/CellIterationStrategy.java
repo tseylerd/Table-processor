@@ -11,11 +11,11 @@ import java.util.function.BiFunction;
 public enum CellIterationStrategy implements IterationStrategy<CellPointer, AbstractCellIterator> {
     COLUMN_ROW(((pointer, iterator) -> iterator.needChangeColumn(pointer.getColumn())),
             (pointer, iterator) -> iterator.needChangeRow(pointer.getRow()),
-            (cellPointer, iterator) -> CellPointer.getPointerWithOffset(cellPointer, 0, iterator.getOffset()),
+            (cellPointer, iterator) -> CellPointer.getPointer(cellPointer, 0, iterator.getOffset()),
             (cellPointer, iterator) -> CellPointer.getPointer(cellPointer.getRow() + iterator.getOffset(), iterator.getBegin().getColumn())),
     ROW_COLUMN((pointer, iterator) -> iterator.needChangeRow(pointer.getRow()),
             (pointer, iterator) -> iterator.needChangeColumn(pointer.getColumn()),
-            (cellPointer, iterator) -> CellPointer.getPointerWithOffset(cellPointer, iterator.getOffset(), 0),
+            (cellPointer, iterator) -> CellPointer.getPointer(cellPointer, iterator.getOffset(), 0),
             (cellPointer, iterator) -> CellPointer.getPointer(iterator.getBegin().getRow(), cellPointer.getColumn() + iterator.getOffset()));
 
     private final BiFunction<CellPointer, AbstractCellIterator, Boolean> firstCheck;

@@ -17,7 +17,7 @@ public class Util {
     private static final Logger log = Logger.getLogger(Util.class.getName());
 
     private static final int ENGLISH_CHARACTERS_COUNT = 26;
-    private static final Pattern CELL_PATTERN =  Pattern.compile("[A-Z]+\\d+");
+    private static final Pattern CELL_PATTERN =  Pattern.compile("\\$?[A-Z]+\\$?\\d+");
 
     public static CellValue moveImmutably(CellValue value, int rowOffset, int columnOffset) {
         CellValue toMove = new CellValue(value);
@@ -25,47 +25,56 @@ public class Util {
         return toMove;
     }
 
-    public static void move(CellValue value, int rowOffset, int columnOffset) { // TODO: 07.03.16 build and not replace;
+    public static void move(CellValue value, int rowOffset, int columnOffset) {
         String expression = value.getEditorValue();
+        if (expression.isEmpty() || expression.charAt(0) != '=')
+            return;
+
         StringBuilder movedValue = new StringBuilder();
         Matcher matcher = CELL_PATTERN.matcher(value.getEditorValue());
         int beginIndex = 0;
         while (matcher.find()) {
             String group = matcher.group();
-            CellPointer pointer = readCellPointer(group);
-            CellPointer newPointer = pointer;
+            PointerMovingExpression movingExpression = readMovingExpression(group);
+            PointerMovingExpression moved = movingExpression;
             try {
-                newPointer = CellPointer.getPointerWithOffset(pointer, rowOffset, columnOffset);
+                moved = movingExpression.moveAndGet(rowOffset, columnOffset);
             } catch (InvalidCellPointerException e) {
-                log.warning(String.format("Can't move pointer %s, column offset = %s, row offst = %s.", pointer, columnOffset, rowOffset));
+                log.warning(String.format("Can't move pointer %s, column offset = %s, row offst = %s.", movingExpression, columnOffset, rowOffset));
             }
             movedValue.append(expression.substring(beginIndex, matcher.start()));
-            movedValue.append(newPointer);
+            movedValue.append(moved);
             beginIndex = matcher.end();
         }
         movedValue.append(expression.substring(beginIndex, expression.length()));
         value.setEditorValue(movedValue.toString());
     }
 
-    private static CellPointer readCellPointer(String full) {
-        if (full.isEmpty()) {
-            return null;
-        }
-
+    private static PointerMovingExpression readMovingExpression(String stringValue) {
         int index = 0;
         StringBuilder column = new StringBuilder();
         StringBuilder row = new StringBuilder();
-        while (index < full.length() && Character.isLetter(full.charAt(index))) {
-            column.append(full.charAt(index));
+        boolean rowFixed = false;
+        boolean columnFixed = false;
+        if (stringValue.charAt(index) == '$') {
+            columnFixed = true;
             index++;
         }
-        while (index < full.length() && Character.isDigit(full.charAt(index))) {
-            row.append(full.charAt(index));
+        while (index < stringValue.length() && Character.isLetter(stringValue.charAt(index))) {
+            column.append(stringValue.charAt(index));
+            index++;
+        }
+        if (stringValue.charAt(index) == '$') {
+            rowFixed = true;
+            index++;
+        }
+        while (index < stringValue.length() && Character.isDigit(stringValue.charAt(index))) {
+            row.append(stringValue.charAt(index));
             index++;
         }
         int rowIndex = Integer.parseInt(row.toString());
         int colIndex = indexByColumnName(column.toString());
-        return CellPointer.getPointer(rowIndex, colIndex);
+        return new PointerMovingExpression(columnFixed, rowFixed, CellPointer.getPointer(rowIndex, colIndex));
     }
 
     public static String columnNameByIndex(int column) {

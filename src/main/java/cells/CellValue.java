@@ -20,8 +20,8 @@ public class CellValue {
         this("");
     }
 
-    public CellValue(String expression) {
-        this(expression, expression);
+    public CellValue(String editorValue) {
+        this(editorValue, editorValue);
     }
 
     public CellValue(String rendererValue, String expression) {

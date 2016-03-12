@@ -34,7 +34,7 @@ public enum SpanMode {
 
         @Override
         public CellPointer getStartCell(CellPointer pointer) {
-            return CellPointer.getPointerWithOffset(pointer, -1, 0);
+            return CellPointer.getPointer(pointer, -1, 0);
         }
     },
     UP(UpSpanManager::new) {
@@ -59,7 +59,7 @@ public enum SpanMode {
 
         @Override
         public CellPointer getStartCell(CellPointer pointer) {
-            return CellPointer.getPointerWithOffset(pointer, 1, 0);
+            return CellPointer.getPointer(pointer, 1, 0);
         }
     },
     LEFT(LeftSpanManager::new) {
@@ -84,7 +84,7 @@ public enum SpanMode {
 
         @Override
         public CellPointer getStartCell(CellPointer pointer) {
-            return CellPointer.getPointerWithOffset(pointer, 0, 1);
+            return CellPointer.getPointer(pointer, 0, 1);
         }
     },
     RIGHT(RightSpanManager::new) {
@@ -109,7 +109,7 @@ public enum SpanMode {
 
         @Override
         public CellPointer getStartCell(CellPointer pointer) {
-            return CellPointer.getPointerWithOffset(pointer, 0, -1);
+            return CellPointer.getPointer(pointer, 0, -1);
         }
     };
 

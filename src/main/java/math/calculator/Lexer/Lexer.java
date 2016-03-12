@@ -42,7 +42,7 @@ public class Lexer {
                 !(builder.length() == 0) && builder.charAt(builder.length() - 1) == 'E' && (current == '-' || current == '+');
     }
 
-    public Lexeme nextLexem() {
+    public Lexeme nextLexeme() {
         if (pointer < expression.length()) {
             StringBuilder builder = new StringBuilder();
             while (notEnd() && needReadDigit(builder)) {
@@ -53,8 +53,14 @@ public class Lexer {
                 number = builder.toString();
                 return Lexeme.NUM;
             }
-            while (notEnd() && Character.isAlphabetic(currentChar())) {
+            if (currentChar() == '$') {
+                incrementPointer();
+            }
+            while (notEnd() && Character.isLetter(currentChar())) {
                 builder.append(currentChar());
+                incrementPointer();
+            }
+            if (currentChar() == '$') {
                 incrementPointer();
             }
             if (notEnd() && Character.isDigit(currentChar())) {
@@ -92,7 +98,13 @@ public class Lexer {
     }
 
     private CellPointer readCellPointer() {
+        if (currentChar() == '$') {
+            incrementPointer();
+        }
         String column = readLiteral();
+        if (currentChar() == '$') {
+            incrementPointer();
+        }
         String row = readNumber();
         return CellPointer.getPointer(Integer.parseInt(row) - 1, Util.indexByColumnName(column));
     }

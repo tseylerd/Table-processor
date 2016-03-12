@@ -60,7 +60,7 @@ public class CellPointer {
         return pointer;
     }
 
-    public static CellPointer getPointerWithOffset(CellPointer pointer, int rowOffset, int columnOffset) {
+    public static CellPointer getPointer(CellPointer pointer, int rowOffset, int columnOffset) {
         CellPointer pointerWithOffset = CellPointerPool.getPointer(pointer, rowOffset, columnOffset);
         if (pointerWithOffset == null) {
             pointerWithOffset = new CellPointer(pointer, rowOffset, columnOffset);
