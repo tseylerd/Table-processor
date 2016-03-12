@@ -3,6 +3,7 @@ package math.calculator.Lexer;
 import cells.pointer.CellPointer;
 import cells.CellRange;
 import math.calculator.AggregateFunction;
+import math.calculator.LexemeType;
 import util.Util;
 
 /**
@@ -83,7 +84,7 @@ public class Lexer {
             }
             if (builder.length() > 0) {
                 number = builder.toString();
-                return Lexeme.NUM;
+                return Lexeme.NUMBER;
             }
             checkFixCharacter();
             while (notEnd() && Character.isLetter(currentChar())) {

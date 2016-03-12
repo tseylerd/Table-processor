@@ -7,14 +7,14 @@ import ui.table.SpreadSheetModel;
 import ui.table.SpreadSheetTable;
 
 import java.awt.*;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 
 /**
+ * This listener is for cell span operation on table
  * @author Dmitriy Tseyler
  */
-public class SpanListener implements MouseListener, MouseMotionListener {
+public class SpanListener extends MouseAdapter {
     private SpreadSheetTable table;
 
     private SpanManager spanManager;
@@ -33,24 +33,14 @@ public class SpanListener implements MouseListener, MouseMotionListener {
     }
 
     @Override
-    public void mouseClicked(MouseEvent e) {
-
-    }
-
-    @Override
     public void mouseDragged(MouseEvent e) {
-        if (spanManager == null) {
+        if (spanManager == null || !table.contains(e.getPoint())) {
             return;
         }
 
         CellPointer current = table.pointerAt(e.getPoint());
         spanManager.newCell(current);
         table.repaint();
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-
     }
 
     @Override
@@ -80,11 +70,6 @@ public class SpanListener implements MouseListener, MouseMotionListener {
         } else {
             return new CellRange(start, start);
         }
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-
     }
 
     @Override

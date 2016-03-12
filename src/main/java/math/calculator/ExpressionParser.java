@@ -56,11 +56,6 @@ public class ExpressionParser {
         return pointers;
     }
 
-    public void reset() {
-        pointers.clear();
-        ranges.clear();
-    }
-
     public Set<CellRange> getRanges() {
         return ranges;
     }
@@ -95,33 +90,41 @@ public class ExpressionParser {
     }
 
     private Expression multiplier() {
-        Lexeme tempLexeme = lexeme;
-        switch (lexeme.getType()) {
-            case AGGREGATE_FUNCTION: {
-                CellRange range = lexer.getRange();
-                ranges.add(range);
-                AggregateFunction function = lexer.getFunction();
-                lexeme = lexer.nextLexeme();
-                return new AggregateExpression(function, range, model);
-            } case CELL_POINTER: {
-                CellPointer pointer = lexer.getCellPointer();
-                pointers.add(pointer);
-                lexeme = lexer.nextLexeme();
-                return new CellPointerExpression(pointer, model);
-            } case NUMBER: {
-                String num = lexer.getNumber();
-                lexeme = lexer.nextLexeme();
-                return new NumberExpression(new LexerValue(num));
-            } case FUNCTION:{
-                lexeme = lexer.nextLexeme();
-                Expression result = new UnaryExpression(tempLexeme::getResult, expression());
-                lexeme = lexer.nextLexeme();
-                return result;
-            } case OPERATION:{
-                lexeme = lexer.nextLexeme();
-                return new UnaryExpression(tempLexeme::getResult, multiplier());
-            }
-        }
-        return null;
+        return lexeme.getType().getExpression(this);
+    }
+
+    public Expression onAgregateFunction() {
+        CellRange range = lexer.getRange();
+        ranges.add(range);
+        AggregateFunction function = lexer.getFunction();
+        lexeme = lexer.nextLexeme();
+        return new AggregateExpression(function, range, model);
+    }
+
+    Expression onCellPointer() {
+        CellPointer pointer = lexer.getCellPointer();
+        pointers.add(pointer);
+        lexeme = lexer.nextLexeme();
+        return new CellPointerExpression(pointer, model);
+    }
+
+    Expression onLiteral() {
+        String num = lexer.getNumber();
+        lexeme = lexer.nextLexeme();
+        return new NumberExpression(new LexerValue(num));
+    }
+
+    Expression onFunction() {
+        Lexeme previous = lexeme;
+        lexeme = lexer.nextLexeme();
+        Expression result = new UnaryExpression(previous::getResult, expression());
+        lexeme = lexer.nextLexeme();
+        return result;
+    }
+
+    Expression onOperation() {
+        Lexeme previous = lexeme;
+        lexeme = lexer.nextLexeme();
+        return new UnaryExpression(previous::getResult, multiplier());
     }
 }

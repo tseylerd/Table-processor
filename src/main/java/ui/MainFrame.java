@@ -5,6 +5,7 @@ import ui.table.SpreadSheetTable;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.logging.Logger;
 
 /**
  * @author Dmitriy Tseyler
@@ -25,6 +26,10 @@ public class MainFrame extends JFrame {
     public static void main(String[] args) throws UnsupportedLookAndFeelException {
         UIManager.setLookAndFeel(new ProcessorLookAndFeel());
         MainFrame frame = new MainFrame();
+        Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
+            JOptionPane.showMessageDialog(frame, e);
+            e.printStackTrace();
+        });
         SwingUtilities.invokeLater(() -> frame.setVisible(true));
     }
 }
