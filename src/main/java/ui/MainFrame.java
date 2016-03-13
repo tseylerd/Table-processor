@@ -1,11 +1,10 @@
 package ui;
 
 import ui.laf.ProcessorLookAndFeel;
-import ui.table.SpreadSheetTable;
+import ui.menu.MainMenuBar;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.logging.Logger;
 
 /**
  * @author Dmitriy Tseyler
@@ -15,9 +14,11 @@ public class MainFrame extends JFrame {
     private static final String TITLE = "Tseyler table processor";
 
     public MainFrame() {
+        MainTabbedPane tabbedPane = new MainTabbedPane();
+        setJMenuBar(new MainMenuBar(tabbedPane, this));
         setLayout(new BorderLayout());
         setTitle(TITLE);
-        add(new SpreadSheetPanel(), BorderLayout.CENTER);
+        add(tabbedPane, BorderLayout.CENTER);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setPreferredSize(DEFAULT_SIZE);
         pack();

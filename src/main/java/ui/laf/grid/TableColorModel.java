@@ -58,7 +58,7 @@ public class TableColorModel {
         }
     }
 
-    private void setBackgroundColor(CellPointer pointer, Color color) {
+    public void setBackgroundColor(CellPointer pointer, Color color) {
         CellColorModel model = getCellColorModel(pointer);
         model.setBackground(color);
     }
@@ -159,7 +159,7 @@ public class TableColorModel {
         return true;
     }
 
-    private void setLowerLineColor(CellPointer pointer, Color color) {
+    public void setLowerLineColor(CellPointer pointer, Color color) {
         CellColorModel cellColorModel = modelMap.get(pointer);
         if (cellColorModel == null) {
             cellColorModel = new CellColorModel();
@@ -170,7 +170,7 @@ public class TableColorModel {
         }
     }
 
-    private void setRightLineColor(CellPointer pointer, Color color) {
+    public void setRightLineColor(CellPointer pointer, Color color) {
         CellColorModel cellColorModel = modelMap.get(pointer);
         if (cellColorModel == null) {
             cellColorModel = new CellColorModel();
@@ -181,12 +181,12 @@ public class TableColorModel {
         }
     }
 
-    void setNeedLowerLine(CellPointer pointer, boolean need) {
+    public void setNeedLowerLine(CellPointer pointer, boolean need) {
         CellColorModel cellColorModel = getCellColorModel(pointer);
         cellColorModel.setNeedLowerLine(need);
     }
 
-    void setNeedRightLine(CellPointer pointer, boolean need) {
+    public void setNeedRightLine(CellPointer pointer, boolean need) {
         CellColorModel cellColorModel = getCellColorModel(pointer);
         cellColorModel.setNeedRightLine(need);
     }

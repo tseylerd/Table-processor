@@ -5,7 +5,8 @@ package ui.icon;
  */
 public enum IconConfiguration {
     WARNING("warning"),
-    CYCLIC_REFERENCE("cyclic_reference");
+    CYCLIC_REFERENCE("cyclic_reference"),
+    CLOSE("close");
 
     private final String name;
 

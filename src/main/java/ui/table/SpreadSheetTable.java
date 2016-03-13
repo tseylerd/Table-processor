@@ -27,8 +27,12 @@ public class SpreadSheetTable extends JTable {
     }
 
     public SpreadSheetTable(int rowCount, int columnCount) {
-        super(new SpreadSheetModel(rowCount, columnCount));
-        tableColorModel = new TableColorModel();
+        this(new SpreadSheetModel(rowCount, columnCount), new TableColorModel());
+    }
+
+    public SpreadSheetTable(SpreadSheetModel model, TableColorModel tableColorModel) {
+        super(model);
+        this.tableColorModel = tableColorModel;
         setCellSelectionEnabled(true);
         setDefaultEditor(CellValue.class, new SpreadSheetEditor());
         setDefaultRenderer(CellValue.class, new SpreadSheetRenderer(this));

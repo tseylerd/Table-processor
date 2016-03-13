@@ -11,9 +11,11 @@ import java.awt.event.ActionEvent;
  * @author Dmitriy Tseyler
  */
 public class SpreadSheetPanel extends JPanel {
-    public SpreadSheetPanel() {
+    private final SpreadSheetTable table;
+
+    public SpreadSheetPanel(SpreadSheetTable table) {
         super(new BorderLayout());
-        SpreadSheetTable table = new SpreadSheetTable();
+        this.table = table;
         JTable rowHeaderTable = new RowHeaderTable(table);
         JScrollPane scrollPane = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         JButton selectAll = new JButton(new AbstractAction("Select all") {
@@ -27,5 +29,9 @@ public class SpreadSheetPanel extends JPanel {
         scrollPane.setRowHeaderView(rowHeaderTable);
         add(scrollPane, BorderLayout.CENTER);
         add(new PreferencesPanel(table), BorderLayout.EAST);
+    }
+
+    public SpreadSheetTable getTable() {
+        return table;
     }
 }
