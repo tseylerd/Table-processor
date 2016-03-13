@@ -1,4 +1,4 @@
-package ui.preferences.grid;
+package ui.preferences.color;
 
 import cells.CellRange;
 import ui.laf.grid.BorderMode;

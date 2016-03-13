@@ -7,11 +7,14 @@ class CellPointerPool {
     private static final CellPointer[][] pointers = new CellPointer[Byte.MAX_VALUE][Byte.MAX_VALUE];
 
     static CellPointer getPointer(int row, int column) {
+        if (row >= Byte.MAX_VALUE || column >= Byte.MAX_VALUE) {
+            return null;
+        }
         return pointers[row][column];
     }
 
     static CellPointer getPointer(CellPointer pointer, int rowOffset, int columnOffset) {
-        return pointers[pointer.getRow() + rowOffset][pointer.getColumn() + columnOffset];
+        return getPointer(pointer.getRow() + rowOffset, pointer.getColumn() + columnOffset);
     }
 
     static void tryCache(CellPointer pointer) {

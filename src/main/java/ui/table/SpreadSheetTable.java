@@ -7,7 +7,9 @@ import ui.laf.grid.TableColorModel;
 import ui.table.dnd.SpreadSheetTransferHandler;
 
 import javax.swing.*;
+import javax.swing.event.TableModelEvent;
 import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
 import java.awt.*;
 
 /**
@@ -69,5 +71,21 @@ public class SpreadSheetTable extends JTable {
                 setValueAt(new CellValue(), cellPointer);
             }
         }
+    }
+
+    public void addColumn() {
+        ((SpreadSheetModel)getModel()).addColumn(getColumnModel());
+    }
+
+    public void addRow() {
+        ((SpreadSheetModel)getModel()).addRow();
+    }
+
+    public void removeRow() {
+        ((SpreadSheetModel)getModel()).removeRow();
+    }
+
+    public void removeColumn() {
+        ((SpreadSheetModel)getModel()).removeColumn(getColumnModel());
     }
 }

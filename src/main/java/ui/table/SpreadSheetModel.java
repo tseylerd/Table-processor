@@ -16,11 +16,10 @@ import util.Util;
 
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author Dmitriy Tseyler
@@ -29,8 +28,8 @@ public class SpreadSheetModel implements TableModel {
     public static final CellValue EMPTY = new CellValue();
 
     private final List<TableModelListener> tableModelListeners;
-    private final HashMap<CellPointer, CellValue> values; //// TODO: 06.03.16 Variable length of rows and columns
-    private final CellsConnectionModel cellsConnectionModel; // TODO: 06.03.16 Should be one model for cells
+    private final Map<CellPointer, CellValue> values;
+    private final CellsConnectionModel cellsConnectionModel;
     private final ExpressionParser parser;
 
     private int rowCount;
@@ -67,6 +66,10 @@ public class SpreadSheetModel implements TableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
+        if (rowIndex >= rowCount || columnIndex >= columnCount) {
+            throw new IndexOutOfBoundsException();
+        }
+
         CellValue value = values.get(CellPointer.getPointer(rowIndex, columnIndex));
         if (value == null) {
             value = EMPTY;
@@ -110,7 +113,7 @@ public class SpreadSheetModel implements TableModel {
             cellValue.setRendererValue(value.getStringValue());
             cellValue.setExpression(expression);
             cellValue.setError(null);
-        } catch (NumberFormatException | InvalidCellPointerException | EmptyValueException e) { // todo reduce exceptions count
+        } catch (NumberFormatException | InvalidCellPointerException | IndexOutOfBoundsException | EmptyValueException e) { // todo reduce exceptions count
             cellValue.setError(Error.PARSE);
         }
         return cellValue;
@@ -130,6 +133,10 @@ public class SpreadSheetModel implements TableModel {
 
     private void fireTableModelListeners(int row) {
         TableModelEvent event = new TableModelEvent(this, row);
+        tableModelListeners.forEach(tableModelListener -> tableModelListener.tableChanged(event));
+    }
+
+    private void fireTableModelListeners(TableModelEvent event) {
         tableModelListeners.forEach(tableModelListener -> tableModelListener.tableChanged(event));
     }
 
@@ -163,6 +170,51 @@ public class SpreadSheetModel implements TableModel {
     @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
         return true;
+    }
+
+    public void addRow() {
+        rowCount++;
+        fireTableRowsInserted(rowCount, rowCount);
+    }
+
+    public void addColumn(TableColumnModel columnModel) {
+        columnModel.addColumn(new TableColumn(columnCount++));
+        fireTableStructureChanged();
+    }
+
+    public void removeRow() {
+        rowCount--;
+        CellRange range = new CellRange(rowCount, 0, rowCount, columnCount);
+        for (CellPointer pointer : range) {
+            values.remove(pointer);
+            setValueAt(EMPTY, pointer);
+        }
+        fireTableRowsDeleted(0, rowCount);
+    }
+
+    public void removeColumn(TableColumnModel model) {
+        columnCount--;
+        CellRange range = new CellRange(0, columnCount, rowCount, columnCount);
+        for (CellPointer pointer : range) {
+            values.remove(pointer);
+            setValueAt(EMPTY, pointer);
+        }
+        model.removeColumn(model.getColumn(columnCount));
+        fireTableStructureChanged();
+    }
+
+    private void fireTableRowsDeleted(int firstRow, int lastRow) {
+        fireTableModelListeners(new TableModelEvent(this, firstRow, lastRow,
+                TableModelEvent.ALL_COLUMNS, TableModelEvent.DELETE));
+    }
+
+    public void fireTableRowsInserted(int firstRow, int lastRow) {
+        fireTableModelListeners(new TableModelEvent(this, firstRow, lastRow,
+                TableModelEvent.ALL_COLUMNS, TableModelEvent.INSERT));
+    }
+
+    public void fireTableStructureChanged() {
+        fireTableModelListeners(new TableModelEvent(this, TableModelEvent.HEADER_ROW));
     }
 }
 

@@ -4,6 +4,9 @@ import ui.table.SpreadSheetTable;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
 /**
@@ -22,6 +25,14 @@ public class RowHeaderTable extends JTable {
         table.getSelectionModel().addListSelectionListener(this::viewTableSelectionChanged); // todo: find a better way, may be one selection model
         getSelectionModel().addListSelectionListener(this::rowHeaderSelectionChanged);
         getColumnModel().getColumn(0).setResizable(true);
+        table.getModel().addTableModelListener(e -> {
+            while (table.getRowCount() < getRowCount()) {
+                ((DefaultTableModel)getModel()).removeRow(getRowCount() - 1);
+            }
+            while (table.getRowCount() > getRowCount()) {
+                ((DefaultTableModel)getModel()).addRow(new Object[]{getRowCount()});
+            }
+        });
     }
 
     private void viewTableSelectionChanged(ListSelectionEvent event) {
