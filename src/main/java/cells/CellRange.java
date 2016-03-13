@@ -82,6 +82,10 @@ public class CellRange implements Iterable<CellPointer>, Transferable {
     }
 
     public static CellRange createCellRange(int[] rows, int[] columns) {
+        if (rows.length == 0 || columns.length == 0) {
+            return null;
+        }
+
         Arrays.sort(rows);
         Arrays.sort(columns);
         CellPointer start = CellPointer.getPointer(rows[0], columns[0]);
@@ -119,6 +123,14 @@ public class CellRange implements Iterable<CellPointer>, Transferable {
 
     public int size() {
         return (end.getColumn() - begin.getColumn() + 1) * (end.getRow() - begin.getRow() + 1);
+    }
+
+    public boolean isOneRowRange() {
+        return getFirstRow() == getLastRow();
+    }
+
+    public boolean isOneColumnRange() {
+        return getLastColumn() == getFirstColumn();
     }
 
     @Override

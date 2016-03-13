@@ -74,7 +74,7 @@ public class SpanListener extends MouseAdapter {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        if (spanMode != null) {
+        if (spanMode != null && startRange != null) {
             spanManager = spanMode.createManager();
             spanManager.setStartRange(startRange);
             turnOffTable();

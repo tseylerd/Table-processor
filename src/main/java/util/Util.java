@@ -6,6 +6,7 @@ import math.calculator.Lexer.LexerValue;
 import ui.table.exceptions.EmptyValueException;
 import ui.table.exceptions.InvalidCellPointerException;
 
+import java.awt.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.logging.Logger;
@@ -135,5 +136,24 @@ public class Util {
             throw new EmptyValueException();
         }
         return value;
+    }
+
+    public static Color mix(Color first, Color second) {
+        float ratio  = 0.5f;
+        float rgb1[] = new float[3];
+        float rgb2[] = new float[3];
+        first.getColorComponents(rgb1);
+        second.getColorComponents(rgb2);
+        float red = rgb1[0] * ratio + rgb2[0] * ratio;
+        float green = rgb1[1] * ratio + rgb2[1] * ratio;
+        float blue = rgb1[2] * ratio + rgb2[2] * ratio;
+        return new Color(red, green, blue);
+    }
+
+    public static Color inverse(Color toInverse) {
+        int red = 255 - toInverse.getRed();
+        int green = 255 - toInverse.getGreen();
+        int blue = 255 - toInverse.getBlue();
+        return new Color(red, green, blue);
     }
 }

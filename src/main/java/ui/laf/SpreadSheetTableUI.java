@@ -1,5 +1,7 @@
 package ui.laf;
 
+import cells.pointer.CellPointer;
+import ui.laf.grid.TableColorModel;
 import ui.laf.span.SpanListener;
 import ui.table.SpreadSheetTable;
 
@@ -157,24 +159,15 @@ public class SpreadSheetTableUI extends BasicTableUI {
             rendererPane.paintComponent(g, component, table, cellRect.x, cellRect.y,
                     cellRect.width, cellRect.height, true);
         }
+        paintCellBackground(g, cellRect, row, column);
         if (spanListener.isCellInside(row, column)) {
             g.setColor(new Color(17, 17, 17, 50));
             g.fillRect(cellRect.x, cellRect.y, cellRect.width, cellRect.height);
         }
     }
 
-    private void paintHover(Graphics g, Rectangle cellRect, int row, int column) {
-        Point point = table.getMousePosition();
-        if (point == null) {
-            return;
-        }
+    private void paintCellBackground(Graphics g, Rectangle cellRect, int row, int column) {
 
-        int hoveredRow = table.rowAtPoint(point);
-        int hoveredColumn = table.columnAtPoint(point);
-        if (hoveredRow == row && hoveredColumn == column) {
-            g.setColor(new Color(17, 17, 17, 50));
-            g.fillRect(cellRect.x, cellRect.y, cellRect.width, cellRect.height);
-        }
     }
 
     /**
@@ -184,7 +177,7 @@ public class SpreadSheetTableUI extends BasicTableUI {
         Rectangle minCell = table.getCellRect(rMin, cMin, true);
         Rectangle maxCell = table.getCellRect(rMax, cMax, true);
         Rectangle damagedArea = minCell.union(maxCell);
-        GridModel gridModel = spreadSheetTable.getGridModel();
+        TableColorModel tableColorModel = spreadSheetTable.getTableColorModel();
 
         TableColumnModel columnModel = table.getColumnModel();
 
@@ -193,8 +186,8 @@ public class SpreadSheetTableUI extends BasicTableUI {
             int x = damagedArea.x;
             y += table.getRowHeight(row);
             for (int column = cMin; column <= cMax; column++) {
-                if (gridModel.needLowerLine(row, column)) {
-                    Color color = gridModel.getLowerLineColor(row, column);
+                if (tableColorModel.needLowerLine(row, column)) {
+                    Color color = tableColorModel.getLowerLineColor(row, column);
                     g.setColor(color);
                     g.drawLine(x, y - 1, x + columnModel.getColumn(column).getWidth() - 1, y - 1);
                 }
@@ -206,8 +199,8 @@ public class SpreadSheetTableUI extends BasicTableUI {
             y = 0;
             x += columnModel.getColumn(column).getWidth();
             for (int row = 0; row <= rMax; row++) {
-                if (gridModel.needRightLine(row, column)) {
-                    Color color = gridModel.getRightLineColor(row, column);
+                if (tableColorModel.needRightLine(row, column)) {
+                    Color color = tableColorModel.getRightLineColor(row, column);
                     g.setColor(color);
                     g.drawLine(x - 1, y, x - 1, y + table.getRowHeight(row) - 1);
                 }

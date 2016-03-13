@@ -1,5 +1,6 @@
 package ui;
 
+import ui.preferences.PreferencesPanel;
 import ui.table.SpreadSheetTable;
 
 import javax.swing.*;
@@ -17,5 +18,6 @@ public class SpreadSheetPanel extends JPanel {
         scrollPane.setCorner(JScrollPane.UPPER_LEFT_CORNER, rowHeaderTable.getTableHeader());
         scrollPane.setRowHeaderView(rowHeaderTable);
         add(scrollPane, BorderLayout.CENTER);
+        add(new PreferencesPanel(table), BorderLayout.EAST);
     }
 }

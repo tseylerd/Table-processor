@@ -2,6 +2,7 @@ package ui.laf;
 
 import javax.swing.*;
 import javax.swing.plaf.metal.MetalLookAndFeel;
+import java.awt.*;
 
 /**
  * @author Dmitriy Tseyler
@@ -12,6 +13,8 @@ public class ProcessorLookAndFeel extends MetalLookAndFeel {
     protected void initClassDefaults(UIDefaults table) {
         super.initClassDefaults(table);
         table.put("SpreadSheetTableUI", SpreadSheetTableUI.class.getName());
+        table.put("Table.grid", Color.GRAY);
+        table.put("Table.cellBackground", Color.WHITE);
     }
 
     @Override

@@ -3,10 +3,11 @@ package ui.table;
 import cells.pointer.CellPointer;
 import cells.CellRange;
 import cells.CellValue;
-import ui.laf.GridModel;
+import ui.laf.grid.TableColorModel;
 import ui.table.dnd.SpreadSheetTransferHandler;
 
 import javax.swing.*;
+import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 
 /**
@@ -17,7 +18,7 @@ public class SpreadSheetTable extends JTable {
     private static final int DEFAULT_ROW_COUNT = 40;
     private static final int DEFAULT_COLUMN_COUNT = 40;
 
-    private final GridModel gridModel;
+    private final TableColorModel tableColorModel;
 
     public SpreadSheetTable() {
         this(DEFAULT_ROW_COUNT, DEFAULT_COLUMN_COUNT);
@@ -25,10 +26,10 @@ public class SpreadSheetTable extends JTable {
 
     public SpreadSheetTable(int rowCount, int columnCount) {
         super(new SpreadSheetModel(rowCount, columnCount));
-        gridModel = new GridModel();
+        tableColorModel = new TableColorModel();
         setCellSelectionEnabled(true);
         setDefaultEditor(CellValue.class, new SpreadSheetEditor());
-        setDefaultRenderer(CellValue.class, new SpreadSheetRenderer());
+        setDefaultRenderer(CellValue.class, new SpreadSheetRenderer(this));
         setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         setAutoResizeMode(AUTO_RESIZE_OFF);
         setDragEnabled(true);
@@ -51,8 +52,8 @@ public class SpreadSheetTable extends JTable {
         setValueAt(value, pointer.getRow(), pointer.getColumn());
     }
 
-    public GridModel getGridModel() {
-        return gridModel;
+    public TableColorModel getTableColorModel() {
+        return tableColorModel;
     }
 
     public CellPointer pointerAt(Point point) {
@@ -63,8 +64,10 @@ public class SpreadSheetTable extends JTable {
 
     public void clearSelectedCells() {
         CellRange range = CellRange.createCellRange(getSelectedRows(), getSelectedColumns());
-        for (CellPointer cellPointer : range) {
-            setValueAt(new CellValue(), cellPointer);
+        if (range != null) {
+            for (CellPointer cellPointer : range) {
+                setValueAt(new CellValue(), cellPointer);
+            }
         }
     }
 }
