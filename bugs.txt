@@ -1,0 +1,5 @@
+Functional:
+1. Spanning, when user select cell inside selected range;
+2. Colors buttons text may be invisible in some cases;
+3. Empty cell reference should produce exception;
+4. Expression not recalculated on move. // fixed

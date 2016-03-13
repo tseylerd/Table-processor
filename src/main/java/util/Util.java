@@ -49,6 +49,7 @@ public class Util {
         }
         movedValue.append(expression.substring(beginIndex, expression.length()));
         value.setEditorValue(movedValue.toString());
+        value.setExpression(null);
     }
 
     private static PointerMovingExpression readMovingExpression(String stringValue) {
