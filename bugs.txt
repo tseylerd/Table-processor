@@ -4,3 +4,4 @@ Functional:
 3. Empty cell reference should produce exception;
 4. Expression not recalculated on move. // fixed
 5. In NewTableDialog default button should be create; // fixed
+6. When user creates new table, it should be selected in tabbed pane;
