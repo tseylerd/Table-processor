@@ -6,6 +6,8 @@ Functional:
 5. In NewTableDialog default button should be create; // fixed
 6. When user creates new table, it should be selected in tabbed pane;
 7. Icon is not centered in tabbed pane panel.
+8. Add ability 'Save', 'Save as...';
+9. Tab should change name, if user save table;
 
 Code:
 C-1. Refactor CellIterationStrategy and remove this functional code.

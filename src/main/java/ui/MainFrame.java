@@ -11,7 +11,7 @@ import java.awt.*;
  */
 public class MainFrame extends JFrame {
     private static final Dimension DEFAULT_SIZE = new Dimension(1024, 768);
-    private static final String TITLE = "Tseyler table processor";
+    private static final String TITLE = "Table processor";
 
     public MainFrame() {
         MainTabbedPane tabbedPane = new MainTabbedPane();
