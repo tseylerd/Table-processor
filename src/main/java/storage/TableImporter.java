@@ -90,25 +90,23 @@ public class TableImporter {
     }
 
     private void assertValueBegin() throws ImportFormatException {
-        if (currentChar() != TableExporter.VALUE_BEGIN_TAG) {
-            throw new ImportFormatException();
-        }
+        check(TableExporter.VALUE_BEGIN_TAG);
     }
 
     private void assertValueEnd() throws ImportFormatException {
-        if (currentChar() != TableExporter.VALUE_END_TAG) {
-            throw new ImportFormatException();
-        }
+        check(TableExporter.VALUE_END_TAG);
     }
 
     private void assertCellBegin() throws ImportFormatException {
-        if (currentChar() != TableExporter.CELL_VALUE_BEGIN_TAG) {
-            throw new ImportFormatException();
-        }
+        check(TableExporter.CELL_VALUE_BEGIN_TAG);
     }
 
     private void assertCellEnd() throws ImportFormatException {
-        if (currentChar() != TableExporter.CELL_VALUE_END_TAG) {
+        check(TableExporter.CELL_VALUE_END_TAG);
+    }
+
+    private void check(char c) throws ImportFormatException {
+        if (current != c) {
             throw new ImportFormatException();
         }
     }
