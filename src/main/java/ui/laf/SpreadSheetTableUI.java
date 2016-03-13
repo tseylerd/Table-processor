@@ -186,11 +186,14 @@ public class SpreadSheetTableUI extends BasicTableUI {
             int x = damagedArea.x;
             y += table.getRowHeight(row);
             for (int column = cMin; column <= cMax; column++) {
+                Color color;
                 if (tableColorModel.needLowerLine(row, column)) {
-                    Color color = tableColorModel.getLowerLineColor(row, column);
-                    g.setColor(color);
-                    g.drawLine(x, y - 1, x + columnModel.getColumn(column).getWidth() - 1, y - 1);
+                    color = tableColorModel.getLowerLineColor(row, column);
+                } else {
+                    color = tableColorModel.getBackgroundColor(CellPointer.getPointer(row, column));
                 }
+                g.setColor(color);
+                g.drawLine(x, y - 1, x + columnModel.getColumn(column).getWidth() - 1, y - 1);
                 x += columnModel.getColumn(column).getWidth();
             }
         }
@@ -199,11 +202,14 @@ public class SpreadSheetTableUI extends BasicTableUI {
             y = 0;
             x += columnModel.getColumn(column).getWidth();
             for (int row = 0; row <= rMax; row++) {
+                Color color;
                 if (tableColorModel.needRightLine(row, column)) {
-                    Color color = tableColorModel.getRightLineColor(row, column);
-                    g.setColor(color);
-                    g.drawLine(x - 1, y, x - 1, y + table.getRowHeight(row) - 1);
+                    color = tableColorModel.getRightLineColor(row, column);
+                } else {
+                    color = tableColorModel.getBackgroundColor(CellPointer.getPointer(row, column));
                 }
+                g.setColor(color);
+                g.drawLine(x - 1, y, x - 1, y + table.getRowHeight(row) - 1);
                 y += table.getRowHeight();
             }
         }

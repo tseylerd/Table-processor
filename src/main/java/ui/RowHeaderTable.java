@@ -10,12 +10,11 @@ import java.awt.*;
  * @author Dmitriy Tseyler
  */
 public class RowHeaderTable extends JTable {
-    private static final int DEFAULT_WIDTH = 40;
+    private static final int DEFAULT_WIDTH = 60;
 
     private boolean adjusting;
 
     private final SpreadSheetTable table;
-    private int width = DEFAULT_WIDTH;
 
     public RowHeaderTable(SpreadSheetTable table) {
         super(table.getRowCount(), 1);
@@ -74,7 +73,7 @@ public class RowHeaderTable extends JTable {
     @Override
     public Dimension getPreferredScrollableViewportSize() {
         Dimension size = super.getPreferredScrollableViewportSize();
-        size.width = width;
+        size.width = DEFAULT_WIDTH;
         return size;
     }
 }

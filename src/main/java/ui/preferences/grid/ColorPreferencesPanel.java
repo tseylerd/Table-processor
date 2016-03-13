@@ -39,7 +39,7 @@ public class ColorPreferencesPanel extends JPanel {
 
         table.getSelectionModel().addListSelectionListener(this::selectionChanged);
 
-        gridColorButton = new JButton(new AbstractAction("Choose grid color") {
+        gridColorButton = new JButton(new AbstractAction("Grid color") {
             @Override
             public void actionPerformed(ActionEvent e) {
                 chooseGridColor();
@@ -54,7 +54,7 @@ public class ColorPreferencesPanel extends JPanel {
 
         addComponents();
 
-        setBorder(new TitledBorder("Grid preferences"));
+        setBorder(new TitledBorder("Color settings"));
         selectionChanged(null);
     }
 
