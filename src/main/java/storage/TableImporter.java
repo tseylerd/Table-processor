@@ -106,7 +106,7 @@ public class TableImporter {
     }
 
     private void check(char c) throws ImportFormatException {
-        if (current != c) {
+        if (currentChar() != c) {
             throw new ImportFormatException();
         }
     }
