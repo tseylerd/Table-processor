@@ -79,20 +79,7 @@ public class SpreadSheetModel implements TableModel {
 
     @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-        CellValue cellValue = (CellValue)aValue;
-        CellPointer pointer = CellPointer.getPointer(rowIndex, columnIndex);
-        cellValue = getTrueValue(cellValue);
-        values.put(pointer, cellValue);
-        try {
-            Set<CellPointer> pointers = parser.getPointers();
-            Set<CellRange> ranges = parser.getRanges();
-            cellsConnectionModel.subscribe(pointer, pointers, ranges);
-            cellsConnectionModel.cellChanged(new PointerNode(pointer));
-        } catch (CyclicReferenceException e) {
-            cellValue.setError(Error.CYCLIC_REFERENCE);
-        }
-        cellsConnectionModel.resetErrors();
-        fireTableModelListeners(rowIndex);
+        setValueAt((CellValue)aValue, CellPointer.getPointer(rowIndex, columnIndex));
     }
 
     private void recalculateValue(CellValue cellValue, PointerNode pointer) {
@@ -128,7 +115,7 @@ public class SpreadSheetModel implements TableModel {
 
     @Override
     public String getColumnName(int columnIndex) {
-        return Util.columnNameByIndex(columnIndex); //// TODO: 07.03.16 cache
+        return Util.columnNameByIndex(columnIndex);
     }
 
     private void fireTableModelListeners(int row) {
@@ -153,8 +140,19 @@ public class SpreadSheetModel implements TableModel {
         return (CellValue)getValueAt(pointer.getRow(), pointer.getColumn());
     }
 
-    public void setValueAt(CellValue value, CellPointer pointer) {
-        setValueAt(value, pointer.getRow(), pointer.getColumn());
+    public void setValueAt(CellValue cellValue, CellPointer pointer) {
+        cellValue = getTrueValue(cellValue);
+        values.put(pointer, cellValue);
+        try {
+            Set<CellPointer> pointers = parser.getPointers();
+            Set<CellRange> ranges = parser.getRanges();
+            cellsConnectionModel.subscribe(pointer, pointers, ranges);
+            cellsConnectionModel.cellChanged(new PointerNode(pointer));
+        } catch (CyclicReferenceException e) {
+            cellValue.setError(Error.CYCLIC_REFERENCE);
+        }
+        cellsConnectionModel.resetErrors();
+        fireTableModelListeners(pointer.getRow());
     }
 
     @Override
@@ -189,7 +187,7 @@ public class SpreadSheetModel implements TableModel {
             values.remove(pointer);
             setValueAt(EMPTY, pointer);
         }
-        fireTableRowsDeleted(0, rowCount);
+        fireTableRowsDeleted(rowCount, rowCount);
     }
 
     public void removeColumn(TableColumnModel model) {

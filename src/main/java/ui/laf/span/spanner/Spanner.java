@@ -43,7 +43,7 @@ public enum Spanner {
 
         @Override
         CellValue moveWithOffset(CellValue toMove, int offset) {
-            return Util.moveImmutably(toMove, 0, -offset);
+            return Util.moveImmutably(toMove, 0, offset);
         }
     },
     RIGHT(CellRange::rangeIterator) {

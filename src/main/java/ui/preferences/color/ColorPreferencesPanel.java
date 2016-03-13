@@ -155,7 +155,7 @@ public class ColorPreferencesPanel extends JPanel {
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.anchor = GridBagConstraints.WEST;
+        gbc.weightx = 1;
 
         for (JCheckBox checkBox : checkBoxes.values()) {
             add(checkBox, gbc);
@@ -169,16 +169,9 @@ public class ColorPreferencesPanel extends JPanel {
         add(resetButton, gbc);
         gbc.gridy++;
 
-        gbc.weightx = 1;
         gbc.weighty = 1;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.gridwidth = 2;
-        add(Box.createGlue(), gbc);
-
-        gbc.gridx = 1;
-        gbc.gridy = 0;
-        gbc.gridwidth = 1;
-        gbc.gridheight = GridBagConstraints.REMAINDER;
         add(Box.createGlue(), gbc);
     }
 }
