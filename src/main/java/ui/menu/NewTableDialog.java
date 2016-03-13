@@ -43,19 +43,21 @@ public class NewTableDialog extends JDialog {
 
     private JPanel getControlPanel() {
         JPanel panel = new JPanel(new BorderLayout());
-        panel.add(new JButton(new AbstractAction("Create") {
+        JButton create = new JButton(new AbstractAction("Create") {
             @Override
             public void actionPerformed(ActionEvent e) {
                 tabbedPane.addTable(name.getText(), new SpreadSheetTable(getRowCount(), getColumnCount()));
                 setVisible(false);
             }
-        }), BorderLayout.WEST);
+        });
+        panel.add(create, BorderLayout.WEST);
         panel.add(new JButton(new AbstractAction("Cancel") {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setVisible(false);
             }
         }), BorderLayout.EAST);
+        getRootPane().setDefaultButton(create);
         return panel;
     }
 
