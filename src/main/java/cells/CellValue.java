@@ -2,6 +2,7 @@ package cells;
 
 import math.calculator.expression.Expression;
 import math.calculator.expression.StringExpression;
+import ui.table.error.Error;
 
 /**
  * @author Dmitriy Tseyler
@@ -10,7 +11,7 @@ public class CellValue {
     private String rendererValue;
     private String editorValue;
     private Expression expression;
-    private boolean errorState;
+    private Error error;
 
     public CellValue(CellValue rendererValue) {
         this(rendererValue.rendererValue, rendererValue.editorValue);
@@ -30,7 +31,7 @@ public class CellValue {
     }
 
     public String getRendererValue() {
-        return isErrorState() ? "Error" : rendererValue;
+        return rendererValue;
     }
 
     public String getEditorValue() {
@@ -45,12 +46,12 @@ public class CellValue {
         this.editorValue = expressionString;
     }
 
-    public void setErrorState(boolean errorState) {
-        this.errorState = errorState;
+    public void setError(Error error) {
+        this.error = error;
     }
 
-    public boolean isErrorState() {
-        return errorState;
+    public Error getError() {
+        return error;
     }
 
     public boolean containsExpression() {

@@ -8,6 +8,7 @@ import cells.pointer.CellPointer;
 import cells.CellRange;
 import math.calculator.Lexer.LexerValue;
 import math.calculator.expression.Expression;
+import ui.table.error.Error;
 import ui.table.exceptions.CyclicReferenceException;
 import ui.table.exceptions.EmptyValueException;
 import ui.table.exceptions.InvalidCellPointerException;
@@ -85,7 +86,7 @@ public class SpreadSheetModel implements TableModel {
             cellsConnectionModel.subscribe(pointer, pointers, ranges);
             cellsConnectionModel.cellChanged(new PointerNode(pointer));
         } catch (CyclicReferenceException e) {
-            cellValue.setErrorState(true);
+            cellValue.setError(Error.CYCLIC_REFERENCE);
         }
         cellsConnectionModel.resetErrors();
         fireTableModelListeners(rowIndex);
@@ -97,7 +98,7 @@ public class SpreadSheetModel implements TableModel {
         try {
             cellsConnectionModel.cellChanged(pointer);
         } catch (CyclicReferenceException e) {
-            cellValue.setErrorState(true);
+            cellValue.setError(Error.CYCLIC_REFERENCE);
         }
         fireTableModelListeners(pointer.getPointer().getRow());
     }
@@ -108,9 +109,9 @@ public class SpreadSheetModel implements TableModel {
             LexerValue value = expression.calculate();
             cellValue.setRendererValue(value.getStringValue());
             cellValue.setExpression(expression);
-            cellValue.setErrorState(false);
+            cellValue.setError(null);
         } catch (NumberFormatException | InvalidCellPointerException | EmptyValueException e) { // todo reduce exceptions count
-            cellValue.setErrorState(true);
+            cellValue.setError(Error.PARSE);
         }
         return cellValue;
     }

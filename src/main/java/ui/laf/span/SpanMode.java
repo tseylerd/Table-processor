@@ -1,6 +1,8 @@
 package ui.laf.span;
 
 import cells.pointer.CellPointer;
+import ui.cursor.CursorConfiguration;
+import ui.cursor.CursorManager;
 import ui.laf.span.managers.*;
 
 import javax.swing.*;
@@ -29,7 +31,7 @@ public enum SpanMode {
 
         @Override
         public Cursor getCursor() {
-            return Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
+            return CursorManager.getInstance().getCursor(CursorConfiguration.SPAN_DOWN);
         }
 
         @Override
@@ -54,7 +56,7 @@ public enum SpanMode {
         }
         @Override
         public Cursor getCursor() {
-            return Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
+            return CursorManager.getInstance().getCursor(CursorConfiguration.SPAN_UP);
         }
 
         @Override
@@ -79,7 +81,7 @@ public enum SpanMode {
         }
         @Override
         public Cursor getCursor() {
-            return Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
+            return CursorManager.getInstance().getCursor(CursorConfiguration.SPAN_LEFT);
         }
 
         @Override
@@ -104,7 +106,7 @@ public enum SpanMode {
         }
         @Override
         public Cursor getCursor() {
-            return Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
+            return CursorManager.getInstance().getCursor(CursorConfiguration.SPAN_RIGHT);
         }
 
         @Override

@@ -3,12 +3,13 @@ package ui.icon;
 /**
  * @author Dmitriy Tseyler
  */
-public enum IconConfig {
-    WARNING("warning");
+public enum IconConfiguration {
+    WARNING("warning"),
+    CYCLIC_REFERENCE("cyclic_reference");
 
     private final String name;
 
-    IconConfig(String name) {
+    IconConfiguration(String name) {
         this.name = name;
     }
 

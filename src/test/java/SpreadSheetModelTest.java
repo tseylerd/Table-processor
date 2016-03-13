@@ -3,6 +3,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import ui.table.SpreadSheetModel;
+import ui.table.error.Error;
 
 /**
  * @author Dmitriy Tseyler
@@ -60,7 +61,7 @@ public class SpreadSheetModelTest extends AbstractExpressionTest {
         CellValue valueA2 = new CellValue("54");
         sheetModel.setValueAt(value, 3, 1);
 
-        Assert.assertTrue(((CellValue)sheetModel.getValueAt(3, 1)).isErrorState());
+        Assert.assertTrue(((CellValue)sheetModel.getValueAt(3, 1)).getError() == Error.PARSE);
 
         sheetModel.setValueAt(valueA1, 0, 0);
         sheetModel.setValueAt(valueA2, 1, 0);

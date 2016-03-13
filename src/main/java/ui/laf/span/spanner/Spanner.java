@@ -97,7 +97,12 @@ public enum Spanner {
         if (secondValue.containsExpression()) {
             return 0;
         }
-        double offset = model.getNumber(second) - model.getNumber(first);
+        double offset;
+        try {
+            offset = model.getNumber(second) - model.getNumber(first);
+        } catch (NumberFormatException e) {
+            return 0;
+        }
         while (iterator.hasNext()) {
             CellPointer pointer = iterator.next();
             CellValue value = model.getValueAt(pointer);
