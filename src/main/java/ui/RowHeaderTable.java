@@ -10,7 +10,7 @@ import java.awt.*;
  * @author Dmitriy Tseyler
  */
 public class RowHeaderTable extends JTable {
-    private static final int DEFAULT_WIDTH = 60;
+    private static final int DEFAULT_WIDTH = 100;
 
     private boolean adjusting;
 

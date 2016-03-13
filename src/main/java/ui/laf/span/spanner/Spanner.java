@@ -109,7 +109,12 @@ public enum Spanner {
             if (value.containsExpression()) {
                 return 0;
             }
-            double newOffset = model.getNumber(pointer) - model.getNumber(second);
+            double newOffset;
+            try {
+                newOffset = model.getNumber(pointer) - model.getNumber(second);
+            } catch (Exception e) {
+                return 0;
+            }
             if (Double.compare(offset, newOffset) != 0) {
                 return 0;
             }

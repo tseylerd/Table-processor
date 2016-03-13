@@ -54,9 +54,13 @@ public class TableColorModel {
 
     public void setBackgroundColor(CellRange range, Color color) {
         for (CellPointer pointer : range) {
-            CellColorModel model = getCellColorModel(pointer);
-            model.setBackground(color);
+            setBackgroundColor(pointer, color);
         }
+    }
+
+    private void setBackgroundColor(CellPointer pointer, Color color) {
+        CellColorModel model = getCellColorModel(pointer);
+        model.setBackground(color);
     }
 
     public Color getBackgroundColor(CellRange range) {
@@ -194,5 +198,16 @@ public class TableColorModel {
             modelMap.put(pointer, cellColorModel);
         }
         return cellColorModel;
+    }
+
+    public void reset(CellRange range) {
+        for (CellPointer pointer : range) {
+            CellColorModel model = modelMap.get(pointer);
+            if (model != null) {
+                model.reset();
+            }
+        }
+        BorderMode.DOWN.setModePreferences(this, range, true);
+        BorderMode.LEFT.setModePreferences(this, range, true);
     }
 }

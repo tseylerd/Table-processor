@@ -64,4 +64,12 @@ public class CellColorModel {
     public void setBackground(Color background) {
         this.background = background;
     }
+
+    public void reset() {
+        setBackground(DEFAULT_BACKGROUND_COLOR);
+        setLowerColor(DEFAULT_GRID_COLOR);
+        setRightColor(DEFAULT_GRID_COLOR);
+        setNeedLowerLine(true);
+        setNeedRightLine(true);
+    }
 }

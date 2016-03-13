@@ -24,6 +24,7 @@ public class ColorPreferencesPanel extends JPanel {
     private final Map<BorderMode, JCheckBox> checkBoxes;
     private final JButton gridColorButton;
     private final JButton backgroundColorButton;
+    private final JButton resetButton;
 
     private Color gridColor = CellColorModel.DEFAULT_GRID_COLOR;
     private Color backgroundColor = CellColorModel.DEFAULT_GRID_COLOR;
@@ -49,6 +50,12 @@ public class ColorPreferencesPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 chooseBackgroundColor();
+            }
+        });
+        resetButton = new JButton(new AbstractAction("Restore defaults") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                reset();
             }
         });
 
@@ -117,6 +124,9 @@ public class ColorPreferencesPanel extends JPanel {
         gridColorButton.setForeground(gridColor);
         backgroundColor = table.getTableColorModel().getBackgroundColor(range);
         backgroundColorButton.setForeground(backgroundColor);
+        backgroundColorButton.setEnabled(range != null);
+        gridColorButton.setEnabled(range != null);
+        resetButton.setEnabled(range != null);
     }
 
     private void createBorderRadioButton(BorderMode mode) {
@@ -128,6 +138,16 @@ public class ColorPreferencesPanel extends JPanel {
             table.repaint(50);
         });
         checkBoxes.put(mode, checkBox);
+    }
+
+    private void reset() {
+        CellRange range = CellRange.createCellRange(table.getSelectedRows(), table.getSelectedColumns());
+        if (range == null)
+            return;
+
+        table.getTableColorModel().reset(range);
+        selectionChanged(null);
+        table.repaint(50);
     }
 
     private void addComponents() {
@@ -145,6 +165,8 @@ public class ColorPreferencesPanel extends JPanel {
         add(gridColorButton, gbc);
         gbc.gridy++;
         add(backgroundColorButton, gbc);
+        gbc.gridy++;
+        add(resetButton, gbc);
         gbc.gridy++;
 
         gbc.weightx = 1;

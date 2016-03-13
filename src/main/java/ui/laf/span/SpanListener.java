@@ -83,7 +83,6 @@ public class SpanListener extends MouseAdapter {
 
     private void turnOffTable() {
         table.setDragEnabled(false);
-        table.clearSelection();
         table.setColumnSelectionAllowed(false);
         table.setRowSelectionAllowed(false);
         table.setCellSelectionEnabled(false);
