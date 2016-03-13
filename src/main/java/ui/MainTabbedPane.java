@@ -13,7 +13,7 @@ public class MainTabbedPane extends JTabbedPane {
     public MainTabbedPane() {
         setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
         setTabPlacement(JTabbedPane.TOP);
-        addTable("Default", new SpreadSheetTable());
+        addTable("New table", new SpreadSheetTable());
     }
 
     public void addTable(String name, SpreadSheetTable table) {
