@@ -27,6 +27,9 @@ public class SpreadSheetRenderer extends DefaultTableCellRenderer {
         TableColorModel colorModel = this.table.getTableColorModel();
         CellPointer pointer = CellPointer.getPointer(row, column);
         Color background = colorModel.getBackgroundColor(pointer);
+        if (background.equals(getBackground())) {
+            return component;
+        }
         Color foreground = Util.inverse(background);
         if (isSelected) {
             background = Util.mix(component.getBackground(), background);

@@ -16,6 +16,7 @@ import java.util.logging.Logger;
  */
 public class Util {
     private static final Logger log = Logger.getLogger(Util.class.getName());
+    private static final int COLOR_MAX = (255 * 3) / 2;
 
     private static final int ENGLISH_CHARACTERS_COUNT = 26;
     private static final Pattern CELL_PATTERN =  Pattern.compile("\\$?[A-Z]+\\$?\\d+");
@@ -132,13 +133,6 @@ public class Util {
         return new LexerValue(a.getDoubleValue() / b.getDoubleValue());
     }
 
-    public static String check(String value) {
-        if (value.isEmpty()) {
-            throw new EmptyValueException();
-        }
-        return value;
-    }
-
     public static Color mix(Color first, Color second) {
         float ratio  = 0.5f;
         float rgb1[] = new float[3];
@@ -152,9 +146,9 @@ public class Util {
     }
 
     public static Color inverse(Color toInverse) {
-        int red = 255 - toInverse.getRed();
-        int green = 255 - toInverse.getGreen();
-        int blue = 255 - toInverse.getBlue();
-        return new Color(red, green, blue);
+        int red = toInverse.getRed();
+        int green = toInverse.getGreen();
+        int blue = toInverse.getBlue();
+        return red + green + blue < COLOR_MAX ? Color.WHITE : Color.BLACK;
     }
 }

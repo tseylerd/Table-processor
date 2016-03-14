@@ -39,14 +39,20 @@ public class ColorPreferencesPanel extends JPanel {
         }
 
         table.getSelectionModel().addListSelectionListener(this::selectionChanged);
+        table.getColumnModel().addColumnModelListener(new TableColumnModelAdapter() {
+            @Override
+            public void columnSelectionChanged(ListSelectionEvent e) {
+                selectionChanged(e);
+            }
+        });
 
-        gridColorButton = new JButton(new AbstractAction("Grid color") {
+        gridColorButton = new InverseColorButton(new AbstractAction("Grid color") {
             @Override
             public void actionPerformed(ActionEvent e) {
                 chooseGridColor();
             }
         });
-        backgroundColorButton = new JButton(new AbstractAction("Background color") {
+        backgroundColorButton = new InverseColorButton(new AbstractAction("Background color") {
             @Override
             public void actionPerformed(ActionEvent e) {
                 chooseBackgroundColor();
@@ -76,7 +82,7 @@ public class ColorPreferencesPanel extends JPanel {
         }
         setter.accept(newColor);
         modelSetter.accept(range, newColor);
-        holder.setForeground(newColor);
+        holder.setBackground(newColor);
         table.repaint(50);
     }
 
@@ -121,12 +127,13 @@ public class ColorPreferencesPanel extends JPanel {
         }
 
         gridColor = table.getTableColorModel().getGridColor(range);
-        gridColorButton.setForeground(gridColor);
+        gridColorButton.setBackground(gridColor);
         backgroundColor = table.getTableColorModel().getBackgroundColor(range);
-        backgroundColorButton.setForeground(backgroundColor);
-        backgroundColorButton.setEnabled(range != null);
-        gridColorButton.setEnabled(range != null);
-        resetButton.setEnabled(range != null);
+        backgroundColorButton.setBackground(backgroundColor);
+        boolean enabled = range != null;
+        backgroundColorButton.setEnabled(enabled);
+        gridColorButton.setEnabled(enabled);
+        resetButton.setEnabled(enabled);
     }
 
     private void createBorderRadioButton(BorderMode mode) {
