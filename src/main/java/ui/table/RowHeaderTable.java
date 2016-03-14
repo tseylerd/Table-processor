@@ -1,5 +1,6 @@
-package ui;
+package ui.table;
 
+import ui.laf.ProcessorUIDefaults;
 import ui.table.SpreadSheetTable;
 
 import javax.swing.*;
@@ -22,6 +23,7 @@ public class RowHeaderTable extends JTable {
     public RowHeaderTable(SpreadSheetTable table) {
         super(table.getRowCount(), 1);
         this.table = table;
+        setRowHeight(ProcessorUIDefaults.DEFAULT_ROW_HEIGHT);
         table.getSelectionModel().addListSelectionListener(this::viewTableSelectionChanged); // todo: find a better way, may be one selection model
         getSelectionModel().addListSelectionListener(this::rowHeaderSelectionChanged);
         getColumnModel().getColumn(0).setResizable(true);

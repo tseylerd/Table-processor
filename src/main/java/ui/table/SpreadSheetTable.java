@@ -3,6 +3,7 @@ package ui.table;
 import cells.pointer.CellPointer;
 import cells.CellRange;
 import cells.CellValue;
+import ui.laf.ProcessorUIDefaults;
 import ui.laf.grid.TableColorModel;
 import ui.table.dnd.SpreadSheetTransferHandler;
 
@@ -32,6 +33,7 @@ public class SpreadSheetTable extends JTable {
 
     public SpreadSheetTable(SpreadSheetModel model, TableColorModel tableColorModel) {
         super(model);
+        setRowHeight(ProcessorUIDefaults.DEFAULT_ROW_HEIGHT);
         this.tableColorModel = tableColorModel;
         setCellSelectionEnabled(true);
         setDefaultEditor(CellValue.class, new SpreadSheetEditor());

@@ -30,7 +30,7 @@ public class IconManager {
         Icon icon = icons.get(config);
         if (icon == null) {
             String fileName = String.format(ICON_PATH, config.getName());
-        icon = new ImageIcon(new ImageIcon(getClass().getResource(fileName)).getImage().getScaledInstance(16, 16, Image.SCALE_SMOOTH));
+            icon = new ImageIcon(new ImageIcon(getClass().getResource(fileName)).getImage().getScaledInstance(16, 16, Image.SCALE_SMOOTH));
             icons.put(config, icon);
         }
         return icon;

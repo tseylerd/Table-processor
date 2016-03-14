@@ -1,6 +1,7 @@
 package ui;
 
 import ui.preferences.PreferencesPanel;
+import ui.table.RowHeaderTable;
 import ui.table.SpreadSheetTable;
 
 import javax.swing.*;

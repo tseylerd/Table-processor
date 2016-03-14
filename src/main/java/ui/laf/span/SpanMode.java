@@ -1,5 +1,6 @@
 package ui.laf.span;
 
+import cells.CellRange;
 import cells.pointer.CellPointer;
 import ui.cursor.CursorConfiguration;
 import ui.cursor.CursorManager;
@@ -38,6 +39,11 @@ public enum SpanMode {
         public CellPointer getStartCell(CellPointer pointer) {
             return CellPointer.getPointer(pointer, -1, 0);
         }
+
+        @Override
+        public CellRange createCellRange(CellPointer start, CellRange range) {
+            return new CellRange(range.getFirstRow(), range.getFirstColumn(), start.getRow(), range.getLastColumn());
+        }
     },
     UP(UpSpanManager::new) {
         @Override
@@ -62,6 +68,11 @@ public enum SpanMode {
         @Override
         public CellPointer getStartCell(CellPointer pointer) {
             return CellPointer.getPointer(pointer, 1, 0);
+        }
+
+        @Override
+        public CellRange createCellRange(CellPointer start, CellRange selectedRange) {
+            return new CellRange(start.getRow(), selectedRange.getFirstColumn(), selectedRange.getLastRow(), selectedRange.getLastColumn());
         }
     },
     LEFT(LeftSpanManager::new) {
@@ -88,6 +99,11 @@ public enum SpanMode {
         public CellPointer getStartCell(CellPointer pointer) {
             return CellPointer.getPointer(pointer, 0, 1);
         }
+
+        @Override
+        public CellRange createCellRange(CellPointer start, CellRange selectedRange) {
+            return new CellRange(selectedRange.getFirstRow(), start.getColumn(), selectedRange.getLastRow(), selectedRange.getLastColumn());
+        }
     },
     RIGHT(RightSpanManager::new) {
         @Override
@@ -113,6 +129,11 @@ public enum SpanMode {
         public CellPointer getStartCell(CellPointer pointer) {
             return CellPointer.getPointer(pointer, 0, -1);
         }
+
+        @Override
+        public CellRange createCellRange(CellPointer start, CellRange selectedRange) {
+            return new CellRange(selectedRange.getFirstRow(), selectedRange.getFirstColumn(), selectedRange.getLastRow(), start.getColumn());
+        }
     };
 
     private final Supplier<SpanManager> supplier;
@@ -134,6 +155,7 @@ public enum SpanMode {
     abstract boolean isItNotLast(CellPointer pointer, JTable table);
     public abstract CellPointer getStartCell(CellPointer pointer);
     public abstract Cursor getCursor();
+    public abstract CellRange createCellRange(CellPointer start, CellRange selectedRange);
 
     public static SpanMode getSpanMode(Point point, Rectangle cellRect, CellPointer pointer, JTable table) {
         for (SpanMode spanMode : SpanMode.values()) {
@@ -145,6 +167,6 @@ public enum SpanMode {
     }
 
     private static boolean isMouseCoordinateOnBorder(int cellRectCoordinate, int mouseCoordinate) {
-        return Math.abs(cellRectCoordinate - mouseCoordinate) < 3;
+        return Math.abs(cellRectCoordinate - mouseCoordinate) < 4;
     }
 }

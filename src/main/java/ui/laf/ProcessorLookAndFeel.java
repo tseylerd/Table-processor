@@ -3,6 +3,8 @@ package ui.laf;
 import javax.swing.*;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Dmitriy Tseyler
@@ -12,9 +14,11 @@ public class ProcessorLookAndFeel extends MetalLookAndFeel {
     @Override
     protected void initClassDefaults(UIDefaults table) {
         super.initClassDefaults(table);
-        table.put("SpreadSheetTableUI", SpreadSheetTableUI.class.getName());
-        table.put("Table.grid", Color.GRAY);
-        table.put("Table.cellBackground", Color.WHITE);
+        Map<String, Object> defaults = new HashMap<>();
+        defaults.put("SpreadSheetTableUI", SpreadSheetTableUI.class.getName());
+        defaults.put("Table.grid", Color.GRAY);
+        defaults.put("Table.cellBackground", Color.WHITE);
+        table.putAll(defaults);
     }
 
     @Override

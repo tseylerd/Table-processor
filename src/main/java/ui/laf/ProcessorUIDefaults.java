@@ -10,4 +10,5 @@ public class ProcessorUIDefaults {
     public static final int DEFAULT_ROW_COUNT = 40;
     public static final int DEFAULT_COLUMN_COUNT = 40;
     public static final Color TRANPARENT = new Color(0, 0, 0, 0);
+    public static final int DEFAULT_ROW_HEIGHT = 25;
 }

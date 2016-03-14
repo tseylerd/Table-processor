@@ -66,7 +66,8 @@ public class SpanListener extends MouseAdapter {
         if (table.isCellSelected(start.getRow(), start.getColumn())) {
             int[] selectedRows = table.getSelectedRows();
             int[] selectedColumns = table.getSelectedColumns();
-            return CellRange.createCellRange(selectedRows, selectedColumns);
+            CellRange range = CellRange.createCellRange(selectedRows, selectedColumns);
+            return spanMode.createCellRange(start, range);
         } else {
             return new CellRange(start, start);
         }
