@@ -1,7 +1,11 @@
 import math.calculator.ExpressionParser;
+import math.calculator.ParserException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import javax.swing.text.html.parser.Parser;
+import java.text.ParseException;
 
 
 /**
@@ -71,16 +75,15 @@ public class ParserTest extends AbstractExpressionTest {
 
     @Test
     public void testStringExpression() throws Exception {
-        String expression = "=abdfgdg";
-        Assert.assertEquals(calculate(expression), expression.substring(1));
+        String expression;
         try {
             expression = "=abdfgggg+1";
             calculate(expression);
-        } catch (NumberFormatException e) {
+        } catch (ParserException e) {
             try {
                 expression = "= 1 + abdfgggg";
                 calculate(expression);
-            } catch (NumberFormatException inner) {
+            } catch (ParserException inner) {
                 Assert.assertTrue(true);
                 return;
             }

@@ -130,7 +130,11 @@ public class SpreadSheetModel implements TableModel {
 
     public double getNumber(int row, int column) {
         CellValue value = (CellValue) getValueAt(row, column);
-        return Double.parseDouble(value.getRendererValue());
+        try {
+            return Double.parseDouble(value.getRendererValue());
+        } catch (NumberFormatException e) {
+            throw new NumberParseException(value.getRendererValue());
+        }
     }
 
     public double getNumber(CellPointer pointer) {

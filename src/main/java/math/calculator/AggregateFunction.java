@@ -15,7 +15,7 @@ public enum AggregateFunction {
         public LexerValue calculate(CellRange range, SpreadSheetModel model) {
             double result = 0;
             for (CellPointer pointer : range) {
-                result += model.getNumber(pointer.getRow(), pointer.getColumn());
+                result += model.getNumber(pointer);
             }
             return new LexerValue(result);
         }
@@ -26,7 +26,7 @@ public enum AggregateFunction {
             int count = 0;
             for (CellPointer cellPointer : range) {
                 count++;
-                result += model.getNumber(cellPointer.getRow(), cellPointer.getColumn());
+                result += model.getNumber(cellPointer);
             }
             result /= count;
             return new LexerValue(result);

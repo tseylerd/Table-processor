@@ -1,4 +1,7 @@
-package math.calculator.Lexer;
+package math.calculator.lexer;
+
+import ui.table.exceptions.NumberParseException;
+import ui.table.exceptions.SpreadSheetException;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -33,9 +36,13 @@ public class LexerValue {
         return stringValue;
     }
 
-    public double getDoubleValue() {
+    public double getDoubleValue() throws NumberParseException {
         if (doubleValue == null) {
-            doubleValue = Double.parseDouble(stringValue);
+            try {
+                doubleValue = Double.parseDouble(stringValue);
+            } catch (NumberFormatException e) {
+                throw new NumberParseException(stringValue);
+            }
         }
         return doubleValue;
     }

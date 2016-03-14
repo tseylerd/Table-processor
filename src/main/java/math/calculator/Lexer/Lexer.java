@@ -1,10 +1,10 @@
-package math.calculator.Lexer;
+package math.calculator.lexer;
 
 import cells.pointer.CellPointer;
 import cells.CellRange;
 import math.calculator.AggregateFunction;
 import math.calculator.LexemeType;
-import ui.table.exceptions.ParserException;
+import math.calculator.ParserException;
 import util.Util;
 
 /**
@@ -117,8 +117,7 @@ public class Lexer {
                 assertEndFunction();
             }
             if (lexeme == null) {
-                number = originalBuilder.toString();
-                lexeme = Lexeme.STRING;
+                throw new ParserException();
             }
             return lexeme;
         }
