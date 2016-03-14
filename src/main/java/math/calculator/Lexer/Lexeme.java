@@ -1,4 +1,4 @@
-package math.calculator.Lexer;
+package math.calculator.lexer;
 
 import math.calculator.LexemeType;
 import math.calculator.function.BinaryFunctionResolver;

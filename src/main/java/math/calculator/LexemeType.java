@@ -1,7 +1,6 @@
 package math.calculator;
 
 import math.calculator.expression.Expression;
-import ui.table.exceptions.ParserException;
 
 /**
  * @author Dmitriy Tseyler

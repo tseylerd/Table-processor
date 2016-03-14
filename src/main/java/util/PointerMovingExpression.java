@@ -1,6 +1,7 @@
 package util;
 
 import cells.pointer.CellPointer;
+import ui.table.exceptions.InvalidCellPointerException;
 
 /**
  * @author Dmitriy Tseyler
@@ -44,7 +45,7 @@ public class PointerMovingExpression {
         return columnFixed ? 0 : offset;
     }
 
-    public PointerMovingExpression moveAndGet(int rowOffset, int columnOffset) {
+    public PointerMovingExpression moveAndGet(int rowOffset, int columnOffset) throws InvalidCellPointerException {
         CellPointer moved = CellPointer.getPointer(pointer, filterRowOffset(rowOffset), filterColumnOffset(columnOffset));
         return new PointerMovingExpression(columnFixed, rowFixed, moved);
     }

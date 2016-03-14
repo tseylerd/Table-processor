@@ -1,6 +1,6 @@
 package math.calculator.expression;
 
-import math.calculator.Lexer.Lexeme;
+import math.calculator.lexer.Lexeme;
 import util.Util;
 
 /**

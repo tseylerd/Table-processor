@@ -2,9 +2,10 @@ package math.calculator.expression;
 
 import cells.pointer.CellPointer;
 import cells.CellValue;
-import math.calculator.Lexer.LexerValue;
+import math.calculator.lexer.LexerValue;
 import ui.table.SpreadSheetModel;
 import ui.table.exceptions.EmptyValueException;
+import ui.table.exceptions.SpreadSheetException;
 
 /**
  * @author Dmitriy Tseyler
@@ -20,7 +21,10 @@ public class CellPointerExpression implements Expression {
 
     @Override
     public LexerValue calculate() {
-        CellValue value = (CellValue)model.getValueAt(pointer.getRow(), pointer.getColumn());
+        CellValue value = model.getValueAt(pointer);
+        if (value.getRendererValue().isEmpty()) {
+            throw new EmptyValueException();
+        }
         return new LexerValue(value.getRendererValue());
     }
 }

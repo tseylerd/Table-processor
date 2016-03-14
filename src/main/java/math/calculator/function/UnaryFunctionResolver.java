@@ -1,6 +1,6 @@
 package math.calculator.function;
 
-import math.calculator.Lexer.LexerValue;
+import math.calculator.lexer.LexerValue;
 
 import java.util.function.Function;
 

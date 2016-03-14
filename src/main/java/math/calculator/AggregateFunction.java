@@ -1,7 +1,7 @@
 package math.calculator;
 
-import math.calculator.Lexer.Lexeme;
-import math.calculator.Lexer.LexerValue;
+import math.calculator.lexer.Lexeme;
+import math.calculator.lexer.LexerValue;
 import ui.table.SpreadSheetModel;
 import cells.pointer.CellPointer;
 import cells.CellRange;

@@ -12,11 +12,11 @@ public class CellPointer {
     private final int row;
     private final int column;
 
-    private CellPointer(CellPointer pointer, int rowOffset, int columnOffset) {
+    private CellPointer(CellPointer pointer, int rowOffset, int columnOffset) throws InvalidCellPointerException {
         this(pointer.row + rowOffset, pointer.column + columnOffset);
     }
 
-    private CellPointer(int row, int column) {
+    private CellPointer(int row, int column) throws InvalidCellPointerException {
         if (row < 0 || column < 0) {
             throw new InvalidCellPointerException();
         }
@@ -52,7 +52,7 @@ public class CellPointer {
         return Util.columnNameByIndex(column) + row;
     }
 
-    public static CellPointer getPointer(int row, int column) {
+    public static CellPointer getPointer(int row, int column) throws InvalidCellPointerException {
         CellPointer pointer = CellPointerPool.getPointer(row, column);
         if (pointer == null) {
             pointer = new CellPointer(row, column);
@@ -60,7 +60,7 @@ public class CellPointer {
         return pointer;
     }
 
-    public static CellPointer getPointer(CellPointer pointer, int rowOffset, int columnOffset) {
+    public static CellPointer getPointer(CellPointer pointer, int rowOffset, int columnOffset) throws InvalidCellPointerException {
         CellPointer pointerWithOffset = CellPointerPool.getPointer(pointer, rowOffset, columnOffset);
         if (pointerWithOffset == null) {
             pointerWithOffset = new CellPointer(pointer, rowOffset, columnOffset);

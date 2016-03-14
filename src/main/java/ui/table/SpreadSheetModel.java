@@ -6,13 +6,11 @@ import cells.connection.PointerNode;
 import math.calculator.ExpressionParser;
 import cells.pointer.CellPointer;
 import cells.CellRange;
-import math.calculator.Lexer.LexerValue;
+import math.calculator.ParserException;
+import math.calculator.lexer.LexerValue;
 import math.calculator.expression.Expression;
 import ui.table.error.Error;
-import ui.table.exceptions.CyclicReferenceException;
-import ui.table.exceptions.EmptyValueException;
-import ui.table.exceptions.InvalidCellPointerException;
-import ui.table.exceptions.ParserException;
+import ui.table.exceptions.*;
 import util.Util;
 
 import javax.swing.event.TableModelEvent;
@@ -102,18 +100,9 @@ public class SpreadSheetModel implements TableModel {
             cellValue.setRendererValue(value.getStringValue());
             cellValue.setExpression(expression);
             cellValue.setError(null);
-        } catch (InvalidCellPointerException | IndexOutOfBoundsException e) {
-            cellValue.setError(Error.INDEX_OUT_OF_RANGE);
+        } catch (SpreadSheetException e) {
             cellValue.setRendererValue("");
-        } catch (ParserException e) {
-            cellValue.setError(Error.PARSE);
-            cellValue.setRendererValue("");
-        } catch (EmptyValueException e) {
-            cellValue.setError(Error.EMPTY_VALUE);
-            cellValue.setRendererValue("");
-        } catch (NumberFormatException e) {
-            cellValue.setError(Error.NUMBER_FORMAT);
-            cellValue.setRendererValue("");
+            cellValue.setError(e.getError());
         }
         return cellValue;
     }

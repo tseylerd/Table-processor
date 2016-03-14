@@ -1,10 +1,12 @@
 package ui.table.exceptions;
 
+import ui.table.error.Error;
+
 /**
  * @author Dmitriy Tseyler
  */
-public class CyclicReferenceException extends Exception {
+public class CyclicReferenceException extends SpreadSheetException {
     public CyclicReferenceException() {
-        super("Cell can't references on itself");
+        super(Error.CYCLIC_REFERENCE, 3, "");
     }
 }

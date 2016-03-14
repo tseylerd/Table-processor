@@ -2,7 +2,7 @@ package math.calculator.expression;
 
 import cells.CellRange;
 import math.calculator.AggregateFunction;
-import math.calculator.Lexer.LexerValue;
+import math.calculator.lexer.LexerValue;
 import ui.table.SpreadSheetModel;
 
 /**

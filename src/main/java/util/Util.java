@@ -2,7 +2,7 @@ package util;
 
 import cells.pointer.CellPointer;
 import cells.CellValue;
-import math.calculator.Lexer.LexerValue;
+import math.calculator.lexer.LexerValue;
 import ui.table.exceptions.InvalidCellPointerException;
 
 import java.awt.*;

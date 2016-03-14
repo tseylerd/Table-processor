@@ -1,7 +1,8 @@
 package math.calculator.expression;
 
-import math.calculator.Lexer.LexerValue;
+import math.calculator.lexer.LexerValue;
 import math.calculator.expression.operation.UnaryOperation;
+import ui.table.exceptions.SpreadSheetException;
 
 /**
  * @author Dmitriy Tseyler

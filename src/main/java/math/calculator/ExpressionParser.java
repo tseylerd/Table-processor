@@ -1,13 +1,12 @@
 package math.calculator;
 
-import math.calculator.Lexer.Lexeme;
-import math.calculator.Lexer.Lexer;
-import math.calculator.Lexer.LexerValue;
+import math.calculator.lexer.Lexeme;
+import math.calculator.lexer.Lexer;
+import math.calculator.lexer.LexerValue;
 import math.calculator.expression.*;
 import ui.table.SpreadSheetModel;
 import cells.pointer.CellPointer;
 import cells.CellRange;
-import ui.table.exceptions.ParserException;
 
 import java.util.HashSet;
 import java.util.Set;

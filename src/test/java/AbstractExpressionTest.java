@@ -1,4 +1,4 @@
-import math.calculator.Lexer.LexerValue;
+import math.calculator.lexer.LexerValue;
 import org.junit.Assert;
 
 /**

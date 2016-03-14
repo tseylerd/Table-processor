@@ -1,6 +1,6 @@
 package math.calculator.expression;
 
-import math.calculator.Lexer.LexerValue;
+import math.calculator.lexer.LexerValue;
 
 /**
  * @author Dmitriy Tseyler
