@@ -7,6 +7,7 @@ import math.calculator.expression.*;
 import ui.table.SpreadSheetModel;
 import cells.pointer.CellPointer;
 import cells.CellRange;
+import ui.table.exceptions.ParserException;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -29,19 +30,22 @@ public class ExpressionParser {
         this.model = model;
     }
 
-    public Expression parse(String expression) {
+    public Expression parse(String expression) throws ParserException{
         pointers.clear();
         ranges.clear();
         expression = expression.replaceAll(" ", "");
         if (expression.isEmpty() || expression.charAt(0) != '=') {
             return new StringExpression(expression);
         }
+        if (expression.length() == 1) {
+            return new StringExpression("");
+        }
         lexer = new Lexer(expression);
         lexeme = lexer.nextLexeme();
         return expression();
     }
 
-    private Expression expression() {
+    private Expression expression() throws ParserException {
         Expression result = composed();
 
         while (lexeme == Lexeme.PLUS || lexeme == Lexeme.MINUS) {
@@ -60,7 +64,7 @@ public class ExpressionParser {
         return ranges;
     }
 
-    private Expression composed() {
+    private Expression composed() throws ParserException {
         Expression result = sign();
         while (lexeme == Lexeme.DIV || lexeme == Lexeme.MULT) {
             Lexeme tempLexeme = lexeme;
@@ -70,7 +74,7 @@ public class ExpressionParser {
         return result;
     }
 
-    private Expression power() {
+    private Expression power() throws ParserException {
         Expression result = multiplier();
         while (lexeme == Lexeme.POW) {
             lexeme = lexer.nextLexeme();
@@ -79,7 +83,7 @@ public class ExpressionParser {
         return result;
     }
 
-    private Expression sign() {
+    private Expression sign() throws ParserException {
         if (lexeme == Lexeme.PLUS || lexeme == Lexeme.MINUS){
             Lexeme tempLexeme = lexeme;
             lexeme = lexer.nextLexeme();
@@ -89,11 +93,11 @@ public class ExpressionParser {
         }
     }
 
-    private Expression multiplier() {
+    private Expression multiplier() throws ParserException {
         return lexeme.getType().getExpression(this);
     }
 
-    public Expression onAgregateFunction() {
+    public Expression onAgregateFunction() throws ParserException {
         CellRange range = lexer.getRange();
         ranges.add(range);
         AggregateFunction function = lexer.getFunction();
@@ -101,20 +105,20 @@ public class ExpressionParser {
         return new AggregateExpression(function, range, model);
     }
 
-    Expression onCellPointer() {
+    Expression onCellPointer() throws ParserException {
         CellPointer pointer = lexer.getCellPointer();
         pointers.add(pointer);
         lexeme = lexer.nextLexeme();
         return new CellPointerExpression(pointer, model);
     }
 
-    Expression onLiteral() {
+    Expression onLiteral() throws ParserException {
         String num = lexer.getNumber();
         lexeme = lexer.nextLexeme();
         return new NumberExpression(new LexerValue(num));
     }
 
-    Expression onFunction() {
+    Expression onFunction() throws ParserException {
         Lexeme previous = lexeme;
         lexeme = lexer.nextLexeme();
         Expression result = new UnaryExpression(previous::getResult, expression());
@@ -122,7 +126,7 @@ public class ExpressionParser {
         return result;
     }
 
-    Expression onOperation() {
+    Expression onOperation() throws ParserException {
         Lexeme previous = lexeme;
         lexeme = lexer.nextLexeme();
         return new UnaryExpression(previous::getResult, multiplier());

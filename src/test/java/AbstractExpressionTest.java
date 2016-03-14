@@ -1,3 +1,4 @@
+import math.calculator.Lexer.LexerValue;
 import org.junit.Assert;
 
 /**
@@ -5,7 +6,6 @@ import org.junit.Assert;
  */
 public abstract class AbstractExpressionTest {
     protected void test(String value, double doubleValue) {
-        double result = Double.parseDouble(value);
-        Assert.assertEquals(Double.compare(result, doubleValue), 0);
+        Assert.assertEquals(value, LexerValue.FORMAT.format(doubleValue));
     }
 }

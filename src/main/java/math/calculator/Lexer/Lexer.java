@@ -4,6 +4,7 @@ import cells.pointer.CellPointer;
 import cells.CellRange;
 import math.calculator.AggregateFunction;
 import math.calculator.LexemeType;
+import ui.table.exceptions.ParserException;
 import util.Util;
 
 /**
@@ -63,18 +64,13 @@ public class Lexer {
                 !(builder.length() == 0) && builder.charAt(builder.length() - 1) == 'E' && (current == '-' || current == '+');
     }
 
-    private boolean needReadLetter() {
-        Lexeme lexeme = Lexeme.getLexem(String.valueOf(currentChar()));
-        return lexeme != null && lexeme.getType() == LexemeType.OPERATION && lexeme != Lexeme.OPEN;
-    }
-
     private void decrement() {
         pointer--;
         builder.setLength(builder.length() - 1);
         originalBuilder.setLength(originalBuilder.length() - 1);
     }
 
-    public Lexeme nextLexeme() {
+    public Lexeme nextLexeme() throws ParserException {
         builder.setLength(0);
         originalBuilder.setLength(0);
         if (pointer < upperCaseExpression.length()) {
@@ -94,6 +90,7 @@ public class Lexer {
             checkFixCharacter();
             if (notEnd() && Character.isDigit(currentChar())) {
                 cellPointer = readCellPointer(builder.toString());
+                assertNextOperation();
                 return Lexeme.CELL;
             }
             Lexeme lexeme = Lexeme.getLexem(builder.toString());
@@ -104,15 +101,20 @@ public class Lexer {
                 lexeme = Lexeme.getLexem(builder.toString());
                 if (lexeme == null) {
                     decrement();
+                } else if (lexeme == Lexeme.CLOSE) {
+                    assertAfterClose();
+                } else {
+                    assertFunction();
                 }
             }
-
             if (lexeme != null && lexeme.getType() == LexemeType.AGGREGATE_FUNCTION) {
                 CellPointer begin = readCellPointer();
+                assertRangeDelimiter();
                 incrementPointer();
                 CellPointer end = readCellPointer();
                 range = new CellRange(begin, end);
                 function = AggregateFunction.getFunction(lexeme);
+                assertEndFunction();
             }
             if (lexeme == null) {
                 number = originalBuilder.toString();
@@ -129,6 +131,61 @@ public class Lexer {
 
     public AggregateFunction getFunction() {
         return function;
+    }
+
+    private void assertNextOperation() throws ParserException {
+        if (pointer == upperCaseExpression.length())
+            return;
+
+        String current = String.valueOf(currentChar());
+        for (Lexeme lexeme : Lexeme.values()) {
+            if (lexeme.getType() == LexemeType.OPERATION) {
+                if (lexeme.getValue().equals(current)) {
+                    return;
+                }
+            }
+        }
+        if (Lexeme.CLOSE.getValue().equals(current) || Lexeme.POW.getValue().equals(current)) {
+            return;
+        }
+
+        throw new ParserException();
+    }
+
+    private void assertFunction() throws ParserException {
+        assertNotEnds();
+        boolean isDigit = Character.isDigit(currentChar());
+        boolean isLetter = Character.isLetter(currentChar());
+        boolean isOpen = currentChar() == '(';
+        if (!isDigit && !isLetter && !isOpen) {
+            throw new ParserException();
+        }
+    }
+
+    private void assertAfterClose() throws ParserException {
+        if (notEnd()) {
+            assertNextOperation();
+        }
+    }
+
+    private void assertRangeDelimiter() throws ParserException {
+        assertNotEnds();
+        if (currentChar() != ':') {
+            throw new ParserException();
+        }
+    }
+
+    private void assertEndFunction() throws ParserException {
+        assertNotEnds();
+        if (currentChar() != ')') {
+            throw new ParserException();
+        }
+    }
+
+    private void assertNotEnds() throws ParserException {
+        if (!notEnd()) {
+            throw new ParserException();
+        }
     }
 
     private CellPointer readCellPointer(String column) {

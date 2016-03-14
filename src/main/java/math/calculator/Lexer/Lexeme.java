@@ -57,4 +57,8 @@ public enum Lexeme {
     public LexerValue getResult(LexerValue... values){
         return functionResolver.getValue(values);
     }
+
+    public String getValue() {
+        return value;
+    }
 }

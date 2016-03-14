@@ -4,6 +4,8 @@ import cells.pointer.CellPointer;
 import cells.CellRange;
 import cells.CellValue;
 import ui.table.SpreadSheetTable;
+import ui.table.error.*;
+import ui.table.error.Error;
 import util.Util;
 
 import javax.swing.*;
@@ -88,7 +90,9 @@ public class SpreadSheetTransferHandler extends TransferHandler {
             CellValue value = table.getValueAt(pointer);
             CellPointer newPointer = CellPointer.getPointer(pointer, rowOffset, columnOffset);
             table.setValueAt(new CellValue(), pointer);
-            Util.move(value, rowOffset, columnOffset);
+            if (!(value.getError() == Error.PARSE)) {
+                Util.move(value, rowOffset, columnOffset);
+            }
             table.setValueAt(value, newPointer);
         }
     }

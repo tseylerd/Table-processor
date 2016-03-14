@@ -61,7 +61,7 @@ public class SpreadSheetModelTest extends AbstractExpressionTest {
         CellValue valueA2 = new CellValue("54");
         sheetModel.setValueAt(value, 3, 1);
 
-        Assert.assertTrue(((CellValue)sheetModel.getValueAt(3, 1)).getError() == Error.PARSE);
+        Assert.assertTrue(((CellValue)sheetModel.getValueAt(3, 1)).getError() == Error.NUMBER_FORMAT);
 
         sheetModel.setValueAt(valueA1, 0, 0);
         sheetModel.setValueAt(valueA2, 1, 0);

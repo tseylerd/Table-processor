@@ -1,10 +1,20 @@
 package math.calculator.Lexer;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
+
 /**
  * @author Dmitriy Tseyler
  * For lazy conversions
  */
 public class LexerValue {
+    public static final DecimalFormat FORMAT = new DecimalFormat("0", DecimalFormatSymbols.getInstance(Locale.ENGLISH));
+
+    static {
+        FORMAT.setMaximumFractionDigits(10);
+    }
+
     private String stringValue;
     private Double doubleValue;
 
@@ -18,11 +28,7 @@ public class LexerValue {
 
     public String getStringValue() {
         if (stringValue == null) {
-            stringValue = String.valueOf(doubleValue);
-        } else try {
-            stringValue = String.valueOf(Double.parseDouble(stringValue));
-        } catch (NumberFormatException ignored) {
-
+            stringValue = FORMAT.format(doubleValue);
         }
         return stringValue;
     }

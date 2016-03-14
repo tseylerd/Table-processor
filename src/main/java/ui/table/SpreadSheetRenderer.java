@@ -46,9 +46,11 @@ public class SpreadSheetRenderer extends DefaultTableCellRenderer {
         if (error != null) {
             setIcon(error.getIcon());
             setText(error.getDescription());
+            setHorizontalAlignment(LEFT);
         } else {
             setIcon(null);
             setText(cellValue.getRendererValue());
+            setHorizontalAlignment(cellValue.containsExpression() ? RIGHT : LEFT);
         }
     }
 }

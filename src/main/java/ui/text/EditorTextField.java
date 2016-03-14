@@ -14,6 +14,6 @@ public class EditorTextField extends JTextField {
     }
 
     public CellValue getValue() {
-        return new CellValue(getText());
+        return new CellValue("", getText());
     }
 }

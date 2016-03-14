@@ -12,6 +12,7 @@ import ui.table.error.Error;
 import ui.table.exceptions.CyclicReferenceException;
 import ui.table.exceptions.EmptyValueException;
 import ui.table.exceptions.InvalidCellPointerException;
+import ui.table.exceptions.ParserException;
 import util.Util;
 
 import javax.swing.event.TableModelEvent;
@@ -89,6 +90,7 @@ public class SpreadSheetModel implements TableModel {
             cellsConnectionModel.cellChanged(pointer);
         } catch (CyclicReferenceException e) {
             cellValue.setError(Error.CYCLIC_REFERENCE);
+            cellValue.setRendererValue("");
         }
         fireTableModelListeners(pointer.getPointer().getRow());
     }
@@ -100,13 +102,23 @@ public class SpreadSheetModel implements TableModel {
             cellValue.setRendererValue(value.getStringValue());
             cellValue.setExpression(expression);
             cellValue.setError(null);
-        } catch (NumberFormatException | InvalidCellPointerException | IndexOutOfBoundsException | EmptyValueException e) { // todo reduce exceptions count
+        } catch (InvalidCellPointerException | IndexOutOfBoundsException e) {
+            cellValue.setError(Error.INDEX_OUT_OF_RANGE);
+            cellValue.setRendererValue("");
+        } catch (ParserException e) {
             cellValue.setError(Error.PARSE);
+            cellValue.setRendererValue("");
+        } catch (EmptyValueException e) {
+            cellValue.setError(Error.EMPTY_VALUE);
+            cellValue.setRendererValue("");
+        } catch (NumberFormatException e) {
+            cellValue.setError(Error.NUMBER_FORMAT);
+            cellValue.setRendererValue("");
         }
         return cellValue;
     }
 
-    private Expression evaluate(CellValue value) {
+    private Expression evaluate(CellValue value) throws ParserException {
         if (value.getExpression() != null) {
             return value.getExpression();
         }

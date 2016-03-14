@@ -7,7 +7,7 @@ class CellPointerPool {
     private static final CellPointer[][] pointers = new CellPointer[Byte.MAX_VALUE][Byte.MAX_VALUE];
 
     static CellPointer getPointer(int row, int column) {
-        if (row >= Byte.MAX_VALUE || column >= Byte.MAX_VALUE) {
+        if (row >= Byte.MAX_VALUE || column >= Byte.MAX_VALUE || column < 0 || row < 0) {
             return null;
         }
         return pointers[row][column];
@@ -18,7 +18,7 @@ class CellPointerPool {
     }
 
     static void tryCache(CellPointer pointer) {
-        if (pointer.getRow() > Byte.MAX_VALUE || pointer.getColumn() > Byte.MAX_VALUE)
+        if (pointer.getRow() >= Byte.MAX_VALUE || pointer.getColumn() >= Byte.MAX_VALUE || pointer.getRow() < 0 || pointer.getColumn() < 0)
             return;
 
         if (pointers[pointer.getRow()][pointer.getColumn()] != null)

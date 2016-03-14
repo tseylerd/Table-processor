@@ -4,6 +4,7 @@ import cells.pointer.CellPointer;
 import cells.CellValue;
 import math.calculator.Lexer.LexerValue;
 import ui.table.SpreadSheetModel;
+import ui.table.exceptions.EmptyValueException;
 
 /**
  * @author Dmitriy Tseyler

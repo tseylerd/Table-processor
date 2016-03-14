@@ -1,26 +1,42 @@
 package math.calculator;
 
 import math.calculator.expression.Expression;
-
-import java.util.function.Function;
+import ui.table.exceptions.ParserException;
 
 /**
  * @author Dmitriy Tseyler
  */
 public enum LexemeType {
-    AGGREGATE_FUNCTION(ExpressionParser::onAgregateFunction),
-    FUNCTION(ExpressionParser::onFunction),
-    CELL_POINTER(ExpressionParser::onCellPointer),
-    OPERATION(ExpressionParser::onOperation),
-    LITERAL(ExpressionParser::onLiteral);
+    AGGREGATE_FUNCTION() {
+        @Override
+        Expression getExpression(ExpressionParser parser) throws ParserException {
+            return parser.onAgregateFunction();
+        }
+    },
+    FUNCTION() {
+        @Override
+        Expression getExpression(ExpressionParser parser) throws ParserException {
+            return parser.onFunction();
+        }
+    },
+    CELL_POINTER() {
+        @Override
+        Expression getExpression(ExpressionParser parser) throws ParserException {
+            return parser.onCellPointer();
+        }
+    },
+    OPERATION() {
+        @Override
+        Expression getExpression(ExpressionParser parser) throws ParserException {
+            return parser.onOperation();
+        }
+    },
+    LITERAL() {
+        @Override
+        Expression getExpression(ExpressionParser parser) throws ParserException {
+            return parser.onLiteral();
+        }
+    };
 
-    private final Function<ExpressionParser, Expression> expressionGetter;
-
-    LexemeType(Function<ExpressionParser, Expression> expressionGetter) {
-        this.expressionGetter = expressionGetter;
-    }
-
-    Expression getExpression(ExpressionParser parser) {
-        return expressionGetter.apply(parser);
-    }
+    abstract Expression getExpression(ExpressionParser parser) throws ParserException;
 }

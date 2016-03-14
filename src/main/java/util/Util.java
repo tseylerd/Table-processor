@@ -3,7 +3,6 @@ package util;
 import cells.pointer.CellPointer;
 import cells.CellValue;
 import math.calculator.Lexer.LexerValue;
-import ui.table.exceptions.EmptyValueException;
 import ui.table.exceptions.InvalidCellPointerException;
 
 import java.awt.*;
@@ -17,7 +16,7 @@ import java.util.logging.Logger;
 public class Util {
     private static final Logger log = Logger.getLogger(Util.class.getName());
     private static final int COLOR_MAX = (255 * 3) / 2;
-
+    private static final float RATIO = 0.5f;
     private static final int ENGLISH_CHARACTERS_COUNT = 26;
     private static final Pattern CELL_PATTERN =  Pattern.compile("\\$?[A-Z]+\\$?\\d+");
 
@@ -48,7 +47,9 @@ public class Util {
             movedValue.append(moved);
             beginIndex = matcher.end();
         }
-        movedValue.append(expression.substring(beginIndex, expression.length()));
+        if (beginIndex < expression.length()) {
+            movedValue.append(expression.substring(beginIndex, expression.length()));
+        }
         value.setEditorValue(movedValue.toString());
         value.setExpression(null);
     }
@@ -134,14 +135,13 @@ public class Util {
     }
 
     public static Color mix(Color first, Color second) {
-        float ratio  = 0.5f;
-        float rgb1[] = new float[3];
-        float rgb2[] = new float[3];
-        first.getColorComponents(rgb1);
-        second.getColorComponents(rgb2);
-        float red = rgb1[0] * ratio + rgb2[0] * ratio;
-        float green = rgb1[1] * ratio + rgb2[1] * ratio;
-        float blue = rgb1[2] * ratio + rgb2[2] * ratio;
+        float rgbFirst[] = new float[3];
+        float rgbSecond[] = new float[3];
+        first.getColorComponents(rgbFirst);
+        second.getColorComponents(rgbSecond);
+        float red = rgbFirst[0] * RATIO + rgbSecond[0] * RATIO;
+        float green = rgbFirst[1] * RATIO + rgbSecond[1] * RATIO;
+        float blue = rgbFirst[2] * RATIO + rgbSecond[2] * RATIO;
         return new Color(red, green, blue);
     }
 
