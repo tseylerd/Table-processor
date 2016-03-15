@@ -9,38 +9,61 @@ import java.util.function.BiFunction;
  * @author Dmitriy Tseyler
  */
 public enum CellIterationStrategy implements IterationStrategy<CellPointer, AbstractCellIterator> {
-    COLUMN_ROW(((pointer, iterator) -> iterator.needChangeColumn(pointer.getColumn())),
-            (pointer, iterator) -> iterator.needChangeRow(pointer.getRow()),
-            (cellPointer, iterator) -> CellPointer.getPointer(cellPointer, 0, iterator.getOffset()),
-            (cellPointer, iterator) -> CellPointer.getPointer(cellPointer.getRow() + iterator.getOffset(), iterator.getBegin().getColumn())),
-    ROW_COLUMN((pointer, iterator) -> iterator.needChangeRow(pointer.getRow()),
-            (pointer, iterator) -> iterator.needChangeColumn(pointer.getColumn()),
-            (cellPointer, iterator) -> CellPointer.getPointer(cellPointer, iterator.getOffset(), 0),
-            (cellPointer, iterator) -> CellPointer.getPointer(iterator.getBegin().getRow(), cellPointer.getColumn() + iterator.getOffset()));
+    COLUMN_ROW() {
+        @Override
+        boolean firstCheck(CellPointer previous, AbstractCellIterator iterator) {
+            return iterator.needChangeColumn(previous.getColumn());
+        }
 
-    private final BiFunction<CellPointer, AbstractCellIterator, Boolean> firstCheck;
-    private final BiFunction<CellPointer, AbstractCellIterator, Boolean> secondCheck;
-    private final BiFunction<CellPointer, AbstractCellIterator, CellPointer> firstFunction;
-    private final BiFunction<CellPointer, AbstractCellIterator, CellPointer> secondFunction;
+        @Override
+        boolean secondCheck(CellPointer previous, AbstractCellIterator iterator) {
+            return iterator.needChangeRow(previous.getRow());
+        }
 
-    CellIterationStrategy(BiFunction<CellPointer, AbstractCellIterator, Boolean> firstCheck,
-                          BiFunction<CellPointer, AbstractCellIterator, Boolean> secondCheck,
-                          BiFunction<CellPointer, AbstractCellIterator, CellPointer> firstFunction,
-                          BiFunction<CellPointer, AbstractCellIterator, CellPointer> secondFunction)
-    {
-        this.firstCheck = firstCheck;
-        this.secondCheck = secondCheck;
-        this.firstFunction = firstFunction;
-        this.secondFunction = secondFunction;
-    }
+        @Override
+        CellPointer nextElementFirst(CellPointer previous, AbstractCellIterator iterator) {
+            return CellPointer.getPointer(previous, 0, iterator.getOffset());
+        }
+
+        @Override
+        CellPointer nextElementSecond(CellPointer previous, AbstractCellIterator iterator) {
+            return CellPointer.getPointer(previous.getRow() + iterator.getOffset(), iterator.getBegin().getColumn());
+        }
+    },
+    ROW_COLUMN {
+        @Override
+        boolean firstCheck(CellPointer previous, AbstractCellIterator iterator) {
+            return iterator.needChangeRow(previous.getRow());
+        }
+
+        @Override
+        boolean secondCheck(CellPointer previous, AbstractCellIterator iterator) {
+            return iterator.needChangeColumn(previous.getColumn());
+        }
+
+        @Override
+        CellPointer nextElementFirst(CellPointer previous, AbstractCellIterator iterator) {
+            return CellPointer.getPointer(previous, iterator.getOffset(), 0);
+        }
+
+        @Override
+        CellPointer nextElementSecond(CellPointer previous, AbstractCellIterator iterator) {
+            return CellPointer.getPointer(iterator.getBegin().getRow(), previous.getColumn() + iterator.getOffset());
+        }
+    };
 
     public CellPointer nextOf(CellPointer previous, AbstractCellIterator iterator) {
         CellPointer next = null;
-        if (firstCheck.apply(previous, iterator)) {
-            next = firstFunction.apply(previous, iterator);
-        } else if (secondCheck.apply(previous, iterator)) {
-            next = secondFunction.apply(previous, iterator);
+        if (firstCheck(previous, iterator)) {
+            next = nextElementFirst(previous, iterator);
+        } else if (secondCheck(previous, iterator)) {
+            next = nextElementSecond(previous, iterator);
         }
         return next;
     }
+
+    abstract boolean firstCheck(CellPointer previous, AbstractCellIterator iterator);
+    abstract boolean secondCheck(CellPointer previous, AbstractCellIterator iterator);
+    abstract CellPointer nextElementFirst(CellPointer previous, AbstractCellIterator iterator);
+    abstract CellPointer nextElementSecond(CellPointer previous, AbstractCellIterator iterator);
 }
