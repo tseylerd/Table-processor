@@ -16,8 +16,8 @@ public class ProcessorLookAndFeel extends MetalLookAndFeel {
         super.initClassDefaults(table);
         Map<String, Object> defaults = new HashMap<>();
         defaults.put("SpreadSheetTableUI", SpreadSheetTableUI.class.getName());
-        defaults.put("Table.grid", Color.GRAY);
-        defaults.put("Table.cellBackground", Color.WHITE);
+        defaults.put("Table.grid", ProcessorUIDefaults.DEFAULT_GRID_COLOR);
+        defaults.put("Table.cellBackground", ProcessorUIDefaults.DEFAULT_BACKGROUND_COLOR);
         table.putAll(defaults);
     }
 

@@ -12,6 +12,7 @@ Functional:
 11. Util.move finds only lower case symbols; // fixed
 12. CellPointer row should start with 0;
 13. On span with linear dependency new numbers format different from old; // fixed
+14. Add try finally to import/export;
 
 Code:
 C-1. Refactor CellIterationStrategy and remove this functional code.

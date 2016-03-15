@@ -1,14 +1,15 @@
 package ui.laf.grid;
 
-import javax.swing.*;
+import ui.laf.ProcessorUIDefaults;
+
 import java.awt.*;
 
 /**
  * @author Dmitriy Tseyler
  */
 public class CellColorModel {
-    public static final Color DEFAULT_GRID_COLOR = (Color) UIManager.get("Table.grid");
-    public static final Color DEFAULT_BACKGROUND_COLOR = (Color) UIManager.get("Table.cellBackground");
+    public static final Color DEFAULT_GRID_COLOR = ProcessorUIDefaults.DEFAULT_GRID_COLOR;
+    public static final Color DEFAULT_BACKGROUND_COLOR = ProcessorUIDefaults.DEFAULT_BACKGROUND_COLOR;
 
     private Color lowerColor;
     private Color rightColor;
