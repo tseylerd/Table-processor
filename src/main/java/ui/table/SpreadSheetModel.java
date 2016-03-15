@@ -24,22 +24,20 @@ import java.util.*;
  * @author Dmitriy Tseyler
  */
 public class SpreadSheetModel implements TableModel {
-    private static final double MULTIPLIER = 1.2;
-
     public static final CellValue EMPTY = new CellValue();
 
     private final List<TableModelListener> tableModelListeners;
-    private final CellValue[][] values;
     private final CellsConnectionModel cellsConnectionModel;
     private final ExpressionParser parser;
 
+    private CellValue[][] values;
     private int rowCount;
     private int columnCount;
 
     public SpreadSheetModel(int rowCount, int columnCount) {
         cellsConnectionModel = new CellsConnectionModel(this);
         parser = new ExpressionParser(this);
-        values = new CellValue[(int)(rowCount * MULTIPLIER)][];
+        values = new CellValue[Util.getIncreasedValue(rowCount)][];
         tableModelListeners = new ArrayList<>();
         this.rowCount = rowCount;
         this.columnCount = columnCount;
@@ -92,7 +90,7 @@ public class SpreadSheetModel implements TableModel {
         int row = pointer.getPointer().getRow();
         int column = pointer.getPointer().getColumn();
         if (values[row] == null) {
-            values[row] = new CellValue[columnCount];
+            values[row] = new CellValue[Util.getIncreasedValue(columnCount)];
         }
         values[row][column] = cellValue;
         try {
@@ -159,7 +157,7 @@ public class SpreadSheetModel implements TableModel {
     public void setValueAt(CellValue cellValue, CellPointer pointer) {
         cellValue = getTrueValue(cellValue);
         if (values[pointer.getRow()] == null) {
-            values[pointer.getRow()] = new CellValue[columnCount];
+            values[pointer.getRow()] = new CellValue[Util.getIncreasedValue(columnCount)];
         }
         values[pointer.getRow()][pointer.getColumn()] = cellValue;
         try {
@@ -195,30 +193,26 @@ public class SpreadSheetModel implements TableModel {
 
     public void addRow() {
         rowCount++;
-        if (values.length < rowCount) {
-            CellValue[][] newValues = new CellValue[getIncreasedValue(rowCount)][columnCount];
-            for (int i = 0; i < values.length; i++) {
-                System.arraycopy(values[i], 0, newValues[i], 0, values[i].length);
-            }
+        if (values.length > 0 && values.length < rowCount) {
+            values = Util.copyRows(values, rowCount, columnCount);
         }
         fireTableRowsInserted(rowCount, rowCount);
     }
 
     public void addColumn(TableColumnModel columnModel) {
         columnModel.addColumn(new TableColumn(columnCount++));
-        if (values.length > 0 && values[0].length < columnCount) {
-            CellValue[][] newValues = new CellValue[rowCount][getIncreasedValue(columnCount)];
-            for (int i = 0; i < values.length; i++) {
-                System.arraycopy(values[i], 0, newValues[i], 0, values[i].length);
-            }
+        if (values.length > 0 && Util.getIncreasedValue(columnCount - 1) < columnCount) {
+            values = Util.copyColumns(values, rowCount, columnCount);
         }
         fireTableStructureChanged();
     }
 
     public void removeRow() {
         int decreased = rowCount - 1;
-        for (int i = 0; i < columnCount; i++) {
-            setValueAt(EMPTY, decreased, i);
+        if (values[decreased] != null) {
+            for (int i = 0; i < columnCount; i++) {
+                setValueAt(EMPTY, decreased, i);
+            }
         }
         rowCount = decreased;
         fireTableRowsDeleted(rowCount, rowCount);
@@ -227,7 +221,9 @@ public class SpreadSheetModel implements TableModel {
     public void removeColumn(TableColumnModel model) {
         int decreased = columnCount - 1;
         for (int i = 0; i < rowCount; i++) {
-            setValueAt(EMPTY, i, decreased);
+            if (values[i] != null) {
+                setValueAt(EMPTY, i, decreased);
+            }
         }
         columnCount = decreased;
         model.removeColumn(model.getColumn(columnCount));
@@ -246,10 +242,6 @@ public class SpreadSheetModel implements TableModel {
 
     public void fireTableStructureChanged() {
         fireTableModelListeners(new TableModelEvent(this, TableModelEvent.HEADER_ROW));
-    }
-
-    private int getIncreasedValue(int value) {
-        return (int)Math.round(value * MULTIPLIER);
     }
 }
 

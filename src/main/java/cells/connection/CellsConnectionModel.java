@@ -67,6 +67,18 @@ public class CellsConnectionModel {
         references.put(pointer, newRefs);
     }
 
+    public void unsibscribe(int row, int column) {
+        CellPointer pointer = CellPointer.getPointer(row, column);
+        PointerNode node = new PointerNode(pointer);
+        Set<PointerNode> pointerNodes = references.get(node);
+        for (PointerNode pointerNode : pointerNodes) {
+            toRecalculate.get(pointerNode).remove(node);
+        }
+        for (PointerNode pointerNode : toRecalculate.get(node)) {
+            cellChanged(pointerNode);
+        }
+    }
+
     public void processRanges(PointerNode pointer, Set<CellRange> ranges, Set<PointerNode> newReferences) {
         for (CellRange range : ranges) {
             processRange(pointer, range, newReferences);

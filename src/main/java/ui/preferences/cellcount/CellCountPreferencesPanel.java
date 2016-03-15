@@ -1,10 +1,11 @@
 package ui.preferences.cellcount;
 
-import ui.table.SpreadSheetModel;
 import ui.table.SpreadSheetTable;
+import util.Util;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.TableModelEvent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
@@ -53,6 +54,15 @@ public class CellCountPreferencesPanel extends JPanel {
 
         addComponents();
         setBorder(new TitledBorder("Row/column control"));
+        table.getModel().addTableModelListener(this::tableModelChanged);
+        tableModelChanged(null);
+    }
+
+    private void tableModelChanged(TableModelEvent e) {
+        decrementRow.setEnabled(table.getModel().getRowCount() > 1);
+        decrementColumn.setEnabled(table.getModel().getColumnCount() > 1);
+        incrementRow.setEnabled(table.getModel().getRowCount() < Util.MAX);
+        incrementColumn.setEnabled(table.getModel().getColumnCount() < Util.MAX);
     }
 
     private void addComponents() {

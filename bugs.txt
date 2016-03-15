@@ -13,6 +13,8 @@ Functional:
 12. CellPointer row should start with 0;
 13. On span with linear dependency new numbers format different from old; // fixed
 14. Add try finally to import/export; // fixed
+15. !! Hang on select big table
+16. Rewrite removeRow/Column with unsubscribe, because setValueAt may eat a lot of resources;
 
 Code:
 C-1. Refactor CellIterationStrategy and remove this functional code. // fixed
