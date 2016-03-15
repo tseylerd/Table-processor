@@ -3,6 +3,7 @@ package ui.laf.span.spanner;
 import cells.pointer.CellPointer;
 import cells.CellRange;
 import cells.CellValue;
+import math.calculator.lexer.LexerValue;
 import ui.table.SpreadSheetModel;
 import util.Util;
 
@@ -135,7 +136,7 @@ public enum Spanner {
             int offset = getOffset(fromPointer, toPointer);
             double number = model.getNumber(fromPointer);
             double spanned = number + offset * toAdd;
-            model.setValueAt(new CellValue(String.valueOf(spanned)), toPointer.getRow(), toPointer.getColumn());
+            model.setValueAt(new CellValue(LexerValue.FORMAT.format(spanned)), toPointer.getRow(), toPointer.getColumn());
         }
     }
 
