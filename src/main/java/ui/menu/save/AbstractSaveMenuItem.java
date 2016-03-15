@@ -38,8 +38,7 @@ public abstract class AbstractSaveMenuItem extends JMenuItem {
         if (!(file.getName().endsWith(TableFileChooser.FILE_FORMAT))) {
             file = new File(file.getPath() + TableFileChooser.FILE_FORMAT);
         }
-        try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             new TableExporter(panel.getTable(), writer).export();
             afterSave(file);
         } catch (IOException ex) {

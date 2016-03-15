@@ -30,30 +30,28 @@ public class TableImporter {
         int columnCount = readInt();
         SpreadSheetModel model = new SpreadSheetModel(rowCount, columnCount);
         TableColorModel colorModel = new TableColorModel();
-        for (int i = 0; i < rowCount; i++) {
-            line = reader.readLine();
+        while ((line = reader.readLine()) != null) {
             current = 0;
-            for (int j = 0; j < columnCount; j++) {
-                assertCellBegin();
-                current++;
-                String rendererValue = readValue();
-                String editorValue = readValue();
-                Color lowerLine = new Color(readInt());
-                Color rightColor = new Color(readInt());
-                Color background = new Color(readInt());
-                boolean needLower = Boolean.valueOf(readValue());
-                boolean needRight = Boolean.valueOf(readValue());
-                assertCellEnd();
-                current++;
-                CellValue value = new CellValue(rendererValue, editorValue);
-                CellPointer pointer = CellPointer.getPointer(i, j);
-                colorModel.setBackgroundColor(pointer, background);
-                colorModel.setNeedLowerLine(pointer, needLower);
-                colorModel.setNeedRightLine(pointer, needRight);
-                colorModel.setRightLineColor(pointer, rightColor);
-                colorModel.setLowerLineColor(pointer, lowerLine);
-                model.setValueAt(value, pointer);
-            }
+            assertCellBegin();
+            current++;
+            int row = readInt();
+            int column = readInt();
+            CellPointer pointer = CellPointer.getPointer(row, column);
+            String editorValue = readValue();
+            Color lowerLine = new Color(readInt());
+            Color rightColor = new Color(readInt());
+            Color background = new Color(readInt());
+            boolean needLower = Boolean.valueOf(readValue());
+            boolean needRight = Boolean.valueOf(readValue());
+            assertCellEnd();
+            current++;
+            CellValue value = new CellValue(editorValue);
+            colorModel.setBackgroundColor(pointer, background);
+            colorModel.setNeedLowerLine(pointer, needLower);
+            colorModel.setNeedRightLine(pointer, needRight);
+            colorModel.setRightLineColor(pointer, rightColor);
+            colorModel.setLowerLineColor(pointer, lowerLine);
+            model.setValueAt(value, pointer);
         }
         return new SpreadSheetTable(model, colorModel);
     }

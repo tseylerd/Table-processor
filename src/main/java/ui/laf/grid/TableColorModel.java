@@ -2,6 +2,7 @@ package ui.laf.grid;
 
 import cells.CellRange;
 import cells.pointer.CellPointer;
+import ui.laf.ProcessorUIDefaults;
 
 import java.awt.*;
 import java.util.*;
@@ -40,7 +41,7 @@ public class TableColorModel {
 
     public Color getRightLineColor(CellPointer pointer) {
         CellColorModel colorModel = modelMap.get(pointer);
-        return colorModel == null ? CellColorModel.DEFAULT_GRID_COLOR : colorModel.getRightColor();
+        return colorModel == null ? ProcessorUIDefaults.DEFAULT_GRID_COLOR : colorModel.getRightColor();
     }
 
     public Color getLowerLineColor(int row, int column) {
@@ -49,7 +50,7 @@ public class TableColorModel {
 
     public Color getLowerLineColor(CellPointer pointer) {
         CellColorModel colorModel = modelMap.get(pointer);
-        return colorModel == null ? CellColorModel.DEFAULT_GRID_COLOR : colorModel.getLowerColor();
+        return colorModel == null ? ProcessorUIDefaults.DEFAULT_GRID_COLOR : colorModel.getLowerColor();
     }
 
     public void setBackgroundColor(CellRange range, Color color) {
@@ -65,14 +66,14 @@ public class TableColorModel {
 
     public Color getBackgroundColor(CellRange range) {
         if (range == null) {
-            return CellColorModel.DEFAULT_BACKGROUND_COLOR;
+            return ProcessorUIDefaults.DEFAULT_BACKGROUND_COLOR;
         }
 
         Color color = null;
         for (CellPointer pointer : range) {
             CellColorModel model = getCellColorModel(pointer);
             if (color != null && !color.equals(model.getBackground())) {
-                return CellColorModel.DEFAULT_BACKGROUND_COLOR;
+                return ProcessorUIDefaults.DEFAULT_BACKGROUND_COLOR;
             }
             color = model.getBackground();
         }
@@ -113,7 +114,7 @@ public class TableColorModel {
 
     public Color getGridColor(CellRange range) {
         if (range == null) {
-            return CellColorModel.DEFAULT_GRID_COLOR;
+            return ProcessorUIDefaults.DEFAULT_GRID_COLOR;
         }
 
         Color color = null;
@@ -133,18 +134,22 @@ public class TableColorModel {
             }
             boolean colorsEquals = isColorsEquals(lower, righter, upper, lefter);
             if (!colorsEquals) {
-                return CellColorModel.DEFAULT_GRID_COLOR;
+                return ProcessorUIDefaults.DEFAULT_GRID_COLOR;
             } else if (color == null) {
                 color = lower;
             } else if (lower != null && !color.equals(lower)) {
-                return CellColorModel.DEFAULT_GRID_COLOR;
+                return ProcessorUIDefaults.DEFAULT_GRID_COLOR;
             }
         }
         if (color == null) {
-            return CellColorModel.DEFAULT_GRID_COLOR;
+            return ProcessorUIDefaults.DEFAULT_GRID_COLOR;
         }
 
         return color;
+    }
+
+    public boolean isConfigured(CellPointer pointer) {
+        return getCellColorModel(pointer).isConfigured();
     }
 
     private boolean isColorsEquals(Color... colors) {

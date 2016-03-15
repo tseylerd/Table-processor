@@ -8,9 +8,6 @@ import java.awt.*;
  * @author Dmitriy Tseyler
  */
 public class CellColorModel {
-    public static final Color DEFAULT_GRID_COLOR = ProcessorUIDefaults.DEFAULT_GRID_COLOR;
-    public static final Color DEFAULT_BACKGROUND_COLOR = ProcessorUIDefaults.DEFAULT_BACKGROUND_COLOR;
-
     private Color lowerColor;
     private Color rightColor;
     private Color background;
@@ -18,9 +15,9 @@ public class CellColorModel {
     private boolean needRightLine;
 
     public CellColorModel() {
-        lowerColor = DEFAULT_GRID_COLOR;
-        rightColor = DEFAULT_GRID_COLOR;
-        background = DEFAULT_BACKGROUND_COLOR;
+        lowerColor = ProcessorUIDefaults.DEFAULT_GRID_COLOR;
+        rightColor = ProcessorUIDefaults.DEFAULT_GRID_COLOR;
+        background = ProcessorUIDefaults.DEFAULT_BACKGROUND_COLOR;
 
         needDownLine = true;
         needRightLine = true;
@@ -67,10 +64,18 @@ public class CellColorModel {
     }
 
     public void reset() {
-        setBackground(DEFAULT_BACKGROUND_COLOR);
-        setLowerColor(DEFAULT_GRID_COLOR);
-        setRightColor(DEFAULT_GRID_COLOR);
+        setBackground(ProcessorUIDefaults.DEFAULT_BACKGROUND_COLOR);
+        setLowerColor(ProcessorUIDefaults.DEFAULT_GRID_COLOR);
+        setRightColor(ProcessorUIDefaults.DEFAULT_GRID_COLOR);
         setNeedLowerLine(true);
         setNeedRightLine(true);
+    }
+
+    public boolean isConfigured() {
+        return background.equals(ProcessorUIDefaults.DEFAULT_BACKGROUND_COLOR)
+                || lowerColor.equals(ProcessorUIDefaults.DEFAULT_GRID_COLOR)
+                || rightColor.equals(ProcessorUIDefaults.DEFAULT_GRID_COLOR)
+                || !needDownLine
+                || !needRightLine;
     }
 }

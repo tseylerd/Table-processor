@@ -34,25 +34,25 @@ public class TableExporter {
         CellRange range = new CellRange(0, 0, rowCount - 1, columnCount - 1);
         SpreadSheetModel model = (SpreadSheetModel)table.getModel();
         TableColorModel colorModel = table.getTableColorModel();
-        Iterator<CellRange> iterator = range.rangeIterator();
         append(rowCount);
         append(columnCount);
         writer.append('\n');
-        while (iterator.hasNext()) {
-            CellRange rowRange = iterator.next();
-            for (CellPointer pointer : rowRange) {
-                CellValue value = model.getValueAt(pointer);
-                writer.append(CELL_VALUE_BEGIN_TAG);
-                append(value.getRendererValue());
-                append(value.getEditorValue());
-                append(colorModel.getLowerLineColor(pointer).getRGB());
-                append(colorModel.getRightLineColor(pointer).getRGB());
-                append(colorModel.getBackgroundColor(pointer).getRGB());
-                append(colorModel.needLowerLine(pointer));
-                append(colorModel.needRightLine(pointer));
-                writer.append(CELL_VALUE_END_TAG);
+        for (CellPointer pointer : range) {
+            if (!model.isConfigured(pointer) && !colorModel.isConfigured(pointer)) {
+                continue;
             }
-            writer.append('\n');
+            CellValue value = model.getValueAt(pointer);
+            writer.append(CELL_VALUE_BEGIN_TAG);
+            append(pointer.getRow());
+            append(pointer.getColumn());
+            append(value.getEditorValue());
+            append(colorModel.getLowerLineColor(pointer).getRGB());
+            append(colorModel.getRightLineColor(pointer).getRGB());
+            append(colorModel.getBackgroundColor(pointer).getRGB());
+            append(colorModel.needLowerLine(pointer));
+            append(colorModel.needRightLine(pointer));
+            writer.append(CELL_VALUE_END_TAG);
+            writer.append("\n");
         }
         writer.flush();
         writer.close();

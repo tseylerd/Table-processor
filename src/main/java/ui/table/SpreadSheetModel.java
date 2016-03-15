@@ -160,6 +160,10 @@ public class SpreadSheetModel implements TableModel {
         fireTableModelListeners(pointer.getRow());
     }
 
+    public boolean isConfigured(CellPointer pointer) {
+        return values.get(pointer) != null;
+    }
+
     @Override
     public void addTableModelListener(TableModelListener l) {
         tableModelListeners.add(l);

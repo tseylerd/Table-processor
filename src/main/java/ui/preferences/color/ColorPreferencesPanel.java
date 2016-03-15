@@ -1,6 +1,7 @@
 package ui.preferences.color;
 
 import cells.CellRange;
+import ui.laf.ProcessorUIDefaults;
 import ui.laf.grid.BorderMode;
 import ui.laf.grid.CellColorModel;
 import ui.table.SpreadSheetTable;
@@ -26,8 +27,8 @@ public class ColorPreferencesPanel extends JPanel {
     private final JButton backgroundColorButton;
     private final JButton resetButton;
 
-    private Color gridColor = CellColorModel.DEFAULT_GRID_COLOR;
-    private Color backgroundColor = CellColorModel.DEFAULT_GRID_COLOR;
+    private Color gridColor = ProcessorUIDefaults.DEFAULT_GRID_COLOR;
+    private Color backgroundColor = ProcessorUIDefaults.DEFAULT_GRID_COLOR;
 
     public ColorPreferencesPanel(SpreadSheetTable table) {
         super(new GridBagLayout());

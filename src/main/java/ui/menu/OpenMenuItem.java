@@ -30,8 +30,7 @@ public class OpenMenuItem extends JMenuItem {
         }
 
         File file = fileChooser.getSelectedFile();
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(file));
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             SpreadSheetTable table = new TableImporter(reader).importTable();
             if (tabbedPane.addTable(file.getName(), table)) {
                 tabbedPane.saved(file);
