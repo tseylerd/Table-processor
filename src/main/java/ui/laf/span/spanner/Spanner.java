@@ -5,6 +5,7 @@ import cells.CellRange;
 import cells.CellValue;
 import math.calculator.lexer.LexerValue;
 import ui.table.SpreadSheetModel;
+import ui.table.exceptions.NumberParseException;
 import util.Util;
 
 import java.util.Iterator;
@@ -101,7 +102,7 @@ public enum Spanner {
         double offset;
         try {
             offset = model.getNumber(second) - model.getNumber(first);
-        } catch (NumberFormatException e) {
+        } catch (NumberParseException e) {
             return 0;
         }
         while (iterator.hasNext()) {
@@ -113,7 +114,7 @@ public enum Spanner {
             double newOffset;
             try {
                 newOffset = model.getNumber(pointer) - model.getNumber(second);
-            } catch (Exception e) {
+            } catch (NumberParseException e) {
                 return 0;
             }
             if (Double.compare(offset, newOffset) != 0) {
