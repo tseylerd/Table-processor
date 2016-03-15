@@ -1,6 +1,6 @@
 package ui.menu;
 
-import ui.MainTabbedPane;
+import ui.tabbedpane.MainTabbedPane;
 import ui.laf.ProcessorUIDefaults;
 import ui.table.SpreadSheetTable;
 

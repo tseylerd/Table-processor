@@ -2,7 +2,7 @@ package ui.menu;
 
 import storage.ImportFormatException;
 import storage.TableImporter;
-import ui.MainTabbedPane;
+import ui.tabbedpane.MainTabbedPane;
 import ui.table.SpreadSheetTable;
 
 import javax.swing.*;
@@ -33,7 +33,9 @@ public class OpenMenuItem extends JMenuItem {
         try {
             BufferedReader reader = new BufferedReader(new FileReader(file));
             SpreadSheetTable table = new TableImporter(reader).importTable();
-            tabbedPane.addTable(file.getName(), table);
+            if (tabbedPane.addTable(file.getName(), table)) {
+                tabbedPane.saved(file);
+            }
         } catch (IOException | ImportFormatException ex) {
             JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Can't open table. Bad file.");
         }

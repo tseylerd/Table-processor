@@ -1,14 +1,14 @@
 Functional:
 1. Spanning, when user select cell inside selected range; // fixed
 2. Colors buttons text may be invisible in some cases; // fixed
-3. Empty cell reference should produce exception;
+3. Empty cell reference should produce exception; // fixed
 4. Expression not recalculated on move. // fixed
 5. In NewTableDialog default button should be create; // fixed
-6. When user creates new table, it should be selected in tabbed pane;
+6. When user creates new table, it should be selected in tabbed pane; // fixed
 7. Icon is not centered in tabbed pane panel.
-8. Add ability 'Save', 'Save as...';
-9. Tab should change name, if user save table;
-10. If tabbed pane contains "New table", next table name should be "New table 1", etc;
+8. Add ability 'Save', 'Save as...'; // fixed
+9. Tab should change name, if user save table; // fixed
+10. If tabbed pane contains "New table", next table name should be "New table copy", etc; // fixed
 11. Util.move finds only lower case symbols; // fixed
 12. CellPointer row should start with 0;
 13. On span with linear dependency new numbers format different from old; // fixed

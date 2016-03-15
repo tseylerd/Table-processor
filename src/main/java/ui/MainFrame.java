@@ -2,6 +2,7 @@ package ui;
 
 import ui.laf.ProcessorLookAndFeel;
 import ui.menu.MainMenuBar;
+import ui.tabbedpane.MainTabbedPane;
 
 import javax.swing.*;
 import java.awt.*;

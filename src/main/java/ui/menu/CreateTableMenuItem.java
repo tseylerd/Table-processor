@@ -1,6 +1,6 @@
 package ui.menu;
 
-import ui.MainTabbedPane;
+import ui.tabbedpane.MainTabbedPane;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
