@@ -29,7 +29,7 @@ public class TableImporter {
         int rowCount = readInt();
         int columnCount = readInt();
         SpreadSheetModel model = new SpreadSheetModel(rowCount, columnCount);
-        TableColorModel colorModel = new TableColorModel();
+        TableColorModel colorModel = new TableColorModel(model);
         while ((line = reader.readLine()) != null) {
             current = 0;
             assertCellBegin();

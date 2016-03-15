@@ -3,7 +3,9 @@ package ui.laf.grid;
 import cells.CellRange;
 import cells.pointer.CellPointer;
 import ui.laf.ProcessorUIDefaults;
+import ui.table.SpreadSheetModel;
 
+import javax.swing.event.TableModelEvent;
 import java.awt.*;
 import java.util.*;
 
@@ -11,10 +13,13 @@ import java.util.*;
  * @author Dmitriy Tseyler
  */
 public class TableColorModel {
-    private final Map<CellPointer, CellColorModel> modelMap;
+    private final CellColorModel[][] modelMap;
+    private final SpreadSheetModel model;
 
-    public TableColorModel() {
-        modelMap = new HashMap<>();
+    public TableColorModel(SpreadSheetModel model) {
+        modelMap = new CellColorModel[model.getRowCount()][];
+        this.model = model;
+        model.addTableModelListener(this::tableChanged);
     }
 
     public boolean needLowerLine(int row, int column) {
@@ -22,7 +27,7 @@ public class TableColorModel {
     }
 
     public boolean needLowerLine(CellPointer pointer) {
-        CellColorModel colorModel = modelMap.get(pointer);
+        CellColorModel colorModel = getCellColorModel(pointer.getRow(), pointer.getColumn());
         return colorModel == null || colorModel.isNeedLowerLine();
     }
 
@@ -31,7 +36,7 @@ public class TableColorModel {
     }
 
     public boolean needRightLine(CellPointer pointer) {
-        CellColorModel colorModel = modelMap.get(pointer);
+        CellColorModel colorModel = getCellColorModel(pointer.getRow(), pointer.getColumn());
         return colorModel == null || colorModel.isNeedRightLine();
     }
 
@@ -40,7 +45,7 @@ public class TableColorModel {
     }
 
     public Color getRightLineColor(CellPointer pointer) {
-        CellColorModel colorModel = modelMap.get(pointer);
+        CellColorModel colorModel = getCellColorModel(pointer.getRow(), pointer.getColumn());
         return colorModel == null ? ProcessorUIDefaults.DEFAULT_GRID_COLOR : colorModel.getRightColor();
     }
 
@@ -49,7 +54,7 @@ public class TableColorModel {
     }
 
     public Color getLowerLineColor(CellPointer pointer) {
-        CellColorModel colorModel = modelMap.get(pointer);
+        CellColorModel colorModel = getCellColorModel(pointer.getRow(), pointer.getColumn());
         return colorModel == null ? ProcessorUIDefaults.DEFAULT_GRID_COLOR : colorModel.getLowerColor();
     }
 
@@ -165,10 +170,10 @@ public class TableColorModel {
     }
 
     public void setLowerLineColor(CellPointer pointer, Color color) {
-        CellColorModel cellColorModel = modelMap.get(pointer);
+        CellColorModel cellColorModel = modelMap[pointer.getRow()][pointer.getColumn()];
         if (cellColorModel == null) {
             cellColorModel = new CellColorModel();
-            modelMap.put(pointer, cellColorModel);
+            modelMap[pointer.getRow()][pointer.getColumn()] = cellColorModel;
         }
         if (cellColorModel.isNeedLowerLine()) {
             cellColorModel.setLowerColor(color);
@@ -176,10 +181,10 @@ public class TableColorModel {
     }
 
     public void setRightLineColor(CellPointer pointer, Color color) {
-        CellColorModel cellColorModel = modelMap.get(pointer);
+        CellColorModel cellColorModel = modelMap[pointer.getRow()][pointer.getColumn()];
         if (cellColorModel == null) {
             cellColorModel = new CellColorModel();
-            modelMap.put(pointer, cellColorModel);
+            modelMap[pointer.getRow()][pointer.getColumn()] = cellColorModel;
         }
         if (cellColorModel.isNeedRightLine()) {
             cellColorModel.setRightColor(color);
@@ -197,22 +202,36 @@ public class TableColorModel {
     }
 
     private CellColorModel getCellColorModel(CellPointer pointer) {
-        CellColorModel cellColorModel = modelMap.get(pointer);
-        if (cellColorModel == null) {
-            cellColorModel = new CellColorModel();
-            modelMap.put(pointer, cellColorModel);
-        }
-        return cellColorModel;
+        return getCellColorModel(pointer.getRow(), pointer.getColumn());
     }
 
     public void reset(CellRange range) {
         for (CellPointer pointer : range) {
-            CellColorModel model = modelMap.get(pointer);
+            CellColorModel model = modelMap[pointer.getRow()][pointer.getColumn()];
             if (model != null) {
                 model.reset();
             }
         }
         BorderMode.DOWN.setModePreferences(this, range, true);
         BorderMode.LEFT.setModePreferences(this, range, true);
+    }
+
+    private CellColorModel getCellColorModel(int row, int column) {
+        if (modelMap[row] == null) {
+            modelMap[row] = new CellColorModel[model.getColumnCount()];
+        }
+        if (modelMap[row][column] == null) {
+            modelMap[row][column] = new CellColorModel();
+        }
+        return modelMap[row][column];
+    }
+
+    private void tableChanged(TableModelEvent event) {
+        if (model.getRowCount() > modelMap.length || model.getColumnCount() > modelMap[0].length) {
+            CellColorModel[][] newValues = new CellColorModel[model.getRowCount()][model.getColumnCount()];
+            for (int i = 0; i < modelMap.length; i++) {
+                System.arraycopy(modelMap[i], 0, newValues[i], 0, modelMap[i].length);
+            }
+        }
     }
 }

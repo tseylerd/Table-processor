@@ -8,9 +8,6 @@ import ui.laf.grid.TableColorModel;
 import ui.table.dnd.SpreadSheetTransferHandler;
 
 import javax.swing.*;
-import javax.swing.event.TableModelEvent;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumn;
 import java.awt.*;
 
 /**
@@ -28,7 +25,11 @@ public class SpreadSheetTable extends JTable {
     }
 
     public SpreadSheetTable(int rowCount, int columnCount) {
-        this(new SpreadSheetModel(rowCount, columnCount), new TableColorModel());
+        this(new SpreadSheetModel(rowCount, columnCount));
+    }
+
+    public SpreadSheetTable(SpreadSheetModel model) {
+        this(model, new TableColorModel(model));
     }
 
     public SpreadSheetTable(SpreadSheetModel model, TableColorModel tableColorModel) {
