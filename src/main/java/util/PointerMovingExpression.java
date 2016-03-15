@@ -1,6 +1,7 @@
 package util;
 
 import cells.pointer.CellPointer;
+import ui.table.SpreadSheetModel;
 import ui.table.exceptions.InvalidCellPointerException;
 
 /**
@@ -9,12 +10,16 @@ import ui.table.exceptions.InvalidCellPointerException;
 public class PointerMovingExpression {
     private final boolean columnFixed;
     private final boolean rowFixed;
+    private final int maxRows;
+    private final int maxColumns;
     private final CellPointer pointer;
 
-    public PointerMovingExpression(boolean columnFixed, boolean rowFixed, CellPointer pointer) {
+    public PointerMovingExpression(boolean columnFixed, boolean rowFixed, CellPointer pointer, int maxRows, int maxColumns) {
         this.rowFixed = rowFixed;
         this.columnFixed = columnFixed;
         this.pointer = pointer;
+        this.maxRows = maxRows;
+        this.maxColumns = maxColumns;
     }
 
     public boolean isRowFixed() {
@@ -38,16 +43,18 @@ public class PointerMovingExpression {
     }
 
     private int filterRowOffset(int offset) {
-        return rowFixed ? 0 : offset;
+        boolean outOfRange = pointer.getRow() + offset >= maxRows || pointer.getRow() + offset < 0;
+        return rowFixed || outOfRange ? 0 : offset;
     }
 
     private int filterColumnOffset(int offset) {
-        return columnFixed ? 0 : offset;
+        boolean outOfRange = pointer.getColumn() + offset >= maxColumns || pointer.getColumn() + offset < 0;
+        return columnFixed || outOfRange ? 0 : offset;
     }
 
-    public PointerMovingExpression moveAndGet(int rowOffset, int columnOffset) throws InvalidCellPointerException {
+    public PointerMovingExpression moveAndGet(int rowOffset, int columnOffset) {
         CellPointer moved = CellPointer.getPointer(pointer, filterRowOffset(rowOffset), filterColumnOffset(columnOffset));
-        return new PointerMovingExpression(columnFixed, rowFixed, moved);
+        return new PointerMovingExpression(columnFixed, rowFixed, moved, maxRows, maxColumns);
     }
 
     @Override

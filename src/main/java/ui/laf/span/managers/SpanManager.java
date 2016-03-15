@@ -13,8 +13,6 @@ import java.util.logging.Logger;
  * @author dtseyler
  */
 public abstract class SpanManager {
-    private static final Logger logger = Logger.getLogger(SpanManager.class.getName());
-
     private final LinkedList<CellRange> ranges;
     private final Spanner spanner;
 
@@ -32,7 +30,6 @@ public abstract class SpanManager {
         while (!ranges.isEmpty() && needRemove(pointer)){
             ranges.removeLast();
         }
-        log();
     }
 
     protected CellRange getLast() {
@@ -65,12 +62,6 @@ public abstract class SpanManager {
                 return true;
         }
         return startRange.isInside(pointer);
-    }
-
-    private void log() {
-        for (CellRange range : ranges) {
-            logger.log(Level.INFO, getClass().getName() + ": " + range.toString());
-        }
     }
 
     protected abstract boolean shouldAdd(CellPointer newPointer);

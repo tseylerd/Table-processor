@@ -3,8 +3,8 @@ package ui.table.dnd;
 import cells.pointer.CellPointer;
 import cells.CellRange;
 import cells.CellValue;
+import ui.table.SpreadSheetModel;
 import ui.table.SpreadSheetTable;
-import ui.table.error.*;
 import ui.table.error.Error;
 import util.Util;
 
@@ -85,13 +85,14 @@ public class SpreadSheetTransferHandler extends TransferHandler {
         } else {
             iterator = range.iterator();
         }
+        SpreadSheetModel model = (SpreadSheetModel)table.getModel();
         while (iterator.hasNext()) {
             CellPointer pointer = iterator.next();
             CellValue value = table.getValueAt(pointer);
             CellPointer newPointer = CellPointer.getPointer(pointer, rowOffset, columnOffset);
             table.setValueAt(new CellValue(), pointer);
             if (!(value.getError() == Error.PARSE)) {
-                Util.move(value, rowOffset, columnOffset);
+                Util.move(value, rowOffset, columnOffset, model.getRowCount(), model.getColumnCount());
             }
             table.setValueAt(value, newPointer);
         }

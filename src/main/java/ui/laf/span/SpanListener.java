@@ -101,9 +101,12 @@ public class SpanListener extends MouseAdapter {
     @Override
     public void mouseReleased(MouseEvent e) {
         if (spanManager != null) {
-            spanManager.span((SpreadSheetModel) table.getModel());
-            spanManager = null;
-            turnOnTable();
+            try {
+                spanManager.span((SpreadSheetModel) table.getModel());
+            } finally {
+                spanManager = null;
+                turnOnTable();
+            }
         }
     }
 

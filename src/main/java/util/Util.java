@@ -3,6 +3,7 @@ package util;
 import cells.pointer.CellPointer;
 import cells.CellValue;
 import math.calculator.lexer.LexerValue;
+import ui.table.SpreadSheetModel;
 import ui.table.exceptions.InvalidCellPointerException;
 
 import java.awt.*;
@@ -20,13 +21,13 @@ public class Util {
     private static final int ENGLISH_CHARACTERS_COUNT = 26;
     private static final Pattern CELL_PATTERN =  Pattern.compile("\\$?[A-Z]+\\$?\\d+");
 
-    public static CellValue moveImmutably(CellValue value, int rowOffset, int columnOffset) {
+    public static CellValue moveImmutably(CellValue value, int rowOffset, int columnOffset, int maxRows, int maxColumns) {
         CellValue toMove = new CellValue(value);
-        move(toMove, rowOffset, columnOffset);
+        move(toMove, rowOffset, columnOffset, maxRows, maxColumns);
         return toMove;
     }
 
-    public static void move(CellValue value, int rowOffset, int columnOffset) {
+    public static void move(CellValue value, int rowOffset, int columnOffset, int maxRows, int maxColumns) {
         String expression = value.getEditorValue();
         if (expression.isEmpty() || expression.charAt(0) != '=')
             return;
@@ -36,7 +37,7 @@ public class Util {
         int beginIndex = 0;
         while (matcher.find()) {
             String group = matcher.group();
-            PointerMovingExpression movingExpression = readMovingExpression(group);
+            PointerMovingExpression movingExpression = readMovingExpression(group, maxRows, maxColumns);
             PointerMovingExpression moved = movingExpression;
             try {
                 moved = movingExpression.moveAndGet(rowOffset, columnOffset);
@@ -54,7 +55,7 @@ public class Util {
         value.setExpression(null);
     }
 
-    private static PointerMovingExpression readMovingExpression(String stringValue) {
+    private static PointerMovingExpression readMovingExpression(String stringValue, int maxRows, int maxColumns) {
         int index = 0;
         StringBuilder column = new StringBuilder();
         StringBuilder row = new StringBuilder();
@@ -78,7 +79,7 @@ public class Util {
         }
         int rowIndex = Integer.parseInt(row.toString());
         int colIndex = indexByColumnName(column.toString());
-        return new PointerMovingExpression(columnFixed, rowFixed, CellPointer.getPointer(rowIndex, colIndex));
+        return new PointerMovingExpression(columnFixed, rowFixed, CellPointer.getPointer(rowIndex, colIndex), maxRows, maxColumns);
     }
 
     public static String columnNameByIndex(int column) {

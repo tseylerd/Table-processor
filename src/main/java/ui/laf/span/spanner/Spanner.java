@@ -22,8 +22,8 @@ public enum Spanner {
         }
 
         @Override
-        CellValue moveWithOffset(CellValue toMove, int offset) {
-            return Util.moveImmutably(toMove, offset, 0);
+        CellValue moveWithOffset(CellValue toMove, int offset, int maxRows, int maxColumns) {
+            return Util.moveImmutably(toMove, offset, 0, maxRows, maxColumns);
         }
     },
     UP(CellRange::inverseColumnRangeIterator) {
@@ -33,8 +33,8 @@ public enum Spanner {
         }
 
         @Override
-        CellValue moveWithOffset(CellValue toMove, int offset) {
-            return Util.moveImmutably(toMove, offset, 0);
+        CellValue moveWithOffset(CellValue toMove, int offset, int maxRows, int maxColumns) {
+            return Util.moveImmutably(toMove, offset, 0, maxRows, maxColumns);
         }
     },
     LEFT(CellRange::inverseRangeIterator) {
@@ -44,8 +44,8 @@ public enum Spanner {
         }
 
         @Override
-        CellValue moveWithOffset(CellValue toMove, int offset) {
-            return Util.moveImmutably(toMove, 0, offset);
+        CellValue moveWithOffset(CellValue toMove, int offset, int maxRows, int maxColumns) {
+            return Util.moveImmutably(toMove, 0, offset, maxRows, maxColumns);
         }
     },
     RIGHT(CellRange::rangeIterator) {
@@ -55,8 +55,8 @@ public enum Spanner {
         }
 
         @Override
-        CellValue moveWithOffset(CellValue toMove, int offset) {
-            return Util.moveImmutably(toMove, 0, offset);
+        CellValue moveWithOffset(CellValue toMove, int offset, int maxRows, int maxColumns) {
+            return Util.moveImmutably(toMove, 0, offset, maxRows, maxColumns);
         }
     };
 
@@ -67,7 +67,7 @@ public enum Spanner {
     }
 
     abstract int getOffset(CellPointer from, CellPointer to);
-    abstract CellValue moveWithOffset(CellValue toMove, int offset);
+    abstract CellValue moveWithOffset(CellValue toMove, int offset, int maxRows, int maxColumns);
 
     public void span(SpreadSheetModel model, CellRange from, CellRange to) {
         Iterator<CellRange> fromIterator = rangeIteratorGetter.apply(from);
@@ -127,13 +127,11 @@ public enum Spanner {
 
     private void spanLinearly(CellRange from, CellRange to, double toAdd, SpreadSheetModel model) {
         Iterator<CellPointer> fromIterator = from.iterator();
-        Iterator<CellPointer> toIterator = to.iterator();
-        while (toIterator.hasNext()) {
+        for (CellPointer toPointer : to) {
             if (!fromIterator.hasNext()) {
                 fromIterator = from.iterator();
             }
             CellPointer fromPointer = fromIterator.next();
-            CellPointer toPointer = toIterator.next();
             int offset = getOffset(fromPointer, toPointer);
             double number = model.getNumber(fromPointer);
             double spanned = number + offset * toAdd;
@@ -143,16 +141,14 @@ public enum Spanner {
 
     private void span(CellRange from, CellRange to, SpreadSheetModel model) {
         Iterator<CellPointer> fromIterator = from.iterator();
-        Iterator<CellPointer> toIterator = to.iterator();
-        while (toIterator.hasNext()) {
+        for (CellPointer toPointer : to) {
             if (!fromIterator.hasNext()) {
                 fromIterator = from.iterator();
             }
             CellPointer fromPointer = fromIterator.next();
-            CellPointer toPointer = toIterator.next();
             int offset = getOffset(fromPointer, toPointer);
             CellValue value = model.getValueAt(fromPointer);
-            CellValue moved = moveWithOffset(value, offset);
+            CellValue moved = moveWithOffset(value, offset, model.getRowCount(), model.getColumnCount());
             model.setValueAt(moved, toPointer);
         }
     }

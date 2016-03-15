@@ -22,8 +22,8 @@ public class SpreadSheetPanel extends JPanel {
         JButton selectAll = new JButton(new AbstractAction("Select all") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                table.setRowSelectionInterval(0, table.getRowCount() - 1);
-                table.setColumnSelectionInterval(0, table.getColumnCount() - 1);
+                SwingUtilities.invokeLater(() -> table.setRowSelectionInterval(0, table.getRowCount() - 1));
+                SwingUtilities.invokeLater(() -> table.setColumnSelectionInterval(0, table.getColumnCount() - 1));
             }
         });
         scrollPane.setCorner(JScrollPane.UPPER_LEFT_CORNER, selectAll);

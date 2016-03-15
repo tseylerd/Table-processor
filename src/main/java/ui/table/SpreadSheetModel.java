@@ -65,7 +65,7 @@ public class SpreadSheetModel implements TableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        if (rowIndex >= rowCount || columnIndex >= columnCount) {
+        if (rowIndex < 0 || columnIndex < 0 || rowIndex >= rowCount || columnIndex >= columnCount) {
             throw new IndexOutOfBoundsException();
         }
 

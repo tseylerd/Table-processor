@@ -18,3 +18,4 @@ Code:
 C-1. Refactor CellIterationStrategy and remove this functional code. // fixed
 C-2. Optimize import/export (store only filled cells) // fixed
 C-3. Create a class of dependency (exponential, something else);
+C-4. !! Replace hashtables with arrays. it should be faster;
