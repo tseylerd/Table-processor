@@ -158,6 +158,27 @@ public class CellRange implements Iterable<CellPointer>, Transferable {
         return Collections.unmodifiableList(ranges);
     }
 
+    public SplittedRange splitHonestly(CellRange range) {
+        CellPointer rangeBegin = range.getBegin();
+        CellPointer rangeEnd = range.getEnd();
+        int xMax = Math.min(rangeEnd.getColumn(), end.getColumn());
+        int yMax = Math.min(rangeEnd.getRow(), end.getRow());
+        int xMin = Math.max(rangeBegin.getColumn(), begin.getColumn());
+        int yMin = Math.max(rangeBegin.getRow(), begin.getRow());
+
+        int xOverlap = Math.max(0, xMax - xMin);
+        int yOverlap = Math.max(0, yMax - yMin);
+        if (xOverlap == 0 || yOverlap == 0) {
+            return null;
+        }
+
+        CellRange upper = getUpperRange(xMin, yMin, xMax, yMax);
+        CellRange bottom = getBottomRange(xMin, yMin, xMax, yMax);
+        CellRange lefter = getLefterRange(xMin, yMin, xMax, yMax);
+        CellRange righter = getRighterRange(xMin, yMin, xMax, yMax);
+        return new SplittedRange(upper, bottom, lefter, righter, new CellRange(yMin, xMin, yMax, xMax));
+    }
+
     private CellRange concatenate(CellRange side, CellRange upper, CellRange bottom) {
         if (side == null) {
             return side;

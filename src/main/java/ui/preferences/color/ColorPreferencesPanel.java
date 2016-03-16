@@ -38,7 +38,7 @@ public class ColorPreferencesPanel extends JPanel {
         checkBoxes = new EnumMap<>(BorderMode.class);
 
         for (BorderMode borderMode : BorderMode.values()) {
-            createBorderRadioButton(borderMode);
+            createBorderCheckBox(borderMode);
         }
 
         table.getSelectionModel().addListSelectionListener(this::selectionChanged);
@@ -124,21 +124,21 @@ public class ColorPreferencesPanel extends JPanel {
         for (Map.Entry<BorderMode, JCheckBox> borderModeCheckBoxEntry : checkBoxes.entrySet()) {
             JCheckBox checkBox = borderModeCheckBoxEntry.getValue();
             BorderMode mode = borderModeCheckBoxEntry.getKey();
-            checkBox.setSelected(modesList.contains(mode));
-            checkBox.setEnabled(mode.isModeEnabled((SpreadSheetModel)table.getModel(), range));
+            checkBox.setSelected(modesList != null && modesList.contains(mode));
+            checkBox.setEnabled(modesList != null && mode.isModeEnabled((SpreadSheetModel)table.getModel(), range));
         }
 
-        gridColor = table.getTableColorModel().getGridColor(range);
-        gridColorButton.setBackground(gridColor);
-        backgroundColor = table.getTableColorModel().getBackgroundColor(range);
-        backgroundColorButton.setBackground(backgroundColor);
+        //gridColor = table.getTableColorModel().getGridColor(range);
+       // gridColorButton.setBackground(gridColor);
+        //backgroundColor = table.getTableColorModel().getBackgroundColor(range);
+       // backgroundColorButton.setBackground(backgroundColor);
         boolean enabled = range != null;
         backgroundColorButton.setEnabled(enabled);
         gridColorButton.setEnabled(enabled);
         resetButton.setEnabled(enabled);
     }
 
-    private void createBorderRadioButton(BorderMode mode) {
+    private void createBorderCheckBox(BorderMode mode) {
         BorderModeCheckBox checkBox = new BorderModeCheckBox(mode);
         checkBox.addActionListener(e -> {
             CellRange range = CellRange.createCellRange(table.getSelectedRows(), table.getSelectedColumns());

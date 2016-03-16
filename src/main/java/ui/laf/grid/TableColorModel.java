@@ -1,7 +1,8 @@
 package ui.laf.grid;
 
 import cells.CellRange;
-import cells.RangeAggregator;
+import cells.BorderModesMapper;
+import cells.ColorMapper;
 import cells.pointer.CellPointer;
 import storage.LazyDynamicArray;
 import ui.laf.ProcessorUIDefaults;
@@ -19,24 +20,32 @@ public class TableColorModel {
     private static final CellColorModel DEFAULT = new CellColorModel();
 
     private final SpreadSheetModel model;
-    private final RangeAggregator aggregator;
+    private final BorderModesMapper borderMapper;
+    private final ColorMapper backgroundMapper;
+    private final ColorMapper rightForegroundMapper;
+    private final ColorMapper downForegroundMapper;
 
     private LazyDynamicArray<CellColorModel> values;
 
     public TableColorModel(SpreadSheetModel model) {
         this.model = model;
         values = new LazyDynamicArray<>(model.getRowCount(), model.getColumnCount(), CellColorModel.class);
-        aggregator = new RangeAggregator(model, this);
-
-        model.addTableModelListener(this::tableChanged);
+        borderMapper = new BorderModesMapper(model, this);
+        backgroundMapper = new ColorMapper(ProcessorUIDefaults.DEFAULT_BACKGROUND_COLOR);
+        rightForegroundMapper = new ColorMapper(ProcessorUIDefaults.DEFAULT_GRID_COLOR);
+        downForegroundMapper = new ColorMapper(ProcessorUIDefaults.DEFAULT_GRID_COLOR);
     }
 
     public void addBorderModes(CellRange range, List<BorderMode> modeList) {
-        aggregator.setBorderMode(range, modeList);
+        borderMapper.set(range, modeList);
     }
 
     public List<BorderMode> getModes(CellRange range) {
-        return aggregator.getModes(range);
+        return borderMapper.get(range);
+    }
+
+    public void addBackgroundColor(CellRange range, Color background) {
+        backgroundMapper.set(range, background);
     }
 
 
