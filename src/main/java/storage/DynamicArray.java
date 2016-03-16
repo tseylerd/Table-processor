@@ -8,7 +8,7 @@ import java.lang.reflect.Array;
  * @author Dmitriy Tseyler
  */
 public class DynamicArray<T> {
-    private static final double MULTIPLIER = 1.2;
+    private static final double MULTIPLIER = 1;
 
     private Object[][] values;
     private int rows;
@@ -52,16 +52,35 @@ public class DynamicArray<T> {
 
     public void addRow() {
         rows++;
-        if (rows >= getIncreasedValue(rows - 1)) {
-            values = copyRows(values, rows - 1, columns);
+        if (rows >= getIncreasedValue(rows)) {
+            values = copyRows(values, rows, columns);
+        }
+        int lastRow = rows - 1;
+        for (int i = 0; i < columns; i++) {
+            if (values[lastRow] != null) {
+                values[rows - 1][i] = null;
+            }
         }
     }
 
     public void addColumn() {
         columns++;
-        if (columns >= getIncreasedValue(columns - 1)) {
-            values = copyColumns(values, rows, columns - 1);
+        if (columns >= getIncreasedValue(columns)) {
+            values = copyColumns(values, rows, columns);
         }
+        for (int i = 0; i < rows; i++) {
+            if (values[i] != null) {
+                values[i][columns - 1] = null;
+            }
+        }
+    }
+
+    public void removeRow() {
+        rows--;
+    }
+
+    public void removeColumn() {
+        columns--;
     }
 
     public int rowCount() {
@@ -81,7 +100,6 @@ public class DynamicArray<T> {
     }
 
     private static<T> T[][] copy(T[][] from, int rows, int columns) {
-        rows = getIncreasedValue(rows);
         Class<?> arrayClass = from.getClass();
         //noinspection unchecked
         T[][] newArray = (T[][])Array.newInstance(arrayClass.getComponentType(), rows);

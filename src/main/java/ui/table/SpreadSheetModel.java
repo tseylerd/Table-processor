@@ -202,6 +202,7 @@ public class SpreadSheetModel implements TableModel {
                 setValueAt(EMPTY, decreased, i);
             }
         }
+        values.removeRow();
         rowCount = decreased;
         fireTableRowsDeleted(rowCount, rowCount);
     }
@@ -211,6 +212,7 @@ public class SpreadSheetModel implements TableModel {
         for (int i = 0; i < rowCount; i++) {
             values.setIfExists(i, decreased, EMPTY);
         }
+        values.removeColumn();
         columnCount = decreased;
         model.removeColumn(model.getColumn(columnCount));
         fireTableStructureChanged();
