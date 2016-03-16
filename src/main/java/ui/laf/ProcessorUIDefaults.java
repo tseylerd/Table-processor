@@ -13,4 +13,5 @@ public class ProcessorUIDefaults {
     public static final int DEFAULT_ROW_HEIGHT = 25;
     public static final Color DEFAULT_GRID_COLOR = Color.GRAY;
     public static final Color DEFAULT_BACKGROUND_COLOR = Color.WHITE;
+    public static final int MAX_ROWS_COLUMNS = Short.MAX_VALUE;
 }

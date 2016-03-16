@@ -17,9 +17,6 @@ import java.util.logging.Logger;
  * @author Dmitriy Tseyler
  */
 public class Util {
-    private static final double MULTIPLIER = 1.2;
-    public static final int MAX = Short.MAX_VALUE;
-
     private static final Logger log = Logger.getLogger(Util.class.getName());
     private static final int COLOR_MAX = (255 * 3) / 2;
     private static final float RATIO = 0.5f;
@@ -156,32 +153,5 @@ public class Util {
         int green = toInverse.getGreen();
         int blue = toInverse.getBlue();
         return red + green + blue < COLOR_MAX ? Color.WHITE : Color.BLACK;
-    }
-
-    public static<T> T[][] copyRows(T[][] from, int rows, int columns) {
-        return copy(from, getIncreasedValue(rows), columns);
-    }
-
-    public static<T> T[][] copyColumns(T[][] from, int rows, int columns) {
-        return copy(from, rows, getIncreasedValue(columns));
-    }
-
-    private static<T> T[][] copy(T[][] from, int rows, int columns) {
-        rows = getIncreasedValue(rows);
-        Class<?> arrayClass = from.getClass();
-        //noinspection unchecked
-        T[][] newArray = (T[][])Array.newInstance(arrayClass.getComponentType(), rows);
-        for (int i = 0; i < from.length; i++) {
-            if (from[i] != null) {
-                //noinspection unchecked
-                newArray[i] = (T[])Array.newInstance(from[i].getClass().getComponentType(), columns);
-                System.arraycopy(from[i], 0, newArray[i], 0, from[i].length);
-            }
-        }
-        return newArray;
-    }
-
-    public static int getIncreasedValue(int value) {
-        return (int)Math.min(Math.round(value * MULTIPLIER), MAX);
     }
 }

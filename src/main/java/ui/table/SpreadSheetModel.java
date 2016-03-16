@@ -9,6 +9,7 @@ import cells.CellRange;
 import math.calculator.ParserException;
 import math.calculator.lexer.LexerValue;
 import math.calculator.expression.Expression;
+import storage.DynamicArray;
 import ui.table.error.Error;
 import ui.table.exceptions.*;
 import util.Util;
@@ -30,14 +31,14 @@ public class SpreadSheetModel implements TableModel {
     private final CellsConnectionModel cellsConnectionModel;
     private final ExpressionParser parser;
 
-    private CellValue[][] values;
+    private DynamicArray<CellValue> values;
     private int rowCount;
     private int columnCount;
 
     public SpreadSheetModel(int rowCount, int columnCount) {
         cellsConnectionModel = new CellsConnectionModel(this);
         parser = new ExpressionParser(this);
-        values = new CellValue[Util.getIncreasedValue(rowCount)][];
+        values = new DynamicArray<>(rowCount, columnCount, CellValue.class);
         tableModelListeners = new ArrayList<>();
         this.rowCount = rowCount;
         this.columnCount = columnCount;
@@ -56,7 +57,7 @@ public class SpreadSheetModel implements TableModel {
     public void recalculate(PointerNode pointerNode) {
         int row = pointerNode.getPointer().getRow();
         int column = pointerNode.getPointer().getColumn();
-        CellValue value = values[row][column];
+        CellValue value = values.get(row, column);
         recalculateValue(value, pointerNode);
     }
 
@@ -70,10 +71,7 @@ public class SpreadSheetModel implements TableModel {
         if (rowIndex < 0 || columnIndex < 0 || rowIndex >= rowCount || columnIndex >= columnCount) {
             throw new IndexOutOfBoundsException();
         }
-        if (values[rowIndex] == null) {
-            return EMPTY;
-        }
-        CellValue value = values[rowIndex][columnIndex];
+        CellValue value = values.get(rowIndex, columnIndex);
         if (value == null) {
             value = EMPTY;
         }
@@ -89,10 +87,7 @@ public class SpreadSheetModel implements TableModel {
         cellValue = getTrueValue(cellValue);
         int row = pointer.getPointer().getRow();
         int column = pointer.getPointer().getColumn();
-        if (values[row] == null) {
-            values[row] = new CellValue[Util.getIncreasedValue(columnCount)];
-        }
-        values[row][column] = cellValue;
+        values.set(row, column, cellValue);
         try {
             cellsConnectionModel.cellChanged(pointer);
         } catch (CyclicReferenceException e) {
@@ -156,10 +151,7 @@ public class SpreadSheetModel implements TableModel {
 
     public void setValueAt(CellValue cellValue, CellPointer pointer) {
         cellValue = getTrueValue(cellValue);
-        if (values[pointer.getRow()] == null) {
-            values[pointer.getRow()] = new CellValue[Util.getIncreasedValue(columnCount)];
-        }
-        values[pointer.getRow()][pointer.getColumn()] = cellValue;
+        values.set(pointer.getRow(), pointer.getColumn(), cellValue);
         try {
             Set<CellPointer> pointers = parser.getPointers();
             Set<CellRange> ranges = parser.getRanges();
@@ -173,7 +165,7 @@ public class SpreadSheetModel implements TableModel {
     }
 
     public boolean isConfigured(CellPointer pointer) {
-        return values[pointer.getRow()][pointer.getColumn()] != null;
+        return values.get(pointer.getRow(), pointer.getColumn()) != null;
     }
 
     @Override
@@ -193,23 +185,19 @@ public class SpreadSheetModel implements TableModel {
 
     public void addRow() {
         rowCount++;
-        if (values.length > 0 && values.length < rowCount) {
-            values = Util.copyRows(values, rowCount, columnCount);
-        }
+        values.addRow();
         fireTableRowsInserted(rowCount, rowCount);
     }
 
     public void addColumn(TableColumnModel columnModel) {
         columnModel.addColumn(new TableColumn(columnCount++));
-        if (values.length > 0 && Util.getIncreasedValue(columnCount - 1) < columnCount) {
-            values = Util.copyColumns(values, rowCount, columnCount);
-        }
+        values.addColumn();
         fireTableStructureChanged();
     }
 
     public void removeRow() {
         int decreased = rowCount - 1;
-        if (values[decreased] != null) {
+        if (values.rowExists(decreased)) {
             for (int i = 0; i < columnCount; i++) {
                 setValueAt(EMPTY, decreased, i);
             }
@@ -221,9 +209,7 @@ public class SpreadSheetModel implements TableModel {
     public void removeColumn(TableColumnModel model) {
         int decreased = columnCount - 1;
         for (int i = 0; i < rowCount; i++) {
-            if (values[i] != null) {
-                setValueAt(EMPTY, i, decreased);
-            }
+            values.setIfExists(i, decreased, EMPTY);
         }
         columnCount = decreased;
         model.removeColumn(model.getColumn(columnCount));
