@@ -1,6 +1,7 @@
 package ui.laf.grid;
 
 import cells.CellRange;
+import cells.RangeAggregator;
 import cells.pointer.CellPointer;
 import storage.LazyDynamicArray;
 import ui.laf.ProcessorUIDefaults;
@@ -9,6 +10,7 @@ import ui.table.SpreadSheetModel;
 import javax.swing.event.TableModelEvent;
 import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 /**
  * @author Dmitriy Tseyler
@@ -17,13 +19,26 @@ public class TableColorModel {
     private static final CellColorModel DEFAULT = new CellColorModel();
 
     private final SpreadSheetModel model;
+    private final RangeAggregator aggregator;
+
     private LazyDynamicArray<CellColorModel> values;
 
     public TableColorModel(SpreadSheetModel model) {
-        values = new LazyDynamicArray<>(model.getRowCount(), model.getRowCount(), CellColorModel.class);
         this.model = model;
+        values = new LazyDynamicArray<>(model.getRowCount(), model.getColumnCount(), CellColorModel.class);
+        aggregator = new RangeAggregator(model, this);
+
         model.addTableModelListener(this::tableChanged);
     }
+
+    public void addBorderModes(CellRange range, List<BorderMode> modeList) {
+        aggregator.setBorderMode(range, modeList);
+    }
+
+    public List<BorderMode> getModes(CellRange range) {
+        return aggregator.getModes(range);
+    }
+
 
     public boolean needLowerLine(int row, int column) {
         return needLowerLine(CellPointer.getPointer(row, column));

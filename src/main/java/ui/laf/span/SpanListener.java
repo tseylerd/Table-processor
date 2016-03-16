@@ -48,6 +48,10 @@ public class SpanListener extends MouseAdapter {
         Point point = e.getPoint();
         int row = table.rowAtPoint(point);
         int column = table.columnAtPoint(point);
+        if (row < 0 || column < 0) {
+            return;
+        }
+
         Rectangle rect = table.getCellRect(row, column, true);
         CellPointer pointer = CellPointer.getPointer(row, column);
 

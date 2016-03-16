@@ -2,6 +2,7 @@ package ui.laf.grid;
 
 import cells.CellRange;
 import cells.pointer.CellPointer;
+import ui.table.SpreadSheetModel;
 import ui.table.SpreadSheetTable;
 
 /**
@@ -33,7 +34,7 @@ public enum BorderMode {
         }
 
         @Override
-        boolean enabled(SpreadSheetTable table, CellRange range) {
+        boolean enabled(SpreadSheetModel model, CellRange range) {
             return range.getFirstColumn() > 0;
         }
     },
@@ -56,8 +57,8 @@ public enum BorderMode {
         }
 
         @Override
-        boolean enabled(SpreadSheetTable table, CellRange range) {
-            return range.getLastColumn() < table.getColumnCount();
+        boolean enabled(SpreadSheetModel model, CellRange range) {
+            return range.getLastColumn() < model.getColumnCount();
         }
     },
     DOWN("Lower border") {
@@ -79,8 +80,8 @@ public enum BorderMode {
         }
 
         @Override
-        boolean enabled(SpreadSheetTable table, CellRange range) {
-            return range.getLastRow() < table.getRowCount();
+        boolean enabled(SpreadSheetModel model, CellRange range) {
+            return range.getLastRow() < model.getRowCount();
         }
     },
     UP("Upper border") {
@@ -108,7 +109,7 @@ public enum BorderMode {
         }
 
         @Override
-        boolean enabled(SpreadSheetTable table, CellRange range) {
+        boolean enabled(SpreadSheetModel model, CellRange range) {
             return range.getFirstRow() > 0;
         }
     },
@@ -139,7 +140,7 @@ public enum BorderMode {
         }
 
         @Override
-        boolean enabled(SpreadSheetTable table, CellRange range) {
+        boolean enabled(SpreadSheetModel model, CellRange range) {
             return range.size() > 1;
         }
     };
@@ -154,7 +155,7 @@ public enum BorderMode {
         return guiName;
     }
 
-    public boolean isModeEnabled(SpreadSheetTable table, CellRange range) {
+    public boolean isModeEnabled(SpreadSheetModel table, CellRange range) {
         return range != null && enabled(table, range);
     }
 
@@ -164,5 +165,5 @@ public enum BorderMode {
 
     public abstract void setModePreferences(TableColorModel model, CellRange range, boolean on);
     abstract boolean turnedOn(TableColorModel model, CellRange range);
-    abstract boolean enabled(SpreadSheetTable table, CellRange range);
+    abstract boolean enabled(SpreadSheetModel model, CellRange range);
 }

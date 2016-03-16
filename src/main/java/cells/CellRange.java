@@ -12,8 +12,7 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Iterator;
+import java.util.*;
 
 /**
  * @author Dmitriy Tseyler
@@ -47,6 +46,14 @@ public class CellRange implements Iterable<CellPointer>, Transferable {
                 begin.getRow() <= pointer.getRow() &&
                 end.getRow() >= pointer.getRow() &&
                 end.getColumn() >= pointer.getColumn();
+    }
+
+    public boolean isInside(CellRange range) {
+        return  range != null &&
+                getFirstColumn() <= range.getFirstColumn() &&
+                getFirstRow() <= range.getFirstRow() &&
+                getLastColumn() >= range.getLastColumn() &&
+                getLastRow() >= range.getLastRow();
     }
 
     public int getFirstColumn() {
@@ -86,8 +93,6 @@ public class CellRange implements Iterable<CellPointer>, Transferable {
             return null;
         }
 
-        Arrays.sort(rows);
-        Arrays.sort(columns);
         CellPointer start = CellPointer.getPointer(rows[0], columns[0]);
         CellPointer end = CellPointer.getPointer(rows[rows.length - 1], columns[columns.length - 1]);
         return new CellRange(start, end);
@@ -125,12 +130,83 @@ public class CellRange implements Iterable<CellPointer>, Transferable {
         return (end.getColumn() - begin.getColumn() + 1) * (end.getRow() - begin.getRow() + 1);
     }
 
-    public boolean isOneRowRange() {
-        return getFirstRow() == getLastRow();
+    public List<CellRange> split(CellRange range) {
+        CellPointer rangeBegin = range.getBegin();
+        CellPointer rangeEnd = range.getEnd();
+        int xMax = Math.min(rangeEnd.getColumn(), end.getColumn());
+        int yMax = Math.min(rangeEnd.getRow(), end.getRow());
+        int xMin = Math.max(rangeBegin.getColumn(), begin.getColumn());
+        int yMin = Math.max(rangeBegin.getRow(), begin.getRow());
+
+        int xOverlap = Math.max(0, xMax - xMin);
+        int yOverlap = Math.max(0, yMax - yMin);
+        if (xOverlap == 0 || yOverlap == 0) {
+            return null;
+        }
+
+        List<CellRange> ranges = new ArrayList<>();
+        CellRange upper = getUpperRange(xMin, yMin, xMax, yMax);
+        CellRange bottom = getBottomRange(xMin, yMin, xMax, yMax);
+        CellRange lefter = getLefterRange(xMin, yMin, xMax, yMax);
+        CellRange righter = getRighterRange(xMin, yMin, xMax, yMax);
+        lefter = concatenate(lefter, upper, bottom);
+        righter = concatenate(righter, upper, bottom);
+        addIfNotNull(ranges, upper);
+        addIfNotNull(ranges, bottom);
+        addIfNotNull(ranges, lefter);
+        addIfNotNull(ranges, righter);
+        return Collections.unmodifiableList(ranges);
     }
 
-    public boolean isOneColumnRange() {
-        return getLastColumn() == getFirstColumn();
+    private CellRange concatenate(CellRange side, CellRange upper, CellRange bottom) {
+        if (side == null) {
+            return side;
+        }
+        if (upper != null) {
+            side = new CellRange(upper.getBegin().getRow(), side.getBegin().getColumn(), side.getEnd().getRow(), side.getEnd().getColumn());
+        }
+        if (bottom != null) {
+            side = new CellRange(side.getBegin().getRow(), side.getBegin().getColumn(), bottom.getEnd().getRow(), side.getEnd().getColumn());
+        }
+        return side;
+    }
+
+    private void addIfNotNull(List<CellRange> ranges, CellRange range) {
+        if (range != null) {
+            ranges.add(range);
+        }
+    }
+
+    private CellRange getUpperRange(int xMin, int yMin, int xMax, int yMax) {
+        if (yMin <= begin.getRow()) {
+            return null;
+        }
+
+        int xStart = begin.getColumn();
+        int yStart = begin.getRow();
+        int xEnd = end.getColumn();
+        return new CellRange(yStart, xStart, yMin - 1, xEnd);
+    }
+
+    private CellRange getBottomRange(int xMin, int yMin, int xMax, int yMax) {
+        if (yMax >= end.getRow()) {
+            return null;
+        }
+        return new CellRange(yMax + 1, begin.getColumn(), end.getRow(), end.getColumn());
+    }
+
+    private CellRange getLefterRange(int xMin, int yMin, int xMax, int yMax) {
+        if (xMin <= begin.getColumn()) {
+            return null;
+        }
+        return new CellRange(Math.max(yMin, begin.getRow()), begin.getColumn(), Math.min(yMax, end.getRow()), xMin - 1);
+    }
+
+    private CellRange getRighterRange(int xMin, int yMin, int xMax, int yMax) {
+        if (xMax >= end.getColumn()) {
+            return null;
+        }
+        return new CellRange(Math.max(yMin, begin.getRow()), xMax + 1, Math.min(yMax, end.getRow()), end.getColumn());
     }
 
     @Override
@@ -160,5 +236,19 @@ public class CellRange implements Iterable<CellPointer>, Transferable {
     @Override
     public boolean isDataFlavorSupported(DataFlavor flavor) {
         return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return begin.hashCode() + end.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof CellRange)) {
+            return false;
+        }
+        CellRange range = (CellRange)obj;
+        return range.begin.equals(begin) && range.end.equals(end);
     }
 }

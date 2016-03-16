@@ -53,11 +53,11 @@ public class BorderModeTest {
     private void testEnabled(CellRange range, boolean allEnabled, boolean downEnabled, boolean upEnabled,
                              boolean rightEnabled, boolean leftEnabled)
     {
-        Assert.assertEquals(BorderMode.ALL_LINES.isModeEnabled(table, range), allEnabled);
-        Assert.assertEquals(BorderMode.DOWN.isModeEnabled(table, range), downEnabled);
-        Assert.assertEquals(BorderMode.UP.isModeEnabled(table, range), upEnabled);
-        Assert.assertEquals(BorderMode.RIGHT.isModeEnabled(table, range), rightEnabled);
-        Assert.assertEquals(BorderMode.LEFT.isModeEnabled(table, range), leftEnabled);
+        Assert.assertEquals(BorderMode.ALL_LINES.isModeEnabled(model, range), allEnabled);
+        Assert.assertEquals(BorderMode.DOWN.isModeEnabled(model, range), downEnabled);
+        Assert.assertEquals(BorderMode.UP.isModeEnabled(model, range), upEnabled);
+        Assert.assertEquals(BorderMode.RIGHT.isModeEnabled(model, range), rightEnabled);
+        Assert.assertEquals(BorderMode.LEFT.isModeEnabled(model, range), leftEnabled);
     }
 
     @Test
