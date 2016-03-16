@@ -159,7 +159,7 @@ public class BorderModeTest {
     }
 
     private void compareToNewGridModel(TableColorModel tableColorModel) {
-        CellRange range = new CellRange(0, 0, ROW_COUNT, COLUMN_COUNT);
+        CellRange range = new CellRange(0, 0, ROW_COUNT - 1, COLUMN_COUNT - 1);
         TableColorModel newModel = new TableColorModel(model);
         for (CellPointer pointer : range) {
             Assert.assertEquals(tableColorModel.needLowerLine(pointer), newModel.needLowerLine(pointer));

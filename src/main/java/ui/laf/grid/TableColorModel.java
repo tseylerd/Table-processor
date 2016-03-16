@@ -2,7 +2,7 @@ package ui.laf.grid;
 
 import cells.CellRange;
 import cells.pointer.CellPointer;
-import storage.DynamicArray;
+import storage.LazyDynamicArray;
 import ui.laf.ProcessorUIDefaults;
 import ui.table.SpreadSheetModel;
 
@@ -17,10 +17,10 @@ public class TableColorModel {
     private static final CellColorModel DEFAULT = new CellColorModel();
 
     private final SpreadSheetModel model;
-    private DynamicArray<CellColorModel> values;
+    private LazyDynamicArray<CellColorModel> values;
 
     public TableColorModel(SpreadSheetModel model) {
-        values = new DynamicArray<>(model.getRowCount(), model.getRowCount(), CellColorModel.class);
+        values = new LazyDynamicArray<>(model.getRowCount(), model.getRowCount(), CellColorModel.class);
         this.model = model;
         model.addTableModelListener(this::tableChanged);
     }

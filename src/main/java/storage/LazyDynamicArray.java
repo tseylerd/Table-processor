@@ -7,18 +7,17 @@ import java.lang.reflect.Array;
 /**
  * @author Dmitriy Tseyler
  */
-public class DynamicArray<T> {
+public class LazyDynamicArray<T> {
     private static final double MULTIPLIER = 1;
 
     private Object[][] values;
     private int rows;
     private int columns;
     private final Class<T> tClass;
-    private final Class<T[]> arrayClass;
 
-    public DynamicArray(int rows, int columns, Class<T> tClass) {
+    public LazyDynamicArray(int rows, int columns, Class<T> tClass) {
         //noinspection unchecked
-        arrayClass = (Class<T[]>)Array.newInstance(tClass, 0).getClass();
+        Class<T[]> arrayClass = (Class<T[]>)Array.newInstance(tClass, 0).getClass();
         this.values = (Object[][])Array.newInstance(arrayClass, getIncreasedValue(rows));
         this.rows = rows;
         this.columns = columns;

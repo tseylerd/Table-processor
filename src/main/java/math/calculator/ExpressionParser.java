@@ -9,6 +9,8 @@ import cells.pointer.CellPointer;
 import cells.CellRange;
 
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -17,20 +19,17 @@ import java.util.Set;
 
 public class ExpressionParser {
     private final SpreadSheetModel model;
-    private final Set<CellPointer> pointers;
     private final Set<CellRange> ranges;
 
     private Lexeme lexeme;
     private Lexer lexer;
 
     public ExpressionParser(SpreadSheetModel model) {
-        pointers = new HashSet<>();
         ranges = new HashSet<>();
         this.model = model;
     }
 
-    public Expression parse(String expression) throws ParserException{
-        pointers.clear();
+    public Expression parse(String expression) throws ParserException {
         ranges.clear();
         expression = expression.replaceAll(" ", "");
         if (expression.isEmpty() || expression.charAt(0) != '=') {
@@ -41,7 +40,14 @@ public class ExpressionParser {
         }
         lexer = new Lexer(expression);
         lexeme = lexer.nextLexeme();
-        return expression();
+        Expression result;
+        try {
+            result = expression();
+        } catch (ParserException e) {
+            ranges.clear();
+            throw e;
+        }
+        return result;
     }
 
     private Expression expression() throws ParserException {
@@ -55,12 +61,8 @@ public class ExpressionParser {
         return result;
     }
 
-    public Set<CellPointer> getPointers() {
-        return pointers;
-    }
-
-    public Set<CellRange> getRanges() {
-        return ranges;
+    public List<CellRange> getRanges() {
+        return new LinkedList<>(ranges);
     }
 
     private Expression composed() throws ParserException {
@@ -106,7 +108,7 @@ public class ExpressionParser {
 
     Expression onCellPointer() throws ParserException {
         CellPointer pointer = lexer.getCellPointer();
-        pointers.add(pointer);
+        ranges.add(new CellRange(pointer, pointer));
         lexeme = lexer.nextLexeme();
         return new CellPointerExpression(pointer, model);
     }

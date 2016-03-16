@@ -9,7 +9,7 @@ import cells.CellRange;
 import math.calculator.ParserException;
 import math.calculator.lexer.LexerValue;
 import math.calculator.expression.Expression;
-import storage.DynamicArray;
+import storage.LazyDynamicArray;
 import ui.table.error.Error;
 import ui.table.exceptions.*;
 import util.Util;
@@ -31,17 +31,18 @@ public class SpreadSheetModel implements TableModel {
     private final CellsConnectionModel cellsConnectionModel;
     private final ExpressionParser parser;
 
-    private DynamicArray<CellValue> values;
+    private LazyDynamicArray<CellValue> values;
     private int rowCount;
     private int columnCount;
 
     public SpreadSheetModel(int rowCount, int columnCount) {
-        cellsConnectionModel = new CellsConnectionModel(this);
-        parser = new ExpressionParser(this);
-        values = new DynamicArray<>(rowCount, columnCount, CellValue.class);
         tableModelListeners = new ArrayList<>();
         this.rowCount = rowCount;
         this.columnCount = columnCount;
+
+        parser = new ExpressionParser(this);
+        values = new LazyDynamicArray<>(rowCount, columnCount, CellValue.class);
+        cellsConnectionModel = new CellsConnectionModel(this);
     }
 
     @Override
@@ -55,8 +56,8 @@ public class SpreadSheetModel implements TableModel {
     }
 
     public void recalculate(PointerNode pointerNode) {
-        int row = pointerNode.getPointer().getRow();
-        int column = pointerNode.getPointer().getColumn();
+        int row = pointerNode.getRow();
+        int column = pointerNode.getColumn();
         CellValue value = values.get(row, column);
         recalculateValue(value, pointerNode);
     }
@@ -80,13 +81,25 @@ public class SpreadSheetModel implements TableModel {
 
     @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-        setValueAt((CellValue)aValue, CellPointer.getPointer(rowIndex, columnIndex));
+        CellValue cellValue = (CellValue)aValue;
+        cellValue = getTrueValue(cellValue);
+        values.set(rowIndex, columnIndex, cellValue);
+        try {
+            List<CellRange> ranges = parser.getRanges();
+            PointerNode node = new PointerNode(rowIndex, columnIndex);
+            cellsConnectionModel.subscribe(node, ranges);
+            cellsConnectionModel.cellChanged(node);
+        } catch (CyclicReferenceException e) {
+            cellValue.setError(Error.CYCLIC_REFERENCE);
+        }
+        cellsConnectionModel.resetErrors();
+        fireTableModelListeners(rowIndex);
     }
 
     private void recalculateValue(CellValue cellValue, PointerNode pointer) {
         cellValue = getTrueValue(cellValue);
-        int row = pointer.getPointer().getRow();
-        int column = pointer.getPointer().getColumn();
+        int row = pointer.getRow();
+        int column = pointer.getColumn();
         values.set(row, column, cellValue);
         try {
             cellsConnectionModel.cellChanged(pointer);
@@ -150,18 +163,7 @@ public class SpreadSheetModel implements TableModel {
     }
 
     public void setValueAt(CellValue cellValue, CellPointer pointer) {
-        cellValue = getTrueValue(cellValue);
-        values.set(pointer.getRow(), pointer.getColumn(), cellValue);
-        try {
-            Set<CellPointer> pointers = parser.getPointers();
-            Set<CellRange> ranges = parser.getRanges();
-            cellsConnectionModel.subscribe(pointer, pointers, ranges);
-            cellsConnectionModel.cellChanged(new PointerNode(pointer));
-        } catch (CyclicReferenceException e) {
-            cellValue.setError(Error.CYCLIC_REFERENCE);
-        }
-        cellsConnectionModel.resetErrors();
-        fireTableModelListeners(pointer.getRow());
+        setValueAt(cellValue, pointer.getRow(), pointer.getColumn());
     }
 
     public boolean isConfigured(CellPointer pointer) {

@@ -9,6 +9,10 @@ public class PointerNode {
     private boolean visited;
     private final CellPointer pointer;
 
+    public PointerNode(int row, int column) {
+        this(CellPointer.getPointer(row, column));
+    }
+
     public PointerNode(CellPointer pointer) {
         this.pointer = pointer;
     }
@@ -20,6 +24,14 @@ public class PointerNode {
         }
 
         return ((PointerNode) obj).pointer.equals(pointer);
+    }
+
+    public int getRow() {
+        return pointer.getRow();
+    }
+
+    public int getColumn() {
+        return pointer.getColumn();
     }
 
     @Override
