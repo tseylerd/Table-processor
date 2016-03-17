@@ -122,7 +122,7 @@ public abstract class RangeMapper<T> {
             if (splitted == null || !splitted.splitSucceful()) {
                 return defaultValue(range);
             } else {
-                concatenate(splitted, range);
+                return concatenate(splitted, range);
             }
         } else {
             T existingValues = map.get(range);
@@ -132,7 +132,6 @@ public abstract class RangeMapper<T> {
                 return existingValues;
             }
         }
-        return defaultValue(range);
     }
 
      private T rangeNotFound(CellRange range) {

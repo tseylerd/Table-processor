@@ -26,7 +26,7 @@ public class ImportExportTest {
         TableColorModel colorModel = table.getTableColorModel();
         SpreadSheetModel spreadSheetModel = (SpreadSheetModel) table.getModel();
         CellRange range = new CellRange(0, 0, ProcessorUIDefaults.DEFAULT_ROW_COUNT - 1, ProcessorUIDefaults.DEFAULT_COLUMN_COUNT - 1);
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < 100; i++) {
             setRandomSettings(colorModel, spreadSheetModel);
         }
 

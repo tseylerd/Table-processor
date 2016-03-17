@@ -110,15 +110,25 @@ public enum BorderMode {
                 lower = model.getNeedBottomLine(cutted);
                 right = model.getNeedRightLine(cutted);
             }
-            CellRange lastRow = new CellRange(range.getLastRow(), range.getFirstColumn(), range.getLastRow(), range.getLastColumn() - 1);
-            if (lastRow.isValid()) {
-                right &= model.getNeedRightLine(lastRow);
+            if (range.getLastColumn() > 0) {
+                CellRange lastRow = new CellRange(range.getLastRow(), range.getFirstColumn(), range.getLastRow(), range.getLastColumn() - 1);
+                if (lastRow.isValid()) {
+                    right &= model.getNeedRightLine(lastRow);
+                }
             }
-            CellRange lastColumn = new CellRange(range.getFirstRow(), range.getLastColumn(), range.getLastRow() - 1, range.getLastColumn());
-            if (lastRow.isValid()) {
-                lower &= model.getNeedBottomLine(lastColumn);
+            if (range.getLastRow() > 0) {
+                CellRange lastColumn = new CellRange(range.getFirstRow(), range.getLastColumn(), range.getLastRow() - 1, range.getLastColumn());
+                if (lastColumn.isValid()) {
+                    lower &= model.getNeedBottomLine(lastColumn);
+                }
             }
-            return right & lower;
+            if (range.getFirstRow() == range.getLastRow()) {
+                return right;
+            } else if (range.getFirstColumn() == range.getLastColumn()) {
+                return lower;
+            } else {
+                return right & lower;
+            }
         }
 
         @Override
