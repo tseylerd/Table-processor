@@ -18,6 +18,7 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 /**
+ * Main panel for customize table cells and grid colors
  * @author Dmitriy Tseyler
  */
 public class ColorPreferencesPanel extends JPanel {
@@ -111,6 +112,12 @@ public class ColorPreferencesPanel extends JPanel {
         this.gridColor = gridColor;
     }
 
+    /**
+     * Here we listen a table selection model. If something changes, we should refresh and configure
+     * our panel depends on selected cell range.
+     * @see {@link BorderMode}
+     * @see {@link ui.laf.grid.TableColorModel}
+     */
     private void selectionChanged(ListSelectionEvent e) {
         if (e != null && e.getValueIsAdjusting()) {
             return;

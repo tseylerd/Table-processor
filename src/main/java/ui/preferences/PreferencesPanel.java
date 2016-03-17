@@ -8,6 +8,9 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
+ * Panel for customize table
+ * @see {@link ColorPreferencesPanel}
+ * @see {@link CellCountPreferencesPanel}
  * @author Dmitriy Tseyler
  */
 public class PreferencesPanel extends JPanel{

@@ -6,6 +6,7 @@ import ui.icon.IconManager;
 import javax.swing.*;
 
 /**
+ * Error representation with text and icon
  * @author Dmitriy Tseyler
  */
 public enum Error {

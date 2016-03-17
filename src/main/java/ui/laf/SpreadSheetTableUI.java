@@ -121,7 +121,7 @@ public class SpreadSheetTableUI extends BasicTableUI {
     }
 
     /**
-     * Copy of {@link BasicTableUI}
+     * Copy of {@link BasicTableUI} paintCells
      */
     private void paintCells(Graphics g, int rMin, int rMax, int cMin, int cMax) {
         TableColumnModel cm = table.getColumnModel();
@@ -145,7 +145,7 @@ public class SpreadSheetTableUI extends BasicTableUI {
     }
 
     /**
-     * Copy of {@link BasicTableUI}
+     * Copy of {@link BasicTableUI} paintCell with logic of painting spanning cells
      */
     private void paintCell(Graphics g, Rectangle cellRect, int row, int column) {
         if (table.isEditing() && table.getEditingRow()==row &&
@@ -166,7 +166,7 @@ public class SpreadSheetTableUI extends BasicTableUI {
     }
 
     /**
-     * Copy of {@link BasicTableUI}, except one moment: we want to draw line depends on grid model values
+     * Copy of {@link BasicTableUI}, except one moment: we want to draw line depends on table color model values
      */
     private void paintGrid(Graphics g, int rMin, int rMax, int cMin, int cMax) {
         Rectangle minCell = table.getCellRect(rMin, cMin, true);
@@ -211,7 +211,7 @@ public class SpreadSheetTableUI extends BasicTableUI {
     }
 
     /**
-     * Copy of {@link BasicTableUI}
+     * Copy of {@link BasicTableUI#paintDropLines(Graphics)}
      */
     private void paintDropLines(Graphics g) {
         JTable.DropLocation loc = table.getDropLocation();
@@ -259,7 +259,7 @@ public class SpreadSheetTableUI extends BasicTableUI {
     }
 
     /**
-     * Copy of {@link BasicTableUI}
+     * Copy of {@link BasicTableUI#getHDropLineRect(JTable.DropLocation)}
      */
     private Rectangle getHDropLineRect(JTable.DropLocation loc) {
         if (!loc.isInsertRow()) {
@@ -291,6 +291,9 @@ public class SpreadSheetTableUI extends BasicTableUI {
         return rect;
     }
 
+    /**
+     * Copy of {@link BasicTableUI#getVDropLineRect(JTable.DropLocation)}
+     */
     private Rectangle getVDropLineRect(JTable.DropLocation loc) {
         if (!loc.isInsertColumn()) {
             return null;
@@ -322,7 +325,7 @@ public class SpreadSheetTableUI extends BasicTableUI {
     }
 
     /**
-     * Copy of {@link BasicTableUI}
+     * Copy of {@link BasicTableUI#extendRect(Rectangle, boolean)}
      */
     private Rectangle extendRect(Rectangle rect, boolean horizontal) {
         if (rect == null) {
@@ -346,6 +349,9 @@ public class SpreadSheetTableUI extends BasicTableUI {
         return rect;
     }
 
+    /**
+     * Action for clearing cells on backspace key pressed
+     */
     private static class DeleteAction extends AbstractAction {
         private final SpreadSheetTable table;
 

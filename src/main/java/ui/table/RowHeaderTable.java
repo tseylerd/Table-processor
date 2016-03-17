@@ -11,6 +11,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
 /**
+ * Simple row header of {@link SpreadSheetTable}
  * @author Dmitriy Tseyler
  */
 public class RowHeaderTable extends JTable {

@@ -7,6 +7,7 @@ import ui.laf.ProcessorUIDefaults;
 import javax.swing.*;
 
 /**
+ * This button deletes tab from {@link MainTabbedPane}
  * @author Dmitriy Tseyler
  */
 public class CloseTabButton extends JButton {

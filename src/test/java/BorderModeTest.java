@@ -12,7 +12,7 @@ import java.awt.*;
 /**
  * @author Dmitriy Tseyler
  */
-public class BorderModeTest {
+public class BorderModeTest extends AbstractSwingTest {
     private static final int ROW_COUNT = 100;
     private static final int COLUMN_COUNT = 100;
 
@@ -20,6 +20,7 @@ public class BorderModeTest {
 
     @Before
     public void init() {
+        super.init();
         SpreadSheetTable table = new SpreadSheetTable(ROW_COUNT, COLUMN_COUNT);
         model = (SpreadSheetModel) table.getModel();
     }

@@ -8,7 +8,7 @@ import java.lang.reflect.Array;
  * @author Dmitriy Tseyler
  */
 public class LazyDynamicArray<T> {
-    private static final double MULTIPLIER = 1;
+    private static final double MULTIPLIER = 1.5;
 
     private Object[][] values;
     private int rows;
@@ -25,6 +25,10 @@ public class LazyDynamicArray<T> {
     }
 
     public void set(int row, int column, T value) {
+        if (row >= rows || column > columns) {
+            throw new IndexOutOfBoundsException();
+        }
+
         if (values[row] == null) {
             values[row] = (Object[])Array.newInstance(tClass, getIncreasedValue(columns));
         }
@@ -112,7 +116,7 @@ public class LazyDynamicArray<T> {
         return newArray;
     }
 
-    public static int getIncreasedValue(int value) {
+    private static int getIncreasedValue(int value) {
         return (int) Math.min(Math.round(value * MULTIPLIER), ProcessorUIDefaults.MAX_ROWS_COLUMNS);
     }
 }

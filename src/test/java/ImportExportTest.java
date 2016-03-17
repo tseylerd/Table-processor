@@ -2,6 +2,7 @@ import cells.CellRange;
 import cells.CellValue;
 import cells.pointer.CellPointer;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import storage.ImportFormatException;
 import storage.TableExporter;
@@ -18,7 +19,7 @@ import java.util.Random;
 /**
  * @author Dmitriy Tseyler
  */
-public class ImportExportTest {
+public class ImportExportTest extends AbstractSwingTest {
 
     @Test
     public void test() {

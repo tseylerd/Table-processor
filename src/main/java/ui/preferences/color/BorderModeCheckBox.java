@@ -5,6 +5,7 @@ import ui.laf.grid.BorderMode;
 import javax.swing.*;
 
 /**
+ * Checkbox with {@link BorderMode} inside
  * @author Dmitriy Tseyler
  */
 public class BorderModeCheckBox extends JCheckBox {

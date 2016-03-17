@@ -7,6 +7,9 @@ import java.util.Collections;
 import java.util.List;
 
 /**
+ * Base exceptions class.
+ * In some cases, I want to show the same highest priority exception in not depending on the order of errors
+ * @see {@link math.calculator.expression.BinaryExpression}
  * @author Dmitriy Tseyler
  */
 public class SpreadSheetException extends RuntimeException implements Comparable<SpreadSheetException> {

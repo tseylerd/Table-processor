@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
+ * Button with always visible text color depends on background color
  * @author Dmitriy Tseyler
  */
 public class InverseColorButton extends JButton {

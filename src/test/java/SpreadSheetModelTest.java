@@ -18,6 +18,7 @@ public class SpreadSheetModelTest extends AbstractExpressionTest {
 
     @Before
     public void init() {
+        super.init();
         sheetModel = new SpreadSheetModel(DEFAULT_ROWS, DEFAULT_COLS);
     }
 

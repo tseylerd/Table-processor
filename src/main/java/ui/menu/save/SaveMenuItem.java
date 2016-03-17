@@ -18,7 +18,7 @@ public class SaveMenuItem extends AbstractSaveMenuItem {
     protected void installListeners() {
         super.installListeners();
         tabbedPane.addChangeListener(this::tabbedPaneSelectedTableChanged);
-        tabbedPane.addSavedListener(this::saved);
+        tabbedPane.addSaveStateListener(this::saved);
     }
 
     @Override

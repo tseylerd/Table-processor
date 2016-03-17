@@ -12,11 +12,15 @@ import java.util.Map;
 import java.util.Set;
 
 /**
+ * Main visible interface of table processor. Contains tabs with tables. Holds saved/unsaved state of each tab.
+ * Monitors tabs overwriting.
+ * By default contains one table with {@value DEFAULT_NAME} name.
  * @author Dmitriy Tseyler
  */
 public class MainTabbedPane extends JTabbedPane {
     private static final String CONFIRMATION_TEXT = "Do you want to overwrite existing table? If not, a copy will be created.";
     private static final String COPY = " copy";
+    private static final String DEFAULT_NAME = "New table";
 
     private final Map<String, File> names;
     private final Set<Runnable> saveListeners;
@@ -27,7 +31,7 @@ public class MainTabbedPane extends JTabbedPane {
 
         setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
         setTabPlacement(JTabbedPane.TOP);
-        addTable("New table", new SpreadSheetTable());
+        addTable(DEFAULT_NAME, new SpreadSheetTable());
     }
 
     public boolean addTable(String name, SpreadSheetTable table) {
@@ -82,7 +86,7 @@ public class MainTabbedPane extends JTabbedPane {
         return names.get(getAccessibleContext().getAccessibleName());
     }
 
-    public void addSavedListener(Runnable consumer) {
+    public void addSaveStateListener(Runnable consumer) {
         saveListeners.add(consumer);
     }
 

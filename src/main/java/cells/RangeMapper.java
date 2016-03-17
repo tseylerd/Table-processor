@@ -2,6 +2,10 @@ package cells;
 
 import java.util.*;
 
+/**
+ * @author Dmitriy Tseyler
+ * @param <T> a value class parameter
+ */
 public abstract class RangeMapper<T> {
 
     private Map<CellRange, T> map;

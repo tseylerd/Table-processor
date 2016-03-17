@@ -19,6 +19,7 @@ import java.util.Iterator;
 import java.util.logging.Logger;
 
 /**
+ * Transfer handler for {@link SpreadSheetTable} to move ranges of values
  * @author Dmitriy Tseyler
  */
 public class SpreadSheetTransferHandler extends TransferHandler {
@@ -70,6 +71,12 @@ public class SpreadSheetTransferHandler extends TransferHandler {
         return true;
     }
 
+    /**
+     * Here we import range from one place to another.
+     * One important thing: order, in which we have to copy values, depends on direction of motion
+     * @see {@link cells.iterator.cell.CellIterationStrategy}
+     * @see {@link cells.iterator.cell.CellIterator}
+     */
     private void processRangeImport(CellRange range, int selectedRow, int selectedColumn) {
         int rowOffset =  selectedRow - beginPointer.getRow();
         int columnOffset = selectedColumn - beginPointer.getColumn();

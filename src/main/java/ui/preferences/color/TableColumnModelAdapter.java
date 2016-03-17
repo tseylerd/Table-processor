@@ -6,6 +6,7 @@ import javax.swing.event.TableColumnModelEvent;
 import javax.swing.event.TableColumnModelListener;
 
 /**
+ * Simple adapter for reusing
  * @author Dmitriy Tseyler
  */
 public class TableColumnModelAdapter implements TableColumnModelListener {

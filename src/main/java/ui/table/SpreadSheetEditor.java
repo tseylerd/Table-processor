@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
+ * Editor for {@link SpreadSheetTable} with {@link EditorTextField}
  * @author Dmitriy Tseyler
  */
 public class SpreadSheetEditor extends DefaultCellEditor {
