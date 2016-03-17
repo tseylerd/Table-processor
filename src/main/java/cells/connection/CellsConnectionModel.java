@@ -55,43 +55,24 @@ public class CellsConnectionModel {
         cycle = false;
     }
 
-    private List<CellRange> getWhatINeedSubscribe(PointerNode pointer, List<CellRange> ranges) {
-        int row = pointer.getRow();
-        int column = pointer.getColumn();
+    private void clear(PointerNode node) {
         //noinspection unchecked
-        List<CellRange> references = this.references.get(row, column);
-        List<CellRange> toSubscribe = new ArrayList<>();
-
-        if (references != null) {
-            ranges.forEach(cellRange -> {
-                if (!references.contains(cellRange)) {
-                    toSubscribe.add(cellRange);
-                }
-            });
-            int size = references.size();
-            for (int i = size - 1; i >= 0; i--) {
-                CellRange range = references.get(i);
-                if (!ranges.contains(range)) {
-                    clearSubscribtion(range, pointer);
-                }
-            }
-            references.addAll(toSubscribe);
-        } else {
-            this.references.set(row, column, ranges);
-            return ranges;
+        List<CellRange> refs = references.get(node.getRow(), node.getColumn());
+        if (refs == null) {
+            return;
         }
-        return toSubscribe;
-    }
 
-    private void clearSubscribtion(CellRange range, PointerNode node) {
-        for (CellPointer pointer : range) {
-            subscribed.get(pointer.getRow(), pointer.getColumn()).remove(node);
+        for (CellRange ref : refs) {
+            for (CellPointer pointer : ref) {
+                subscribed.get(pointer.getRow(), pointer.getColumn()).remove(node);
+            }
         }
     }
 
     public void subscribe(PointerNode pointer, List<CellRange> ranges) {
-        List<CellRange> toSubscribe = getWhatINeedSubscribe(pointer, ranges);
-        processRanges(pointer, toSubscribe);
+        clear(pointer);
+        this.references.set(pointer.getRow(), pointer.getColumn(), ranges);
+        processRanges(pointer, ranges);
     }
 
     public void processRanges(PointerNode pointer, List<CellRange> ranges) {
