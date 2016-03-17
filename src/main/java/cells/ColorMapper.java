@@ -1,5 +1,7 @@
 package cells;
 
+import cells.pointer.CellPointer;
+
 import java.awt.*;
 
 /**
@@ -47,5 +49,9 @@ public class ColorMapper extends RangeMapper<Color> {
     @Override
     Color processSmallRange(CellRange range) {
         return null;
+    }
+
+    public Color getColor(CellPointer pointer) {
+        return get(new CellRange(pointer, pointer));
     }
 }

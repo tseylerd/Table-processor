@@ -138,8 +138,8 @@ public class CellRange implements Iterable<CellPointer>, Transferable {
         int xMin = Math.max(rangeBegin.getColumn(), begin.getColumn());
         int yMin = Math.max(rangeBegin.getRow(), begin.getRow());
 
-        int xOverlap = Math.max(0, xMax - xMin);
-        int yOverlap = Math.max(0, yMax - yMin);
+        int xOverlap = Math.max(0, xMax - xMin + 1);
+        int yOverlap = Math.max(0, yMax - yMin + 1);
         if (xOverlap == 0 || yOverlap == 0) {
             return null;
         }
@@ -166,8 +166,8 @@ public class CellRange implements Iterable<CellPointer>, Transferable {
         int xMin = Math.max(rangeBegin.getColumn(), begin.getColumn());
         int yMin = Math.max(rangeBegin.getRow(), begin.getRow());
 
-        int xOverlap = Math.max(0, xMax - xMin);
-        int yOverlap = Math.max(0, yMax - yMin);
+        int xOverlap = Math.max(0, xMax - xMin + 1);
+        int yOverlap = Math.max(0, yMax - yMin + 1);
         if (xOverlap == 0 || yOverlap == 0) {
             return null;
         }
@@ -228,6 +228,10 @@ public class CellRange implements Iterable<CellPointer>, Transferable {
             return null;
         }
         return new CellRange(Math.max(yMin, begin.getRow()), xMax + 1, Math.min(yMax, end.getRow()), end.getColumn());
+    }
+
+    public boolean isValid() {
+        return getFirstColumn() <= getLastColumn() && getFirstRow() <= getLastRow();
     }
 
     @Override

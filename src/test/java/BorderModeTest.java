@@ -9,6 +9,9 @@ import ui.table.SpreadSheetModel;
 import ui.table.SpreadSheetTable;
 
 import java.awt.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author Dmitriy Tseyler
@@ -90,13 +93,14 @@ public class BorderModeTest {
 
     private void testAllLinesMode(CellRange range) {
         TableColorModel tableColorModel = new TableColorModel(model);
-        BorderMode.ALL_LINES.setModePreferences(tableColorModel, range, false);
+        List<BorderMode> borderModes = Collections.singletonList(BorderMode.LEFT);
+        tableColorModel.setBorderModes(range, borderModes);
         for (CellPointer pointer : range) {
             Assert.assertFalse(tableColorModel.needLowerLine(pointer) && pointer.getRow() != range.getLastRow());
             Assert.assertFalse(tableColorModel.needRightLine(pointer) && pointer.getColumn() != range.getLastColumn());
         }
-
-        BorderMode.ALL_LINES.setModePreferences(tableColorModel, range, true);
+        borderModes = Collections.singletonList(BorderMode.ALL_LINES);
+        tableColorModel.setBorderModes(range, borderModes);
         for (CellPointer pointer : range) {
             Assert.assertTrue(tableColorModel.needLowerLine(pointer) || pointer.getRow() == range.getLastRow());
             Assert.assertTrue(tableColorModel.needRightLine(pointer) || pointer.getColumn() == range.getLastColumn());

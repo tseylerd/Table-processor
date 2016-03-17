@@ -3,6 +3,7 @@ package ui.preferences.color;
 import cells.CellRange;
 import ui.laf.ProcessorUIDefaults;
 import ui.laf.grid.BorderMode;
+import ui.laf.grid.CellColorModel;
 import ui.table.SpreadSheetModel;
 import ui.table.SpreadSheetTable;
 
@@ -11,13 +12,11 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
-import java.util.List;
 
 /**
  * @author Dmitriy Tseyler
@@ -38,7 +37,7 @@ public class ColorPreferencesPanel extends JPanel {
         checkBoxes = new EnumMap<>(BorderMode.class);
 
         for (BorderMode borderMode : BorderMode.values()) {
-            createBorderCheckBox(borderMode);
+            createBorderRadioButton(borderMode);
         }
 
         table.getSelectionModel().addListSelectionListener(this::selectionChanged);
@@ -120,37 +119,31 @@ public class ColorPreferencesPanel extends JPanel {
 
         CellRange range = CellRange.createCellRange(table.getSelectedRows(), table.getSelectedColumns());
 
-        List<BorderMode> modesList = table.getTableColorModel().getModes(range);
-        for (Map.Entry<BorderMode, JCheckBox> borderModeCheckBoxEntry : checkBoxes.entrySet()) {
-            JCheckBox checkBox = borderModeCheckBoxEntry.getValue();
-            BorderMode mode = borderModeCheckBoxEntry.getKey();
-            checkBox.setSelected(modesList != null && modesList.contains(mode));
-            checkBox.setEnabled(modesList != null && mode.isModeEnabled((SpreadSheetModel)table.getModel(), range));
+        Map<BorderMode, Boolean> modesTurnedOnMap = table.getTableColorModel().getBorderModesTurnedOnMap(range);
+        for (Map.Entry<BorderMode, Boolean> turnedOnEntry : modesTurnedOnMap.entrySet()) {
+            BorderMode mode = turnedOnEntry.getKey();
+            JCheckBox checkBox = checkBoxes.get(mode);
+            boolean enabled = mode.isModeEnabled((SpreadSheetModel)table.getModel(), range);
+            checkBox.setEnabled(enabled);
+            checkBox.setSelected(enabled && turnedOnEntry.getValue());
         }
 
-        //gridColor = table.getTableColorModel().getGridColor(range);
-       // gridColorButton.setBackground(gridColor);
-        //backgroundColor = table.getTableColorModel().getBackgroundColor(range);
-       // backgroundColorButton.setBackground(backgroundColor);
+        gridColor = table.getTableColorModel().getGridColor(range);
+        gridColorButton.setBackground(gridColor);
+        backgroundColor = table.getTableColorModel().getBackgroundColor(range);
+        backgroundColorButton.setBackground(backgroundColor);
         boolean enabled = range != null;
         backgroundColorButton.setEnabled(enabled);
         gridColorButton.setEnabled(enabled);
         resetButton.setEnabled(enabled);
     }
 
-    private void createBorderCheckBox(BorderMode mode) {
+    private void createBorderRadioButton(BorderMode mode) {
         BorderModeCheckBox checkBox = new BorderModeCheckBox(mode);
         checkBox.addActionListener(e -> {
             CellRange range = CellRange.createCellRange(table.getSelectedRows(), table.getSelectedColumns());
             BorderMode borderMode = checkBox.getMode();
             borderMode.setModePreferences(table.getTableColorModel(), range, checkBox.isSelected());
-            List<BorderMode> modeList = new ArrayList<>();
-            for (Map.Entry<BorderMode, JCheckBox> borderModeCheckBoxEntry : checkBoxes.entrySet()) {
-                if (borderModeCheckBoxEntry.getValue().isSelected()) {
-                    modeList.add(borderModeCheckBoxEntry.getKey());
-                }
-            }
-            table.getTableColorModel().addBorderModes(range, modeList);
             table.repaint(50);
         });
         checkBoxes.put(mode, checkBox);

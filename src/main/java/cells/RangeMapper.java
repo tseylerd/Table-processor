@@ -1,5 +1,8 @@
 package cells;
 
+import cells.pointer.CellPointer;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,7 +10,7 @@ import java.util.Map;
 public abstract class RangeMapper<T> {
     private static final int MIN = 225;
 
-    private Map<CellRange, T> map;
+    protected Map<CellRange, T> map;
     private int minX;
     private int minY;
     private int maxX;
@@ -16,6 +19,45 @@ public abstract class RangeMapper<T> {
 
     protected RangeMapper() {
         map = new HashMap<>();
+    }
+
+    public boolean contains(CellRange range) {
+        if (map.containsKey(range)) {
+            return true;
+        }
+        for (CellRange cellRange : map.keySet()) {
+            if (range.isInside(range))
+                return true;
+        }
+        return false;
+    }
+
+    public boolean containsF(CellRange range) {
+        return map.containsKey(range);
+    }
+
+    public void delete(CellRange range) {
+        if (map.containsKey(range)) {
+            map.remove(range);
+        }
+
+        List<CellRange> toRemove = new ArrayList<>();
+        Map<CellRange, T> newMap = new HashMap<>();
+        for (Map.Entry<CellRange, T> cellRangeListEntry : map.entrySet()) {
+            CellRange existing = cellRangeListEntry.getKey();
+            T existingValue = cellRangeListEntry.getValue();
+
+            List<CellRange> ranges = existing.split(range);
+            if (ranges == null || ranges.isEmpty()) {
+                continue;
+            }
+            for (CellRange cellRange : ranges) {
+                newMap.put(cellRange, existingValue);
+                indexXY(cellRange);
+            }
+        }
+        map = newMap;
+        fullRange = new CellRange(minY, minX, maxY, maxX);
     }
 
     public void set(CellRange range, T newValue) {
@@ -95,8 +137,8 @@ public abstract class RangeMapper<T> {
         for (Map.Entry<CellRange, T> cellRangeListEntry : map.entrySet()) {
             CellRange existing = cellRangeListEntry.getKey();
             SplittedRange splittedRange = range.splitHonestly(existing);
-            if (splittedRange.splitSucceful()) {
-                return processSplitted(splittedRange, existing, map.get(existing));
+            if (splittedRange != null && splittedRange.splitSucceful()) {
+                return processSplitted(splittedRange, existing, cellRangeListEntry.getValue());
             }
         }
         return defaultValue(range);

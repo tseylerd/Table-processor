@@ -1,5 +1,7 @@
 package cells;
 
+import cells.pointer.CellPointer;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import ui.laf.grid.BorderMode;
 import ui.laf.grid.TableColorModel;
 import ui.table.SpreadSheetModel;
@@ -9,7 +11,10 @@ import java.util.*;
 /**
  * @author Dmitriy Tseyler
  */
-public class BorderModesMapper extends RangeMapper<List<BorderMode>> {
+public class BorderModesMapper extends RangeMapper<Boolean> {
+    public static final int RIGHT_INDEX = 0;
+    public static final int DOWN_INDEX = 1;
+
     private final SpreadSheetModel model;
     private final TableColorModel colorModel;
 
@@ -19,84 +24,37 @@ public class BorderModesMapper extends RangeMapper<List<BorderMode>> {
     }
 
     @Override
-    List<BorderMode> concatenate(SplittedRange splittedRange, CellRange range) {
-        List<BorderMode> modes = get(splittedRange.getSplitter());
-        List<BorderMode> result = defaultValue(range);
-
-        if (splittedRange.getLeft() != null) {
-            if (!modes.contains(BorderMode.LEFT)) {
-                result.remove(BorderMode.LEFT);
-            }
-        }
-        if (splittedRange.getRight() != null) {
-            if (!modes.contains(BorderMode.RIGHT)) {
-                result.remove(BorderMode.RIGHT);
-            }
-        }
-        if (splittedRange.getUp() != null) {
-            if (!modes.contains(BorderMode.UP)) {
-                result.remove(BorderMode.UP);
-            }
-        }
-        if (splittedRange.getDown() != null) {
-            if (!modes.contains(BorderMode.DOWN)) {
-                result.remove(BorderMode.DOWN);
-            }
-        }
-        if (!modes.contains(BorderMode.ALL_LINES)) {
-            result.remove(BorderMode.ALL_LINES);
-        }
-        return result;
+    Boolean concatenate(SplittedRange splittedRange, CellRange range) {
+        Boolean need = get(splittedRange.getSplitter());
+        Boolean result = defaultValue(range);
+        return result && need;
     }
 
     @Override
-    List<BorderMode> defaultValue(CellRange range) {
-        List<BorderMode> modes = new ArrayList<>();
-        for (BorderMode mode : BorderMode.values()) {
-            if (mode.isModeEnabled(model, range)) {
-                modes.add(mode);
-            }
-        }
-        return modes;
+    Boolean defaultValue(CellRange range) {
+        return true;
     }
 
     @Override
-    List<BorderMode> processSmallRange(CellRange range) {
-        List<BorderMode> modes = new ArrayList<>();
-        for (BorderMode mode : BorderMode.values()) {
-            if (mode.isModeEnabled(model, range) && mode.isModeTurnedOn(colorModel, range)) {
-                modes.add(mode);
-            }
-        }
-        return modes;
+    Boolean processSmallRange(CellRange range) {
+        return  defaultValue(range);
     }
 
     @Override
-    List<BorderMode> processSplitted(SplittedRange splittedRange, CellRange range, List<BorderMode> existing) {
-        List<BorderMode> leftModes = get(splittedRange.getLeft());
-        List<BorderMode> rightModes = get(splittedRange.getRight());
-        List<BorderMode> upModes = get(splittedRange.getUp());
-        List<BorderMode> downModes = get(splittedRange.getDown());
-        List<BorderMode> modes = new ArrayList<>();
+    Boolean processSplitted(SplittedRange splittedRange, CellRange range, Boolean existing) {
+        Boolean leftModes = get(splittedRange.getLeft());
+        Boolean rightModes = get(splittedRange.getRight());
+        Boolean upModes = get(splittedRange.getUp());
+        Boolean downModes = get(splittedRange.getDown());
 
-        processSideMode(BorderMode.LEFT, existing, leftModes, modes);
-        processSideMode(BorderMode.RIGHT, existing, rightModes, modes);
-        processSideMode(BorderMode.UP, existing, upModes, modes);
-        processSideMode(BorderMode.DOWN, existing, downModes, modes);
-        boolean leftContainsGrid = leftModes == null || leftModes.contains(BorderMode.ALL_LINES);
-        boolean downContainsGrid = downModes == null || downModes.contains(BorderMode.ALL_LINES);
-        boolean upContainsGrid = upModes == null || upModes.contains(BorderMode.ALL_LINES);
-        boolean rightContainsGrid = rightModes == null || rightModes.contains(BorderMode.ALL_LINES);
-        boolean existingContainsGrid = existing.contains(BorderMode.ALL_LINES);
-        if (leftContainsGrid && rightContainsGrid && upContainsGrid && downContainsGrid && existingContainsGrid) {
-            modes.add(BorderMode.ALL_LINES);
-        }
-        return modes;
+        existing &= leftModes == null || leftModes;
+        existing &= rightModes == null || rightModes;
+        existing &= upModes == null || upModes;
+        existing &= downModes == null || downModes;
+        return existing;
     }
 
-    private void processSideMode(BorderMode mode, List<BorderMode> existing, List<BorderMode> splittedPart, List<BorderMode> target) {
-        if (splittedPart != null && splittedPart.contains(mode) && !existing.contains(mode)) {
-            target.add(mode);
-        }
+    public Boolean need(CellPointer pointer) {
+        return get(new CellRange(pointer, pointer));
     }
 }

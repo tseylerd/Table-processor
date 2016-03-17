@@ -1,9 +1,9 @@
 package ui.laf.grid;
 
+import cells.BorderModesMapper;
 import cells.CellRange;
 import cells.pointer.CellPointer;
 import ui.table.SpreadSheetModel;
-import ui.table.SpreadSheetTable;
 
 /**
  * @author Dmitriy Tseyler
@@ -14,9 +14,7 @@ public enum BorderMode {
         public void setModePreferences(TableColorModel model, CellRange range, boolean on) {
             CellRange firstColumnRange = range.getFirstColumnRange();
             if (firstColumnRange.getFirstColumn() > 0) {
-                for (CellPointer cellPointer : firstColumnRange) {
-                    model.setNeedRightLine(CellPointer.getPointer(cellPointer, 0, -1), on);
-                }
+                model.setNeedRightLine(new CellRange(range.getFirstRow(), range.getFirstColumn() - 1, range.getLastRow(), range.getFirstColumn() - 1), on);
             }
         }
 
@@ -25,12 +23,8 @@ public enum BorderMode {
             if (range.getFirstColumn() == 0)
                 return true;
 
-            for (CellPointer pointer : range.getFirstColumnRange()) {
-                CellPointer lefter = CellPointer.getPointer(pointer, 0, -1);
-                if (!model.needRightLine(lefter))
-                    return false;
-            }
-            return true;
+            Boolean modes = model.getNeedRightLine(new CellRange(range.getFirstRow(), range.getFirstColumn() - 1, range.getLastRow(), range.getFirstColumn() - 1));
+            return modes;
         }
 
         @Override
@@ -42,18 +36,13 @@ public enum BorderMode {
         @Override
         public void setModePreferences(TableColorModel model, CellRange range, boolean on) {
             CellRange lastColumnRange = range.getLastColumnRange();
-            for (CellPointer cellPointer : lastColumnRange) {
-                    model.setNeedRightLine(cellPointer, on);
-            }
+            model.setNeedRightLine(lastColumnRange, on);
         }
 
         @Override
         boolean turnedOn(TableColorModel model, CellRange range) {
-            for (CellPointer pointer : range.getLastColumnRange()) {
-                if (!model.needRightLine(pointer))
-                    return false;
-            }
-            return true;
+            Boolean modes = model.getNeedRightLine(range.getLastColumnRange());
+            return modes;
         }
 
         @Override
@@ -65,18 +54,12 @@ public enum BorderMode {
         @Override
         public void setModePreferences(TableColorModel model, CellRange range, boolean on) {
             CellRange lastRowRange = range.getLastRowRange();
-            for (CellPointer cellPointer : lastRowRange) {
-                model.setNeedLowerLine(cellPointer, on);
-            }
+            model.setNeedDownLine(lastRowRange, on);
         }
 
         @Override
         boolean turnedOn(TableColorModel model, CellRange range) {
-            for (CellPointer pointer : range.getLastRowRange()) {
-                if (!model.needLowerLine(pointer))
-                    return false;
-            }
-            return true;
+            return model.getNeedLowerLine(range.getLastRowRange());
         }
 
         @Override
@@ -89,9 +72,7 @@ public enum BorderMode {
         public void setModePreferences(TableColorModel model, CellRange range, boolean on) {
             CellRange firstRowRange = range.getFirstRowRange();
             if (firstRowRange.getFirstRow() > 0) {
-                for (CellPointer cellPointer : firstRowRange) {
-                    model.setNeedLowerLine(CellPointer.getPointer(cellPointer, -1, 0), on);
-                }
+                model.setNeedDownLine(new CellRange(range.getFirstRow() - 1, range.getFirstColumn(), range.getFirstRow() - 1, range.getLastColumn()), on);
             }
         }
 
@@ -100,12 +81,7 @@ public enum BorderMode {
             if (range.getFirstRow() == 0)
                 return true;
 
-            for (CellPointer pointer : range.getFirstRowRange()) {
-                CellPointer lefter = CellPointer.getPointer(pointer, -1, 0);
-                if (!model.needLowerLine(lefter))
-                    return false;
-            }
-            return true;
+            return model.getNeedLowerLine(new CellRange(range.getFirstRow() - 1, range.getFirstColumn(), range.getFirstRow() - 1, range.getLastColumn()));
         }
 
         @Override
@@ -116,27 +92,37 @@ public enum BorderMode {
     ALL_LINES("Grid") {
         @Override
         public void setModePreferences(TableColorModel model, CellRange range, boolean on) {
-            for (CellPointer pointer : range) {
-                if (pointer.getRow() < range.getLastRow()) {
-                    model.setNeedLowerLine(pointer, on);
-                }
-                if (pointer.getColumn() < range.getLastColumn()) {
-                    model.setNeedRightLine(pointer, on);
-                }
-            }
+            CellRange cutted = new CellRange(range.getFirstRow(), range.getFirstColumn(), range.getLastRow() - 1, range.getLastColumn() - 1);
+            model.setNeedDownLine(cutted, on);
+            model.setNeedRightLine(cutted, on);
+            model.setNeedRightLine(new CellRange(range.getLastRow(), range.getFirstColumn(), range.getLastRow(), range.getLastColumn() - 1), on);
+            model.setNeedDownLine(new CellRange(range.getFirstRow(), range.getLastColumn(), range.getLastRow() - 1, range.getLastColumn()), on);
         }
 
         @Override
         boolean turnedOn(TableColorModel model, CellRange range) {
-            for (CellPointer pointer : range) {
-                if (!model.needLowerLine(pointer) && pointer.getRow() < range.getLastRow()) {
-                    return false;
-                }
-                if (!model.needRightLine(pointer) && pointer.getColumn() < range.getLastColumn()) {
-                    return false;
-                }
+            boolean lower = true;
+            boolean right = true;
+            CellRange cutted = range;
+            if (cutted.getFirstRow() < cutted.getLastRow()) {
+                cutted = new CellRange(cutted.getFirstRow(), cutted.getFirstColumn(), cutted.getLastRow() - 1, cutted.getLastColumn());
             }
-            return true;
+            if (cutted.getFirstColumn() < cutted.getLastColumn()) {
+                cutted = new CellRange(cutted.getFirstRow(), cutted.getFirstColumn(), cutted.getLastRow(), cutted.getLastColumn() - 1);
+            }
+            if (cutted.isValid()) {
+                lower = model.getNeedLowerLine(cutted);
+                right = model.getNeedRightLine(cutted);
+            }
+            CellRange lastRow = new CellRange(range.getLastRow(), range.getFirstColumn(), range.getLastRow(), range.getLastColumn() - 1);
+            if (lastRow.isValid()) {
+                right &= model.getNeedRightLine(lastRow);
+            }
+            CellRange lastColumn = new CellRange(range.getFirstRow(), range.getLastColumn(), range.getLastRow() - 1, range.getLastColumn());
+            if (lastRow.isValid()) {
+                lower &= model.getNeedLowerLine(lastColumn);
+            }
+            return right & lower;
         }
 
         @Override

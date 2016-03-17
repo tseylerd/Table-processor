@@ -53,7 +53,6 @@ public class ImportExportTest {
             TableColorModel importedColorModel = imported.getTableColorModel();
             SpreadSheetModel importedSpreadSheetModel = (SpreadSheetModel)imported.getModel();
             for (CellPointer pointer : range) {
-                System.out.println(pointer);
                 Assert.assertEquals(colorModel.getBackgroundColor(pointer), importedColorModel.getBackgroundColor(pointer));
                 Assert.assertEquals(colorModel.getLowerLineColor(pointer), importedColorModel.getLowerLineColor(pointer));
                 Assert.assertEquals(colorModel.getRightLineColor(pointer), importedColorModel.getRightLineColor(pointer));
