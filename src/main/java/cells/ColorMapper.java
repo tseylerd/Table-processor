@@ -46,11 +46,6 @@ public class ColorMapper extends RangeMapper<Color> {
         return defaultColor;
     }
 
-    @Override
-    Color processSmallRange(CellRange range) {
-        return null;
-    }
-
     public Color getColor(CellPointer pointer) {
         return get(new CellRange(pointer, pointer));
     }

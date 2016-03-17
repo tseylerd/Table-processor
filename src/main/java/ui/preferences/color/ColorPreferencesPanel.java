@@ -3,7 +3,6 @@ package ui.preferences.color;
 import cells.CellRange;
 import ui.laf.ProcessorUIDefaults;
 import ui.laf.grid.BorderMode;
-import ui.laf.grid.CellColorModel;
 import ui.table.SpreadSheetModel;
 import ui.table.SpreadSheetTable;
 
@@ -89,7 +88,7 @@ public class ColorPreferencesPanel extends JPanel {
     }
 
     private void chooseGridColor() {
-        chooseColor(this::getGridColor, this::setGridColor, table.getTableColorModel()::setRangeLineColor, gridColorButton);
+        chooseColor(this::getGridColor, this::setGridColor, table.getTableColorModel()::setGridColor, gridColorButton);
     }
 
     private void chooseBackgroundColor() {

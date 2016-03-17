@@ -187,8 +187,8 @@ public class SpreadSheetTableUI extends BasicTableUI {
             y += table.getRowHeight(row);
             for (int column = cMin; column <= cMax; column++) {
                 Color color;
-                if (tableColorModel.needLowerLine(row, column)) {
-                    color = tableColorModel.getLowerLineColor(row, column);
+                if (tableColorModel.needBottomLine(row, column)) {
+                    color = tableColorModel.getBottomLineColor(row, column);
                 } else {
                     color = tableColorModel.getBackgroundColor(CellPointer.getPointer(row, column));
                 }

@@ -50,12 +50,12 @@ public enum BorderMode {
         @Override
         public void setModePreferences(TableColorModel model, CellRange range, boolean on) {
             CellRange lastRowRange = range.getLastRowRange();
-            model.setNeedDownLine(lastRowRange, on);
+            model.setNeedBottomLine(lastRowRange, on);
         }
 
         @Override
         boolean turnedOn(TableColorModel model, CellRange range) {
-            return model.getNeedLowerLine(range.getLastRowRange());
+            return model.getNeedBottomLine(range.getLastRowRange());
         }
 
         @Override
@@ -68,7 +68,7 @@ public enum BorderMode {
         public void setModePreferences(TableColorModel model, CellRange range, boolean on) {
             CellRange firstRowRange = range.getFirstRowRange();
             if (firstRowRange.getFirstRow() > 0) {
-                model.setNeedDownLine(new CellRange(range.getFirstRow() - 1, range.getFirstColumn(), range.getFirstRow() - 1, range.getLastColumn()), on);
+                model.setNeedBottomLine(new CellRange(range.getFirstRow() - 1, range.getFirstColumn(), range.getFirstRow() - 1, range.getLastColumn()), on);
             }
         }
 
@@ -77,7 +77,7 @@ public enum BorderMode {
             if (range.getFirstRow() == 0)
                 return true;
 
-            return model.getNeedLowerLine(new CellRange(range.getFirstRow() - 1, range.getFirstColumn(), range.getFirstRow() - 1, range.getLastColumn()));
+            return model.getNeedBottomLine(new CellRange(range.getFirstRow() - 1, range.getFirstColumn(), range.getFirstRow() - 1, range.getLastColumn()));
         }
 
         @Override
@@ -89,10 +89,10 @@ public enum BorderMode {
         @Override
         public void setModePreferences(TableColorModel model, CellRange range, boolean on) {
             CellRange cutted = new CellRange(range.getFirstRow(), range.getFirstColumn(), range.getLastRow() - 1, range.getLastColumn() - 1);
-            model.setNeedDownLine(cutted, on);
+            model.setNeedBottomLine(cutted, on);
             model.setNeedRightLine(cutted, on);
             model.setNeedRightLine(new CellRange(range.getLastRow(), range.getFirstColumn(), range.getLastRow(), range.getLastColumn() - 1), on);
-            model.setNeedDownLine(new CellRange(range.getFirstRow(), range.getLastColumn(), range.getLastRow() - 1, range.getLastColumn()), on);
+            model.setNeedBottomLine(new CellRange(range.getFirstRow(), range.getLastColumn(), range.getLastRow() - 1, range.getLastColumn()), on);
         }
 
         @Override
@@ -107,7 +107,7 @@ public enum BorderMode {
                 cutted = new CellRange(cutted.getFirstRow(), cutted.getFirstColumn(), cutted.getLastRow(), cutted.getLastColumn() - 1);
             }
             if (cutted.isValid()) {
-                lower = model.getNeedLowerLine(cutted);
+                lower = model.getNeedBottomLine(cutted);
                 right = model.getNeedRightLine(cutted);
             }
             CellRange lastRow = new CellRange(range.getLastRow(), range.getFirstColumn(), range.getLastRow(), range.getLastColumn() - 1);
@@ -116,7 +116,7 @@ public enum BorderMode {
             }
             CellRange lastColumn = new CellRange(range.getFirstRow(), range.getLastColumn(), range.getLastRow() - 1, range.getLastColumn());
             if (lastRow.isValid()) {
-                lower &= model.getNeedLowerLine(lastColumn);
+                lower &= model.getNeedBottomLine(lastColumn);
             }
             return right & lower;
         }

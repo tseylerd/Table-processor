@@ -1,9 +1,6 @@
 package cells;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public abstract class RangeMapper<T> {
     protected Map<CellRange, T> map;
@@ -15,6 +12,25 @@ public abstract class RangeMapper<T> {
 
     protected RangeMapper() {
         map = new HashMap<>();
+    }
+
+    public void setMap(Map<CellRange, T> map) {
+        if (map.isEmpty()) {
+            return;
+        }
+
+        this.map = map;
+        reset();
+        for (CellRange range : map.keySet()) {
+            indexXY(range);
+        }
+        fullRange = new CellRange(minY, minX, maxY, maxX);
+    }
+
+    private void reset() {
+        minX = minY = Integer.MAX_VALUE;
+        maxX = maxY = Integer.MIN_VALUE;
+        fullRange = null;
     }
 
     public boolean contains(CellRange range) {
@@ -32,7 +48,7 @@ public abstract class RangeMapper<T> {
         if (map.containsKey(range)) {
             map.remove(range);
         }
-
+        reset();
         List<CellRange> toRemove = new ArrayList<>();
         Map<CellRange, T> newMap = new HashMap<>();
         for (Map.Entry<CellRange, T> cellRangeListEntry : map.entrySet()) {
@@ -54,8 +70,7 @@ public abstract class RangeMapper<T> {
 
     public void set(CellRange range, T newValue) {
         Map<CellRange, T> newMap = new HashMap<>();
-        minX = minY = Integer.MAX_VALUE;
-        maxX = maxY = Integer.MIN_VALUE;
+        reset();
         for (Map.Entry<CellRange, T> cellRangeListEntry : map.entrySet()) {
             CellRange existing = cellRangeListEntry.getKey();
             T existingValue = cellRangeListEntry.getValue();
@@ -136,9 +151,11 @@ public abstract class RangeMapper<T> {
         return defaultValue(range);
     }
 
+    public Map<CellRange, T> getMap() {
+        return Collections.unmodifiableMap(map);
+    }
 
     abstract T processSplitted(SplittedRange splittedRange, CellRange range, T existing);
     abstract T defaultValue(CellRange range);
     abstract T concatenate(SplittedRange splittedRange, CellRange range);
-    abstract T processSmallRange(CellRange range);
 }

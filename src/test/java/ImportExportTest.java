@@ -25,28 +25,18 @@ public class ImportExportTest {
         SpreadSheetTable table = new SpreadSheetTable();
         TableColorModel colorModel = table.getTableColorModel();
         SpreadSheetModel spreadSheetModel = (SpreadSheetModel) table.getModel();
-
         CellRange range = new CellRange(0, 0, ProcessorUIDefaults.DEFAULT_ROW_COUNT - 1, ProcessorUIDefaults.DEFAULT_COLUMN_COUNT - 1);
-        Random r = new Random();
-        for (CellPointer cellPointer : range) {
-            int rgb = r.nextInt(255);
-            Color color = new Color(rgb);
-            int bool = r.nextInt(2);
-            boolean needLine = bool == 1;
-            int value = r.nextInt(1000);
-            /*colorModel.setBackgroundColor(cellPointer, color);
-            colorModel.setNeedLowerLine(cellPointer, needLine);
-            colorModel.setNeedRightLine(cellPointer, needLine);
-            colorModel.setLowerLineColor(cellPointer, color);
-            colorModel.setRightLineColor(cellPointer, color);*/
-            spreadSheetModel.setValueAt(new CellValue(String.valueOf(value)), cellPointer);
+        for (int i = 0; i < 1; i++) {
+            setRandomSettings(colorModel, spreadSheetModel);
         }
+
         StringWriter writer = new StringWriter();
         try {
             new TableExporter(table, new BufferedWriter(writer)).export();
         } catch (IOException e) {
             Assert.assertTrue(false);
         }
+
         StringReader reader = new StringReader(writer.toString());
         try (BufferedReader bufferedReader = new BufferedReader(reader)) {
             SpreadSheetTable imported = new TableImporter(bufferedReader).importTable();
@@ -54,14 +44,35 @@ public class ImportExportTest {
             SpreadSheetModel importedSpreadSheetModel = (SpreadSheetModel)imported.getModel();
             for (CellPointer pointer : range) {
                 Assert.assertEquals(colorModel.getBackgroundColor(pointer), importedColorModel.getBackgroundColor(pointer));
-                Assert.assertEquals(colorModel.getLowerLineColor(pointer), importedColorModel.getLowerLineColor(pointer));
+                Assert.assertEquals(colorModel.getBottomLineColor(pointer), importedColorModel.getBottomLineColor(pointer));
                 Assert.assertEquals(colorModel.getRightLineColor(pointer), importedColorModel.getRightLineColor(pointer));
-                Assert.assertEquals(colorModel.needLowerLine(pointer), importedColorModel.needLowerLine(pointer));
-                Assert.assertEquals(colorModel.needRightLine(pointer), importedColorModel.needLowerLine(pointer));
+                Assert.assertEquals(colorModel.needBottomLine(pointer), importedColorModel.needBottomLine(pointer));
+                Assert.assertEquals(colorModel.needRightLine(pointer), importedColorModel.needBottomLine(pointer));
                 Assert.assertEquals(spreadSheetModel.getValueAt(pointer), importedSpreadSheetModel.getValueAt(pointer));
             }
         } catch (IOException | ImportFormatException e) {
             Assert.assertTrue(false);
+        }
+    }
+
+    private void setRandomSettings(TableColorModel model, SpreadSheetModel spreadSheetModel) {
+        Random r = new Random();
+        int row = r.nextInt(20);
+        int column = r.nextInt(20);
+        int endRow = r.nextInt(20) + 20;
+        int endColumn = r.nextInt(20) + 20;
+        CellRange range = new CellRange(row, column, endRow, endColumn);
+        int rgb = r.nextInt(255);
+        Color color = new Color(rgb);
+        int bool = r.nextInt(2);
+        boolean needLine = bool == 1;
+        int value = r.nextInt(100);
+        model.setBackgroundColor(range, color);
+        model.setGridColor(range, color);
+        model.setNeedRightLine(range, needLine);
+        model.setNeedBottomLine(range, needLine);
+        for (CellPointer pointer : range) {
+            spreadSheetModel.setValueAt(new CellValue(String.valueOf(value)), pointer);
         }
     }
 }

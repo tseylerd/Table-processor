@@ -19,11 +19,6 @@ public class BorderModesMapper extends RangeMapper<Boolean> {
     }
 
     @Override
-    Boolean processSmallRange(CellRange range) {
-        return  defaultValue(range);
-    }
-
-    @Override
     Boolean processSplitted(SplittedRange splittedRange, CellRange range, Boolean existing) {
         Boolean leftModes = get(splittedRange.getLeft());
         Boolean rightModes = get(splittedRange.getRight());
