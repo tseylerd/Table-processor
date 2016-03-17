@@ -5,7 +5,7 @@ import cells.CellRange;
 /**
  * @author Dmitriy Tseyler
  */
-public class ColumnResolver implements IterationStrategyCompareResolver {
+public class ColumnResolver implements IterationStrategyIndexResolver {
     @Override
     public int getFirst(CellRange range) {
         return range.getFirstColumn();

@@ -159,15 +159,10 @@ public class SpreadSheetTableUI extends BasicTableUI {
             rendererPane.paintComponent(g, component, table, cellRect.x, cellRect.y,
                     cellRect.width, cellRect.height, true);
         }
-        paintCellBackground(g, cellRect, row, column);
         if (spanListener.isCellInside(row, column)) {
-            g.setColor(new Color(17, 17, 17, 50));
+            g.setColor(ProcessorUIDefaults.DEFAULT_SPAN_COLOR);
             g.fillRect(cellRect.x, cellRect.y, cellRect.width, cellRect.height);
         }
-    }
-
-    private void paintCellBackground(Graphics g, Rectangle cellRect, int row, int column) {
-
     }
 
     /**
@@ -360,7 +355,9 @@ public class SpreadSheetTableUI extends BasicTableUI {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            table.clearSelectedCells();
+            if (!table.isEditing()) {
+                table.clearSelectedCells();
+            }
         }
     }
 }

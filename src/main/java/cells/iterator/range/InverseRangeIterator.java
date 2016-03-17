@@ -1,7 +1,7 @@
 package cells.iterator.range;
 
 import cells.CellRange;
-import cells.iterator.IterationStrategyCompareResolver;
+import cells.iterator.IterationStrategyIndexResolver;
 
 /**
  * @author Dmitriy Tseyler
@@ -22,7 +22,7 @@ public class InverseRangeIterator extends AbstractRangeIterator {
     }
 
     @Override
-    boolean needChange(CellRange range, IterationStrategyCompareResolver resolver) {
+    boolean needChange(CellRange range, IterationStrategyIndexResolver resolver) {
         return resolver.getFirst(range) > resolver.getFirst(this.range);
     }
 

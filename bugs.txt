@@ -13,12 +13,12 @@ Functional:
 12. CellPointer row should start with 0;
 13. On span with linear dependency new numbers format different from old; // fixed
 14. Add try finally to import/export; // fixed
-15. !! Hang on select big table
-16. Rewrite removeRow/Column with unsubscribe, because setValueAt may eat a lot of resources;
+15. !! Hang on select big table // fixed
+16. Rewrite removeRow/Column with unsubscribe, because setValueAt may eat a lot of resources; // fixed
 
 Code:
 C-1. Refactor CellIterationStrategy and remove this functional code. // fixed
 C-2. Optimize import/export (store only filled cells) // fixed
 C-3. Create a class of dependency (exponential, something else);
-C-4. !! Replace hashtables with arrays. it should be faster;
-C-5. Count, how much rows/columns maximum can be used;
+C-4. !! Replace hashtables with arrays. it should be faster; // fixed
+C-5. Count, how much rows/columns maximum can be used; // done

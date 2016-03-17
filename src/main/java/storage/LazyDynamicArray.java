@@ -90,11 +90,11 @@ public class LazyDynamicArray<T> {
         return columns;
     }
 
-    public static<T> T[][] copyRows(T[][] from, int rows, int columns) {
+    private static<T> T[][] copyRows(T[][] from, int rows, int columns) {
         return copy(from, getIncreasedValue(rows), columns);
     }
 
-    public static<T> T[][] copyColumns(T[][] from, int rows, int columns) {
+    private static<T> T[][] copyColumns(T[][] from, int rows, int columns) {
         return copy(from, rows, getIncreasedValue(columns));
     }
 
