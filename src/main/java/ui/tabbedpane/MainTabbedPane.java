@@ -75,6 +75,7 @@ public class MainTabbedPane extends JTabbedPane {
     public void replaceWithNewName(File file) {
         String name = file.getName();
         names.remove(getAccessibleContext().getAccessibleName());
+        setTitleAt(getSelectedIndex(), name);
         getAccessibleContext().setAccessibleName(name);
         setTabComponentAt(getSelectedIndex(), createTabPanel(name));
     }
