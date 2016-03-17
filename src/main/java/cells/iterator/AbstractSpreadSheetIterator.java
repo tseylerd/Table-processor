@@ -7,13 +7,13 @@ import java.util.Iterator;
 /**
  * @author Dmitriy Tseyler
  */
-public abstract class AbstractSpreadSheetIterator<T> implements Iterator<T> {
+public abstract class AbstractSpreadSheetIterator<T, U extends IterationStrategy<T, ? extends AbstractSpreadSheetIterator>> implements Iterator<T> {
     protected final CellRange range;
-    private final IterationStrategy<T, AbstractSpreadSheetIterator> strategy;
+    protected final U strategy;
     private final int offset;
     private T current;
 
-    public AbstractSpreadSheetIterator(CellRange range, IterationStrategy<T, AbstractSpreadSheetIterator> strategy, int offset) {
+    public AbstractSpreadSheetIterator(CellRange range, U strategy, int offset) {
         this.range = range;
         this.strategy = strategy;
         this.offset = offset;
@@ -27,12 +27,6 @@ public abstract class AbstractSpreadSheetIterator<T> implements Iterator<T> {
         return result;
     }
 
-    protected T nextOf(T value) {
-        return strategy.nextOf(value, this);
-    }
-
-    public abstract T getBegin();
-
     public int getOffset() {
         return offset;
     }
@@ -45,4 +39,7 @@ public abstract class AbstractSpreadSheetIterator<T> implements Iterator<T> {
     protected void setBegin(T value) {
         current = value;
     }
+
+    public abstract T getBegin();
+    protected abstract T nextOf(T value);
 }

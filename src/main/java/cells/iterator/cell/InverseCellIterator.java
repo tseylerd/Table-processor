@@ -2,7 +2,6 @@ package cells.iterator.cell;
 
 import cells.pointer.CellPointer;
 import cells.CellRange;
-import cells.iterator.IterationStrategy;
 
 /**
  * @author Dmitriy Tseyler
@@ -13,11 +12,11 @@ public class InverseCellIterator extends AbstractCellIterator {
         this(range, CellIterationStrategy.COLUMN_ROW);
     }
 
-    public InverseCellIterator(CellRange range, IterationStrategy strategy) {
+    public InverseCellIterator(CellRange range, CellIterationStrategy strategy) {
         this(range, strategy, -1);
     }
 
-    public InverseCellIterator(CellRange range, IterationStrategy strategy, int offset) {
+    public InverseCellIterator(CellRange range, CellIterationStrategy strategy, int offset) {
         super(range, strategy, offset);
     }
 

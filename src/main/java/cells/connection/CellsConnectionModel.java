@@ -61,6 +61,7 @@ public class CellsConnectionModel {
         //noinspection unchecked
         List<CellRange> references = this.references.get(row, column);
         List<CellRange> toSubscribe = new ArrayList<>();
+
         if (references != null) {
             ranges.forEach(cellRange -> {
                 if (!references.contains(cellRange)) {
@@ -72,7 +73,6 @@ public class CellsConnectionModel {
                 CellRange range = references.get(i);
                 if (!ranges.contains(range)) {
                     clearSubscribtion(range, pointer);
-                    references.remove(i);
                 }
             }
             references.addAll(toSubscribe);
@@ -91,24 +91,22 @@ public class CellsConnectionModel {
 
     public void subscribe(PointerNode pointer, List<CellRange> ranges) {
         List<CellRange> toSubscribe = getWhatINeedSubscribe(pointer, ranges);
-        List<PointerNode> newRefs = new LinkedList<>();
-        processRanges(pointer, toSubscribe, newRefs);
-        references.set(pointer.getRow(), pointer.getColumn(), newRefs);
+        processRanges(pointer, toSubscribe);
     }
 
-    public void processRanges(PointerNode pointer, List<CellRange> ranges, List<PointerNode> newReferences) {
+    public void processRanges(PointerNode pointer, List<CellRange> ranges) {
         for (CellRange range : ranges) {
-            processRange(pointer, range, newReferences);
+            processRange(pointer, range);
         }
     }
 
-    private void processRange(PointerNode pointer, CellRange range, List<PointerNode> newRefs) {
+    private void processRange(PointerNode pointer, CellRange range) {
         for (CellPointer cellPointer : range) {
-            processReference(pointer, new PointerNode(cellPointer), newRefs);
+            processReference(pointer, new PointerNode(cellPointer));
         }
     }
 
-    private void processReference(PointerNode mainPointer, PointerNode cellPointer, List<PointerNode> references) {
+    private void processReference(PointerNode mainPointer, PointerNode cellPointer) {
         int row = cellPointer.getRow();
         int column = cellPointer.getColumn();
         //noinspection unchecked
@@ -118,7 +116,6 @@ public class CellsConnectionModel {
             subscribed.set(cellPointer.getPointer().getRow(), cellPointer.getPointer().getColumn(), recalculate);
         }
         recalculate.add(mainPointer);
-        references.add(cellPointer);
     }
 
     private void tableModelChanged(TableModelEvent e) {

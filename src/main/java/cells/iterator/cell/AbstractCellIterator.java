@@ -9,16 +9,20 @@ import cells.iterator.IterationStrategy;
 /**
  * @author Dmitriy Tseyler
  */
-public abstract class AbstractCellIterator extends AbstractSpreadSheetIterator<CellPointer> {
+public abstract class AbstractCellIterator extends AbstractSpreadSheetIterator<CellPointer, CellIterationStrategy> {
     protected AbstractCellIterator(CellRange range, int offset) {
         this(range, CellIterationStrategy.COLUMN_ROW, offset);
     }
 
-    protected AbstractCellIterator(CellRange range, IterationStrategy strategy, int offset) {
-        //noinspection unchecked
+    protected AbstractCellIterator(CellRange range, CellIterationStrategy strategy, int offset) {
         super(range, strategy, offset);
     }
 
     abstract boolean needChangeColumn(int column);
     abstract boolean needChangeRow(int row);
+
+    @Override
+    protected CellPointer nextOf(CellPointer value) {
+        return strategy.nextOf(value, this);
+    }
 }
