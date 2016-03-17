@@ -1,8 +1,6 @@
 package ui.laf.grid;
 
-import cells.BorderModesMapper;
 import cells.CellRange;
-import cells.pointer.CellPointer;
 import ui.table.SpreadSheetModel;
 
 /**
@@ -23,8 +21,7 @@ public enum BorderMode {
             if (range.getFirstColumn() == 0)
                 return true;
 
-            Boolean modes = model.getNeedRightLine(new CellRange(range.getFirstRow(), range.getFirstColumn() - 1, range.getLastRow(), range.getFirstColumn() - 1));
-            return modes;
+            return model.getNeedRightLine(new CellRange(range.getFirstRow(), range.getFirstColumn() - 1, range.getLastRow(), range.getFirstColumn() - 1));
         }
 
         @Override
@@ -41,8 +38,7 @@ public enum BorderMode {
 
         @Override
         boolean turnedOn(TableColorModel model, CellRange range) {
-            Boolean modes = model.getNeedRightLine(range.getLastColumnRange());
-            return modes;
+            return model.getNeedRightLine(range.getLastColumnRange());
         }
 
         @Override

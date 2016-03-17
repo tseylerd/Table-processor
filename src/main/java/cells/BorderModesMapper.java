@@ -1,28 +1,11 @@
 package cells;
 
 import cells.pointer.CellPointer;
-import com.sun.org.apache.xpath.internal.operations.Bool;
-import ui.laf.grid.BorderMode;
-import ui.laf.grid.TableColorModel;
-import ui.table.SpreadSheetModel;
-
-import java.util.*;
 
 /**
  * @author Dmitriy Tseyler
  */
 public class BorderModesMapper extends RangeMapper<Boolean> {
-    public static final int RIGHT_INDEX = 0;
-    public static final int DOWN_INDEX = 1;
-
-    private final SpreadSheetModel model;
-    private final TableColorModel colorModel;
-
-    public BorderModesMapper(SpreadSheetModel model, TableColorModel colorModel) {
-        this.model = model;
-        this.colorModel = colorModel;
-    }
-
     @Override
     Boolean concatenate(SplittedRange splittedRange, CellRange range) {
         Boolean need = get(splittedRange.getSplitter());

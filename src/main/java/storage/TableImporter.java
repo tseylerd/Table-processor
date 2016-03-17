@@ -29,7 +29,7 @@ public class TableImporter {
         int rowCount = readInt();
         int columnCount = readInt();
         SpreadSheetModel model = new SpreadSheetModel(rowCount, columnCount);
-        TableColorModel colorModel = new TableColorModel(model);
+        TableColorModel colorModel = new TableColorModel();
         while ((line = reader.readLine()) != null) {
             current = 0;
             assertCellBegin();
@@ -46,11 +46,11 @@ public class TableImporter {
             assertCellEnd();
             current++;
             CellValue value = new CellValue(editorValue);
-            colorModel.setBackgroundColor(pointer, background);
+            /*colorModel.setBackgroundColor(pointer, background);
             colorModel.setNeedLowerLine(pointer, needLower);
             colorModel.setNeedRightLine(pointer, needRight);
             colorModel.setRightLineColor(pointer, rightColor);
-            colorModel.setLowerLineColor(pointer, lowerLine);
+            colorModel.setLowerLineColor(pointer, lowerLine);*/
             model.setValueAt(value, pointer);
         }
         return new SpreadSheetTable(model, colorModel);

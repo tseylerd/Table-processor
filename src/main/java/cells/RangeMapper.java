@@ -1,15 +1,11 @@
 package cells;
 
-import cells.pointer.CellPointer;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public abstract class RangeMapper<T> {
-    private static final int MIN = 225;
-
     protected Map<CellRange, T> map;
     private int minX;
     private int minY;
@@ -26,14 +22,10 @@ public abstract class RangeMapper<T> {
             return true;
         }
         for (CellRange cellRange : map.keySet()) {
-            if (range.isInside(range))
+            if (cellRange.isInside(range))
                 return true;
         }
         return false;
-    }
-
-    public boolean containsF(CellRange range) {
-        return map.containsKey(range);
     }
 
     public void delete(CellRange range) {

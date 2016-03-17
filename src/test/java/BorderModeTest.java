@@ -9,10 +9,6 @@ import ui.table.SpreadSheetModel;
 import ui.table.SpreadSheetTable;
 
 import java.awt.*;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-
 /**
  * @author Dmitriy Tseyler
  */
@@ -20,12 +16,11 @@ public class BorderModeTest {
     private static final int ROW_COUNT = 100;
     private static final int COLUMN_COUNT = 100;
 
-    private SpreadSheetTable table;
     private SpreadSheetModel model;
 
     @Before
     public void init() {
-        table = new SpreadSheetTable(ROW_COUNT, COLUMN_COUNT);
+        SpreadSheetTable table = new SpreadSheetTable(ROW_COUNT, COLUMN_COUNT);
         model = (SpreadSheetModel) table.getModel();
     }
 
@@ -76,7 +71,7 @@ public class BorderModeTest {
     @Test
     public void testColors() {
         CellRange range = new CellRange(1, 1, ROW_COUNT - 1, COLUMN_COUNT - 1);
-        TableColorModel colorModel = new TableColorModel(model);
+        TableColorModel colorModel = new TableColorModel();
         colorModel.setRangeLineColor(range, Color.BLUE);
         colorModel.setBackgroundColor(range, Color.GRAY);
         for (CellPointer pointer : range) {
@@ -92,15 +87,14 @@ public class BorderModeTest {
     }
 
     private void testAllLinesMode(CellRange range) {
-        TableColorModel tableColorModel = new TableColorModel(model);
-        List<BorderMode> borderModes = Collections.singletonList(BorderMode.LEFT);
-        tableColorModel.setBorderModes(range, borderModes);
+        TableColorModel tableColorModel = new TableColorModel();
+        BorderMode.ALL_LINES.setModePreferences(tableColorModel, range, false);
         for (CellPointer pointer : range) {
             Assert.assertFalse(tableColorModel.needLowerLine(pointer) && pointer.getRow() != range.getLastRow());
             Assert.assertFalse(tableColorModel.needRightLine(pointer) && pointer.getColumn() != range.getLastColumn());
         }
-        borderModes = Collections.singletonList(BorderMode.ALL_LINES);
-        tableColorModel.setBorderModes(range, borderModes);
+
+        BorderMode.ALL_LINES.setModePreferences(tableColorModel, range, true);
         for (CellPointer pointer : range) {
             Assert.assertTrue(tableColorModel.needLowerLine(pointer) || pointer.getRow() == range.getLastRow());
             Assert.assertTrue(tableColorModel.needRightLine(pointer) || pointer.getColumn() == range.getLastColumn());
@@ -110,7 +104,7 @@ public class BorderModeTest {
     }
 
     private void testDownMode(CellRange range) {
-        TableColorModel tableColorModel = new TableColorModel(model);
+        TableColorModel tableColorModel = new TableColorModel();
         BorderMode.DOWN.setModePreferences(tableColorModel, range, false);
         for (CellPointer pointer : range.getLastRowRange()) {
             Assert.assertFalse(tableColorModel.needLowerLine(pointer));
@@ -123,7 +117,7 @@ public class BorderModeTest {
     }
 
     private void testUpMode(CellRange range) {
-        TableColorModel tableColorModel = new TableColorModel(model);
+        TableColorModel tableColorModel = new TableColorModel();
         BorderMode.UP.setModePreferences(tableColorModel, range, false);
         for (CellPointer pointer : range.getFirstRowRange()) {
             Assert.assertFalse(tableColorModel.needLowerLine(CellPointer.getPointer(pointer, -1, 0)));
@@ -136,7 +130,7 @@ public class BorderModeTest {
     }
 
     private void testRightMode(CellRange range) {
-        TableColorModel tableColorModel = new TableColorModel(model);
+        TableColorModel tableColorModel = new TableColorModel();
         BorderMode.RIGHT.setModePreferences(tableColorModel, range, false);
         for (CellPointer pointer : range.getLastColumnRange()) {
             Assert.assertFalse(tableColorModel.needRightLine(pointer));
@@ -150,7 +144,7 @@ public class BorderModeTest {
 
 
     private void testLeftMode(CellRange range) {
-        TableColorModel tableColorModel = new TableColorModel(model);
+        TableColorModel tableColorModel = new TableColorModel();
         BorderMode.LEFT.setModePreferences(tableColorModel, range, false);
         for (CellPointer pointer : range.getFirstColumnRange()) {
             Assert.assertFalse(tableColorModel.needRightLine(CellPointer.getPointer(pointer, 0, -1)));
@@ -164,7 +158,7 @@ public class BorderModeTest {
 
     private void compareToNewGridModel(TableColorModel tableColorModel) {
         CellRange range = new CellRange(0, 0, ROW_COUNT - 1, COLUMN_COUNT - 1);
-        TableColorModel newModel = new TableColorModel(model);
+        TableColorModel newModel = new TableColorModel();
         for (CellPointer pointer : range) {
             Assert.assertEquals(tableColorModel.needLowerLine(pointer), newModel.needLowerLine(pointer));
             Assert.assertEquals(tableColorModel.needRightLine(pointer), newModel.needRightLine(pointer));

@@ -34,11 +34,11 @@ public class ImportExportTest {
             int bool = r.nextInt(2);
             boolean needLine = bool == 1;
             int value = r.nextInt(1000);
-            colorModel.setBackgroundColor(cellPointer, color);
+            /*colorModel.setBackgroundColor(cellPointer, color);
             colorModel.setNeedLowerLine(cellPointer, needLine);
             colorModel.setNeedRightLine(cellPointer, needLine);
             colorModel.setLowerLineColor(cellPointer, color);
-            colorModel.setRightLineColor(cellPointer, color);
+            colorModel.setRightLineColor(cellPointer, color);*/
             spreadSheetModel.setValueAt(new CellValue(String.valueOf(value)), cellPointer);
         }
         StringWriter writer = new StringWriter();
