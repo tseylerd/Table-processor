@@ -3,8 +3,6 @@ package cells.iterator.cell;
 import cells.pointer.CellPointer;
 import cells.iterator.IterationStrategy;
 
-import java.util.function.BiFunction;
-
 /**
  * @author Dmitriy Tseyler
  */

@@ -19,11 +19,8 @@ public class PointerNode {
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof PointerNode)) {
-            return false;
-        }
-
-        return ((PointerNode) obj).pointer.equals(pointer);
+        return obj instanceof PointerNode
+                && ((PointerNode) obj).pointer.equals(pointer);
     }
 
     public int getRow() {

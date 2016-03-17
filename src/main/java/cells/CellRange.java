@@ -145,10 +145,10 @@ public class CellRange implements Iterable<CellPointer>, Transferable {
         }
 
         List<CellRange> ranges = new ArrayList<>();
-        CellRange upper = getUpperRange(xMin, yMin, xMax, yMax);
-        CellRange bottom = getBottomRange(xMin, yMin, xMax, yMax);
-        CellRange lefter = getLefterRange(xMin, yMin, xMax, yMax);
-        CellRange righter = getRighterRange(xMin, yMin, xMax, yMax);
+        CellRange upper = getUpperRange(yMin);
+        CellRange bottom = getBottomRange(yMax);
+        CellRange lefter = getLefterRange(xMin, yMin, yMax);
+        CellRange righter = getRighterRange(yMin, xMax, yMax);
         lefter = concatenate(lefter, upper, bottom);
         righter = concatenate(righter, upper, bottom);
         addIfNotNull(ranges, upper);
@@ -172,16 +172,16 @@ public class CellRange implements Iterable<CellPointer>, Transferable {
             return null;
         }
 
-        CellRange upper = getUpperRange(xMin, yMin, xMax, yMax);
-        CellRange bottom = getBottomRange(xMin, yMin, xMax, yMax);
-        CellRange lefter = getLefterRange(xMin, yMin, xMax, yMax);
-        CellRange righter = getRighterRange(xMin, yMin, xMax, yMax);
+        CellRange upper = getUpperRange(yMin);
+        CellRange bottom = getBottomRange(yMax);
+        CellRange lefter = getLefterRange(xMin, yMin, yMax);
+        CellRange righter = getRighterRange(yMin, xMax, yMax);
         return new SplittedRange(upper, bottom, lefter, righter, new CellRange(yMin, xMin, yMax, xMax));
     }
 
     private CellRange concatenate(CellRange side, CellRange upper, CellRange bottom) {
         if (side == null) {
-            return side;
+            return null;
         }
         if (upper != null) {
             side = new CellRange(upper.getBegin().getRow(), side.getBegin().getColumn(), side.getEnd().getRow(), side.getEnd().getColumn());
@@ -198,7 +198,7 @@ public class CellRange implements Iterable<CellPointer>, Transferable {
         }
     }
 
-    private CellRange getUpperRange(int xMin, int yMin, int xMax, int yMax) {
+    private CellRange getUpperRange(int yMin) {
         if (yMin <= begin.getRow()) {
             return null;
         }
@@ -209,21 +209,21 @@ public class CellRange implements Iterable<CellPointer>, Transferable {
         return new CellRange(yStart, xStart, yMin - 1, xEnd);
     }
 
-    private CellRange getBottomRange(int xMin, int yMin, int xMax, int yMax) {
+    private CellRange getBottomRange(int yMax) {
         if (yMax >= end.getRow()) {
             return null;
         }
         return new CellRange(yMax + 1, begin.getColumn(), end.getRow(), end.getColumn());
     }
 
-    private CellRange getLefterRange(int xMin, int yMin, int xMax, int yMax) {
+    private CellRange getLefterRange(int xMin, int yMin, int yMax) {
         if (xMin <= begin.getColumn()) {
             return null;
         }
         return new CellRange(Math.max(yMin, begin.getRow()), begin.getColumn(), Math.min(yMax, end.getRow()), xMin - 1);
     }
 
-    private CellRange getRighterRange(int xMin, int yMin, int xMax, int yMax) {
+    private CellRange getRighterRange(int yMin, int xMax, int yMax) {
         if (xMax >= end.getColumn()) {
             return null;
         }
@@ -236,7 +236,7 @@ public class CellRange implements Iterable<CellPointer>, Transferable {
 
     @Override
     public String toString() {
-        return begin.toString() + ":" + end.toString();
+        return begin + ":" + end;
     }
 
     /* ================== Iterable ================== */

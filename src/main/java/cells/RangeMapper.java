@@ -3,7 +3,8 @@ package cells;
 import java.util.*;
 
 public abstract class RangeMapper<T> {
-    protected Map<CellRange, T> map;
+
+    private Map<CellRange, T> map;
     private int minX;
     private int minY;
     private int maxX;
@@ -21,16 +22,22 @@ public abstract class RangeMapper<T> {
 
         this.map = map;
         reset();
-        for (CellRange range : map.keySet()) {
-            indexXY(range);
-        }
-        fullRange = new CellRange(minY, minX, maxY, maxX);
+        map.keySet().forEach(this::indexXY);
+        createNewRange();
     }
 
     private void reset() {
         minX = minY = Integer.MAX_VALUE;
         maxX = maxY = Integer.MIN_VALUE;
         fullRange = null;
+    }
+
+    private void createNewRange() {
+        if (minX == Integer.MAX_VALUE) {
+            return;
+        }
+
+        fullRange = new CellRange(minY, minX, maxY, maxX);
     }
 
     public boolean contains(CellRange range) {
@@ -45,11 +52,8 @@ public abstract class RangeMapper<T> {
     }
 
     public void delete(CellRange range) {
-        if (map.containsKey(range)) {
-            map.remove(range);
-        }
+        map.remove(range);
         reset();
-        List<CellRange> toRemove = new ArrayList<>();
         Map<CellRange, T> newMap = new HashMap<>();
         for (Map.Entry<CellRange, T> cellRangeListEntry : map.entrySet()) {
             CellRange existing = cellRangeListEntry.getKey();
@@ -65,7 +69,7 @@ public abstract class RangeMapper<T> {
             }
         }
         map = newMap;
-        fullRange = new CellRange(minY, minX, maxY, maxX);
+        createNewRange();
     }
 
     public void set(CellRange range, T newValue) {
@@ -92,7 +96,7 @@ public abstract class RangeMapper<T> {
         newMap.put(range, newValue);
         indexXY(range);
         map = newMap;
-        fullRange = new CellRange(minY, minX, maxY, maxX);
+        createNewRange();
     }
 
     private void indexXY(CellRange range) {
