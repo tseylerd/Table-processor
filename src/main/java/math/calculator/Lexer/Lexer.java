@@ -20,6 +20,7 @@ public class Lexer {
     private final String upperCaseExpression;
     private final StringBuilder builder;
 
+    private int bracesCount;
     private int pointer;
     private String number;
     private CellPointer cellPointer;
@@ -32,6 +33,7 @@ public class Lexer {
         builder = new StringBuilder();
 
         pointer = 0;
+        bracesCount = 0;
         number = "";
     }
 
@@ -48,6 +50,11 @@ public class Lexer {
     }
 
     private void incrementPointer() {
+        if (currentChar() == '(') {
+            bracesCount++;
+        } else if (currentChar() == ')') {
+            bracesCount--;
+        }
         pointer++;
     }
 
@@ -102,7 +109,7 @@ public class Lexer {
                     decrement();
                 } else if (lexeme == Lexeme.CLOSE) {
                     assertAfterClose();
-                } else {
+                } else if (lexeme.getType() == LexemeType.FUNCTION && lexeme != Lexeme.OPEN) {
                     assertFunction();
                 }
             }
@@ -153,10 +160,11 @@ public class Lexer {
 
     private void assertFunction() throws ParserException {
         assertNotEnds();
+        boolean isOperation = currentChar() == '-' || currentChar() == '+';
         boolean isDigit = Character.isDigit(currentChar());
         boolean isLetter = Character.isLetter(currentChar());
         boolean isOpen = currentChar() == '(';
-        if (!isDigit && !isLetter && !isOpen) {
+        if (!isDigit && !isLetter && !isOpen && !isOperation) {
             throw new ParserException();
         }
     }
@@ -232,5 +240,9 @@ public class Lexer {
 
     public String getNumber(){
         return number;
+    }
+
+    public int getBracesCount() {
+        return bracesCount;
     }
 }
