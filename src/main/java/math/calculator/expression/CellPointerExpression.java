@@ -4,6 +4,7 @@ import cells.pointer.CellPointer;
 import cells.CellValue;
 import math.calculator.lexer.LexerValue;
 import ui.table.SpreadSheetModel;
+import ui.table.exceptions.CorruptedReferenceException;
 import ui.table.exceptions.EmptyValueException;
 import ui.table.exceptions.SpreadSheetException;
 
@@ -24,7 +25,11 @@ public class CellPointerExpression implements Expression {
     public LexerValue calculate() {
         CellValue value = model.getValueAt(pointer);
         if (value.getRendererValue().isEmpty()) {
-            throw new EmptyValueException();
+            if (value.getError() == null) {
+                throw new EmptyValueException();
+            } else {
+                throw new CorruptedReferenceException();
+            }
         }
         return new LexerValue(value.getRendererValue());
     }

@@ -115,6 +115,7 @@ public class Lexer {
                 range = new CellRange(begin, end);
                 function = AggregateFunction.getFunction(lexeme);
                 assertEndFunction();
+                incrementPointer();
             }
             if (lexeme == null) {
                 throw new ParserException();

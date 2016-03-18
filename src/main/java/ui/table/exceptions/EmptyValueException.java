@@ -8,6 +8,6 @@ import ui.table.error.Error;
  */
 public class EmptyValueException extends SpreadSheetException {
     public EmptyValueException() {
-        super(Error.EMPTY_VALUE, 5, "");
+        super(Error.EMPTY_VALUE, 6, "");
     }
 }

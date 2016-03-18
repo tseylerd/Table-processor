@@ -14,7 +14,8 @@ public enum Error {
     PARSE(IconManager.getInstance().getIcon(IconConfiguration.WARNING), "Error"),
     EMPTY_VALUE(IconManager.getInstance().getIcon(IconConfiguration.WARNING), "Empty value"),
     INDEX_OUT_OF_RANGE(IconManager.getInstance().getIcon(IconConfiguration.WARNING), "Incorrect index"),
-    NUMBER_FORMAT(IconManager.getInstance().getIcon(IconConfiguration.WARNING), "Can't perform operation");
+    NUMBER_FORMAT(IconManager.getInstance().getIcon(IconConfiguration.WARNING), "Can't perform operation"),
+    BAD_REFERENCE(IconManager.getInstance().getIcon(IconConfiguration.WARNING), "Corrupted reference");
 
     private final Icon icon;
     private final String description;

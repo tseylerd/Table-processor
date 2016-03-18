@@ -23,7 +23,7 @@ public class CellsConnectionModel {
 
     private final SpreadSheetModel model;
 
-    private boolean cycle;
+    private PointerNode firstInCycle;
 
     @SuppressWarnings("unchecked")
     public CellsConnectionModel(SpreadSheetModel model) {
@@ -44,7 +44,7 @@ public class CellsConnectionModel {
         }
 
         if (pointer.isVisited()) {
-            cycle = true;
+            firstInCycle = pointer;
             throw new CyclicReferenceException();
         }
 
@@ -56,14 +56,17 @@ public class CellsConnectionModel {
             pointer.setVisited(false);
         }
 
-        if (cycle) {
+        if (firstInCycle != null) {
+            if (firstInCycle.equals(pointer)) {
+                firstInCycle = null;
+            }
             throw new CyclicReferenceException();
         }
     }
 
 
     public void resetErrors() {
-        cycle = false;
+        firstInCycle = null;
     }
 
     private void clear(PointerNode node) {

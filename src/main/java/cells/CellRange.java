@@ -107,7 +107,7 @@ public class CellRange implements Iterable<CellPointer>, Transferable {
     }
 
     public Iterator<CellPointer> rowColumnIterator() {
-        return new CellIterator(this, CellIterationStrategy.COLUMN_CHANGE_FIRST);
+        return new CellIterator(this, CellIterationStrategy.ROW_CHANGE_FIRST);
     }
 
     public Iterator<CellRange> rangeIterator() {
