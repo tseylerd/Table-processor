@@ -1,7 +1,9 @@
 package math.calculator.function;
 
+import math.calculator.ParserException;
 import math.calculator.lexer.LexerValue;
 
+import java.text.ParseException;
 import java.util.function.BiFunction;
 
 /**
@@ -18,7 +20,7 @@ public class BinaryFunctionResolver implements FunctionResolver {
     @Override
     public LexerValue getValue(LexerValue... values) {
         if (values.length != 2) {
-            throw new IllegalArgumentException("Must be two values");
+            throw new ParserException();
         }
         return biFunction.apply(values[0], values[1]);
     }

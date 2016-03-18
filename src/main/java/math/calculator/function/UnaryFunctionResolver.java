@@ -1,5 +1,6 @@
 package math.calculator.function;
 
+import math.calculator.ParserException;
 import math.calculator.lexer.LexerValue;
 
 import java.util.function.Function;
@@ -18,7 +19,7 @@ public class UnaryFunctionResolver implements FunctionResolver {
     @Override
     public LexerValue getValue(LexerValue... values) {
         if (values.length != 1) {
-            throw new IllegalArgumentException("Must be one value");
+            throw new ParserException();
         }
         return function.apply(values[0]);
     }

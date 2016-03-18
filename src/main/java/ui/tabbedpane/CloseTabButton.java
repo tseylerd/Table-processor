@@ -16,6 +16,10 @@ public class CloseTabButton extends JButton {
         setBorder(BorderFactory.createEmptyBorder());
         setOpaque(false);
         setIcon(IconManager.getInstance().getIcon(IconConfiguration.CLOSE));
-        addActionListener(e -> tabbedPane.removeTable(name));
+        addActionListener(e -> {
+            if (tabbedPane.getTabCount() > 1) {
+                tabbedPane.removeTable(name);
+            }
+        });
     }
 }

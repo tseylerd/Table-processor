@@ -45,6 +45,9 @@ public class ExpressionParser {
             ranges.clear();
             throw e;
         }
+        if (lexer.getBracesCount() != 0) {
+            throw new ParserException();
+        }
         return result;
     }
 
@@ -93,6 +96,10 @@ public class ExpressionParser {
     }
 
     private Expression multiplier() throws ParserException {
+        if (lexeme == null || lexeme.getType() == null) {
+            throw new ParserException();
+        }
+
         return lexeme.getType().getExpression(this);
     }
 

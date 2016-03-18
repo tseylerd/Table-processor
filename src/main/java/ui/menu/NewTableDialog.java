@@ -24,8 +24,8 @@ public class NewTableDialog extends JDialog {
         this.tabbedPane = tabbedPane;
 
         JPanel contentPane = new JPanel(new GridLayout(4, 1));
-        rowCount = new JSpinner(new SpinnerNumberModel(ProcessorUIDefaults.DEFAULT_ROW_COUNT, 1, Short.MAX_VALUE, 1));
-        columnCount = new JSpinner(new SpinnerNumberModel(ProcessorUIDefaults.DEFAULT_COLUMN_COUNT, 1, Short.MAX_VALUE, 1));
+        rowCount = new JSpinner(new SpinnerNumberModel(ProcessorUIDefaults.DEFAULT_ROW_COUNT, 1, ProcessorUIDefaults.MAX_ROWS_COLUMNS, 1));
+        columnCount = new JSpinner(new SpinnerNumberModel(ProcessorUIDefaults.DEFAULT_COLUMN_COUNT, 1, ProcessorUIDefaults.MAX_ROWS_COLUMNS, 1));
         name = new JTextField();
         contentPane.add(createLabeledComponent("Table name: ", name));
         contentPane.add(createLabeledComponent("Row count: ", rowCount));

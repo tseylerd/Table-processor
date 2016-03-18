@@ -16,5 +16,5 @@ public class ProcessorUIDefaults {
     public static final Color DEFAULT_GRID_COLOR = Color.GRAY;
     public static final Color DEFAULT_BACKGROUND_COLOR = Color.WHITE;
     public static final Color DEFAULT_SPAN_COLOR = new Color(17, 17, 17, 50);
-    public static final int MAX_ROWS_COLUMNS = 1000;
+    public static final int MAX_ROWS_COLUMNS = 10000;
 }
