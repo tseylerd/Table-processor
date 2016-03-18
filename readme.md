@@ -33,8 +33,12 @@ Expression can contains +, -, /, * and power binary operations, +, - unary opera
 Case is not important.
 
 ###Example of expression:
-'''=(A1*B2^3*(sum(a1:a10)-1)/4+(-1)*mean(a1:a10)*min(a1:a2)/6)^B1
+```
+=($A$1*B2^3*(sum(a1:a10)-1)/4+(-1)*mean(a1:a10)*min(a1:a2)/6)^B1
+```
 ###After spanning on one row down:
-'''=(A2*B3^3*(sum(a2:a11)-1)/4+(-1)*mean(a2:a11)*min(a2:a3)/6)^B2
+```
+=($A$1*B3^3*(sum(a2:a11)-1)/4+(-1)*mean(a2:a11)*min(a2:a3)/6)^B2
+```
 
 Customization of table can be done with right settings panel on tab.
