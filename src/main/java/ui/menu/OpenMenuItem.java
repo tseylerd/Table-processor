@@ -35,7 +35,7 @@ public class OpenMenuItem extends JMenuItem {
             if (tabbedPane.addTable(file.getName(), table)) {
                 tabbedPane.saved(file);
             }
-        } catch (IOException | ImportFormatException ex) {
+        } catch (Exception ex) {
             JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Can't open table. Bad file.");
         }
     }

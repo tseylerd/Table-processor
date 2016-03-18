@@ -25,6 +25,7 @@ public class SpreadSheetPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 SwingUtilities.invokeLater(() -> table.setRowSelectionInterval(0, table.getRowCount() - 1));
                 SwingUtilities.invokeLater(() -> table.setColumnSelectionInterval(0, table.getColumnCount() - 1));
+                SwingUtilities.invokeLater(table::requestFocus);
             }
         });
         scrollPane.setCorner(JScrollPane.UPPER_LEFT_CORNER, selectAll);
