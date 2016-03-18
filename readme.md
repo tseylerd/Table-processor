@@ -9,6 +9,7 @@
         - left
         - right
     - Moving cells and ranges
+    - Import/export tables
 
 ##Expressions:
 First symbol should be '='.
