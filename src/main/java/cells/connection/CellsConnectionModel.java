@@ -77,12 +77,18 @@ public class CellsConnectionModel {
 
         for (CellRange ref : refs) {
             for (CellPointer pointer : ref) {
-                subscribed.get(pointer.getRow(), pointer.getColumn()).remove(node);
+                List<PointerNode> pointerNodes = subscribed.get(pointer.getRow(), pointer.getColumn());
+                if (pointerNodes != null) {
+                    pointerNodes.remove(node);
+                }
             }
         }
     }
 
     public void subscribe(PointerNode pointer, List<CellRange> ranges) {
+        if (pointer.getRow() >= references.rowCount() || pointer.getColumn() >= references.columnCount()) {
+            return;
+        }
         clear(pointer); // clear old subscribtion
         this.references.set(pointer.getRow(), pointer.getColumn(), ranges);
         processRanges(pointer, ranges); // write new subscription
@@ -103,6 +109,10 @@ public class CellsConnectionModel {
     private void processReference(PointerNode mainPointer, PointerNode cellPointer) {
         int row = cellPointer.getRow();
         int column = cellPointer.getColumn();
+        if (row >= subscribed.rowCount() || column >= subscribed.columnCount()) {
+            return;
+        }
+
         List<PointerNode> recalculate = subscribed.get(row, column);
         if (recalculate == null) {
             recalculate = new ArrayList<>(DEFAULT_CAPACITY);

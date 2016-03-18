@@ -33,7 +33,7 @@ public class Util {
             return;
 
         StringBuilder movedValue = new StringBuilder();
-        Matcher matcher = CELL_PATTERN.matcher(value.getEditorValue());
+        Matcher matcher = CELL_PATTERN.matcher(value.getEditorValue().toUpperCase());
         int beginIndex = 0;
         while (matcher.find()) {
             String group = matcher.group();

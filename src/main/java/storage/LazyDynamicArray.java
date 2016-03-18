@@ -28,7 +28,7 @@ public class LazyDynamicArray<T> {
     }
 
     public void set(int row, int column, T value) {
-        if (row >= rows || column > columns) {
+        if (row >= rows || column >= columns) {
             throw new IndexOutOfBoundsException();
         }
 

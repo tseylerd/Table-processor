@@ -7,6 +7,9 @@ import math.calculator.LexemeType;
 import math.calculator.ParserException;
 import util.Util;
 
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+
 /**
  * Lexer implementation
  * @author Dmitriy Tseyler
@@ -15,9 +18,7 @@ public class Lexer {
     public static final char FIX_CHARACTER = '$';
 
     private final String upperCaseExpression;
-    private final String originalExpression;
     private final StringBuilder builder;
-    private final StringBuilder originalBuilder;
 
     private int pointer;
     private String number;
@@ -26,11 +27,9 @@ public class Lexer {
     private AggregateFunction function;
 
     public Lexer(String expression){
-        this.originalExpression = expression.substring(1);
-        this.upperCaseExpression = originalExpression.toUpperCase();
+        this.upperCaseExpression = expression.substring(1).toUpperCase();
 
         builder = new StringBuilder();
-        originalBuilder = new StringBuilder();
 
         pointer = 0;
         number = "";
@@ -38,7 +37,6 @@ public class Lexer {
 
     private void append() {
         builder.append(currentChar());
-        originalBuilder.append(originalChar());
     }
 
     private boolean notEnd() {
@@ -47,10 +45,6 @@ public class Lexer {
 
     private char currentChar() {
         return upperCaseExpression.charAt(pointer);
-    }
-
-    private char originalChar() {
-        return originalExpression.charAt(pointer);
     }
 
     private void incrementPointer() {
@@ -63,7 +57,7 @@ public class Lexer {
         boolean isFullStop = current == '.';
         boolean builderNotEmpty = builder.length() > 0;
         boolean isExp = current == 'E';
-        boolean isExpAllowed = isExp && builderNotEmpty && Character.isDigit(builder.charAt(builder.length() - 1)) || builder.charAt(builder.length() - 1) == '.';
+        boolean isExpAllowed = isExp && builderNotEmpty && (Character.isDigit(builder.charAt(builder.length() - 1)) || builder.charAt(builder.length() - 1) == '.');
         boolean isOperatorAllowed = builderNotEmpty && builder.charAt(builder.length() - 1) == 'E' && (current == '-' || current == '+');
         return isDigit ||
                 isFullStop ||
@@ -74,12 +68,10 @@ public class Lexer {
     private void decrement() {
         pointer--;
         builder.setLength(builder.length() - 1);
-        originalBuilder.setLength(originalBuilder.length() - 1);
     }
 
     public Lexeme nextLexeme() throws ParserException {
         builder.setLength(0);
-        originalBuilder.setLength(0);
         if (pointer < upperCaseExpression.length()) {
             while (notEnd() && needReadDigit(builder)) { // try read number
                 append();
@@ -89,12 +81,12 @@ public class Lexer {
                 number = builder.toString();
                 return Lexeme.NUMBER;
             }
-            checkFixCharacter(); // try read CellPointer column
+            checkFixCharacter(Character::isLetter); // try read CellPointer column
             while (notEnd() && Character.isLetter(currentChar())) {
                 append();
                 incrementPointer();
             }
-            checkFixCharacter(); // try read CellPointer row
+            checkFixCharacter(Character::isDigit); // try read CellPointer row
             if (notEnd() && Character.isDigit(currentChar())) {
                 cellPointer = readCellPointer(builder.toString());
                 assertNextOperation();
@@ -200,17 +192,19 @@ public class Lexer {
     }
 
     private CellPointer readCellPointer() {
-        checkFixCharacter();
+        checkFixCharacter(Character::isLetter);
         String column = readLiteral();
-        checkFixCharacter();
+        checkFixCharacter(Character::isDigit);
         String row = readNumber();
         return CellPointer.getPointer(Integer.parseInt(row) - 1, Util.indexByColumnName(column));
     }
 
-    private void checkFixCharacter() {
+    private void checkFixCharacter(Predicate<Character> check) {
         if (notEnd() && currentChar() == FIX_CHARACTER) {
-            originalBuilder.append(FIX_CHARACTER);
             incrementPointer();
+            if (notEnd() && !check.test(currentChar())) {
+                throw new ParserException();
+            }
         }
     }
 

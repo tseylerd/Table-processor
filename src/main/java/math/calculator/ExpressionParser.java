@@ -8,10 +8,7 @@ import ui.table.SpreadSheetModel;
 import cells.pointer.CellPointer;
 import cells.CellRange;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Base class for expression parsing
@@ -63,7 +60,7 @@ public class ExpressionParser {
     }
 
     public List<CellRange> getRanges() {
-        return new LinkedList<>(ranges);
+        return new ArrayList<>(ranges);
     }
 
     private Expression composed() throws ParserException {
@@ -101,6 +98,9 @@ public class ExpressionParser {
 
     public Expression onAgregateFunction() throws ParserException {
         CellRange range = lexer.getRange();
+        if (range.getFirstColumn() > range.getLastColumn() || range.getFirstRow() > range.getLastRow()) {
+            throw new ParserException();
+        }
         ranges.add(range);
         AggregateFunction function = lexer.getFunction();
         lexeme = lexer.nextLexeme();
