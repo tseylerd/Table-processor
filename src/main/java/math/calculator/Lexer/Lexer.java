@@ -8,6 +8,7 @@ import math.calculator.ParserException;
 import util.Util;
 
 /**
+ * Lexer implementation
  * @author Dmitriy Tseyler
  */
 public class Lexer {
@@ -58,10 +59,16 @@ public class Lexer {
 
     private boolean needReadDigit(StringBuilder builder) {
         char current = currentChar();
-        return Character.isDigit(current) ||
-                current == '.' ||
-                (current == 'E' && builder.length() > 0 && (Character.isDigit(builder.charAt(builder.length() - 1)) || builder.charAt(builder.length() - 1) == '.')) ||
-                !(builder.length() == 0) && builder.charAt(builder.length() - 1) == 'E' && (current == '-' || current == '+');
+        boolean isDigit = Character.isDigit(current);
+        boolean isFullStop = current == '.';
+        boolean builderNotEmpty = builder.length() > 0;
+        boolean isExp = current == 'E';
+        boolean isExpAllowed = isExp && builderNotEmpty && Character.isDigit(builder.charAt(builder.length() - 1)) || builder.charAt(builder.length() - 1) == '.';
+        boolean isOperatorAllowed = builderNotEmpty && builder.charAt(builder.length() - 1) == 'E' && (current == '-' || current == '+');
+        return isDigit ||
+                isFullStop ||
+                isExpAllowed ||
+                isOperatorAllowed;
     }
 
     private void decrement() {
@@ -74,7 +81,7 @@ public class Lexer {
         builder.setLength(0);
         originalBuilder.setLength(0);
         if (pointer < upperCaseExpression.length()) {
-            while (notEnd() && needReadDigit(builder)) {
+            while (notEnd() && needReadDigit(builder)) { // try read number
                 append();
                 incrementPointer();
             }
@@ -82,12 +89,12 @@ public class Lexer {
                 number = builder.toString();
                 return Lexeme.NUMBER;
             }
-            checkFixCharacter();
+            checkFixCharacter(); // try read CellPointer column
             while (notEnd() && Character.isLetter(currentChar())) {
                 append();
                 incrementPointer();
             }
-            checkFixCharacter();
+            checkFixCharacter(); // try read CellPointer row
             if (notEnd() && Character.isDigit(currentChar())) {
                 cellPointer = readCellPointer(builder.toString());
                 assertNextOperation();
@@ -95,7 +102,7 @@ public class Lexer {
             }
             Lexeme lexeme = Lexeme.getLexem(builder.toString());
 
-            if (lexeme == null && notEnd()) {
+            if (lexeme == null && notEnd()) { // try get operation lexem
                 append();
                 incrementPointer();
                 lexeme = Lexeme.getLexem(builder.toString());
@@ -107,7 +114,7 @@ public class Lexer {
                     assertFunction();
                 }
             }
-            if (lexeme != null && lexeme.getType() == LexemeType.AGGREGATE_FUNCTION) {
+            if (lexeme != null && lexeme.getType() == LexemeType.AGGREGATE_FUNCTION) { // try get cell range
                 CellPointer begin = readCellPointer();
                 assertRangeDelimiter();
                 incrementPointer();

@@ -3,6 +3,7 @@ package math.calculator;
 import math.calculator.expression.Expression;
 
 /**
+ * Type of lexem
  * @author Dmitriy Tseyler
  */
 public enum LexemeType {

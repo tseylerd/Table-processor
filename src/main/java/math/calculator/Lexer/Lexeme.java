@@ -7,6 +7,7 @@ import math.calculator.function.UnaryFunctionResolver;
 import util.Util;
 
 /**
+ * Lexemes
  * @author Dmitriy Tseyler
  */
 public enum Lexeme {
