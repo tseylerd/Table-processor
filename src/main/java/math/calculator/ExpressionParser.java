@@ -41,9 +41,9 @@ public class ExpressionParser {
         Expression result;
         try {
             result = expression();
-        } catch (ParserException e) {
+        } catch (Exception e) {
             ranges.clear();
-            throw e;
+            throw new ParserException();
         }
         if (lexer.getBracesCount() != 0) {
             throw new ParserException();
