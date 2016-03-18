@@ -3,6 +3,7 @@ package cells.iterator;
 import cells.CellRange;
 
 /**
+ * Helps to {@link cells.iterator.range.AbstractRangeIterator} to resolve what column is first and last in range
  * @author Dmitriy Tseyler
  */
 public class ColumnResolver implements IterationStrategyIndexResolver {

@@ -1,6 +1,7 @@
 package cells;
 
 /**
+ * Result of range splitting by another range.
  * @author Dmitriy Tseyler
  */
 public class SplittedRange {

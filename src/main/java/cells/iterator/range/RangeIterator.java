@@ -2,8 +2,12 @@ package cells.iterator.range;
 
 import cells.CellRange;
 import cells.iterator.IterationStrategyIndexResolver;
+import cells.iterator.cell.InverseCellIterator;
 
 /**
+ * Iterator over {@link CellRange} rows or columns.
+ * This is the normal order iterator. It begins in the left/upper column/row.
+ * @see InverseRangeIterator
  * @author Dmitriy Tseyler
  */
 public class RangeIterator extends AbstractRangeIterator {

@@ -4,10 +4,13 @@ import cells.pointer.CellPointer;
 import cells.iterator.IterationStrategy;
 
 /**
+ * The strategy, which determines, row or column we want to change first.
+ * {@link CellIterationStrategy#COLUMN_CHANGE_FIRST} try firstly change column.
+ * {@link CellIterationStrategy#ROW_CHANGE_FIRST} try firstly change row.
  * @author Dmitriy Tseyler
  */
 public enum CellIterationStrategy implements IterationStrategy<CellPointer, AbstractCellIterator> {
-    COLUMN_ROW() {
+    COLUMN_CHANGE_FIRST() {
         @Override
         boolean firstCheck(CellPointer previous, AbstractCellIterator iterator) {
             return iterator.needChangeColumn(previous.getColumn());
@@ -28,7 +31,7 @@ public enum CellIterationStrategy implements IterationStrategy<CellPointer, Abst
             return CellPointer.getPointer(previous.getRow() + iterator.getOffset(), iterator.getBegin().getColumn());
         }
     },
-    ROW_COLUMN {
+    ROW_CHANGE_FIRST {
         @Override
         boolean firstCheck(CellPointer previous, AbstractCellIterator iterator) {
             return iterator.needChangeRow(previous.getRow());

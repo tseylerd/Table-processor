@@ -1,4 +1,4 @@
-package ui.text;
+package ui.table;
 
 import cells.CellValue;
 

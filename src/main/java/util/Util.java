@@ -3,22 +3,20 @@ package util;
 import cells.pointer.CellPointer;
 import cells.CellValue;
 import math.calculator.lexer.LexerValue;
-import ui.table.SpreadSheetModel;
 import ui.table.exceptions.InvalidCellPointerException;
 
 import java.awt.*;
-import java.lang.reflect.Array;
-import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.logging.Logger;
 
 /**
+ * Utility class for application
  * @author Dmitriy Tseyler
  */
 public class Util {
     private static final Logger log = Logger.getLogger(Util.class.getName());
-    private static final int COLOR_MAX = (255 * 3) / 2;
+    private static final int COLOR_MAX = 255 * 3 / 2;
     private static final float RATIO = 0.5f;
     private static final int ENGLISH_CHARACTERS_COUNT = 26;
     private static final Pattern CELL_PATTERN =  Pattern.compile("\\$?[A-Z]+\\$?\\d+");
@@ -44,7 +42,7 @@ public class Util {
             try {
                 moved = movingExpression.moveAndGet(rowOffset, columnOffset);
             } catch (InvalidCellPointerException e) {
-                log.warning(String.format("Can't move pointer %s, column offset = %s, row offst = %s.", movingExpression, columnOffset, rowOffset));
+                log.warning(String.format("Can't move pointer %s, column offset = %s, row offset = %s.", movingExpression, columnOffset, rowOffset));
             }
             movedValue.append(expression.substring(beginIndex, matcher.start()));
             movedValue.append(moved);

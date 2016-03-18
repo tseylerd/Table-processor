@@ -2,10 +2,11 @@ package cells.iterator.range;
 
 import cells.CellRange;
 import cells.iterator.AbstractSpreadSheetIterator;
-import cells.iterator.IterationStrategy;
 import cells.iterator.IterationStrategyIndexResolver;
 
 /**
+ * Abstract range iterator. Used for iteration over the {@link CellRange}.
+ * @see RangeIterationStrategy
  * @author Dmitriy Tseyler
  */
 public abstract class AbstractRangeIterator extends AbstractSpreadSheetIterator<CellRange, RangeIterationStrategy> {

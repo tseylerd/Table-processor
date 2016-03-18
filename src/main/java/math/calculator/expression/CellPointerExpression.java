@@ -8,6 +8,7 @@ import ui.table.exceptions.EmptyValueException;
 import ui.table.exceptions.SpreadSheetException;
 
 /**
+ * Expression for access table cell value
  * @author Dmitriy Tseyler
  */
 public class CellPointerExpression implements Expression {

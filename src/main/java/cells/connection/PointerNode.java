@@ -3,6 +3,7 @@ package cells.connection;
 import cells.pointer.CellPointer;
 
 /**
+ * Node of cells graph
  * @author Dmitriy Tseyler
  */
 public class PointerNode {

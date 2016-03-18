@@ -11,6 +11,7 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
+ * Class of spread sheet table. Delegates all logic to {@link SpreadSheetModel}
  * @author Dmitriy Tseyler
  */
 public class SpreadSheetTable extends JTable {

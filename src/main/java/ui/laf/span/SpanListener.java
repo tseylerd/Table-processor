@@ -12,6 +12,7 @@ import java.awt.event.MouseEvent;
 
 /**
  * This listener is for cell span operation on table
+ * It listens mouse on table to know, when we need start spanning
  * @author Dmitriy Tseyler
  */
 public class SpanListener extends MouseAdapter {

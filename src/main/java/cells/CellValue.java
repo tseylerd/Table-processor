@@ -5,6 +5,8 @@ import math.calculator.expression.StringExpression;
 import ui.table.error.Error;
 
 /**
+ * Cell value representation
+ * It contains a value for renderer, value for editor, error and expression.
  * @author Dmitriy Tseyler
  */
 public class CellValue {

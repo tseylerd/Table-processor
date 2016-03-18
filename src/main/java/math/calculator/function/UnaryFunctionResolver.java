@@ -5,7 +5,8 @@ import math.calculator.lexer.LexerValue;
 import java.util.function.Function;
 
 /**
- * Created by dtseyler on 11.01.16.
+ * Used for applying unary function to value
+ * @author Dmitriy Tseyler
  */
 public class UnaryFunctionResolver implements FunctionResolver {
     private final Function<LexerValue, LexerValue> function;

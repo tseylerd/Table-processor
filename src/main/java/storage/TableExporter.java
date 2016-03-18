@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.util.Map;
 
 /**
+ * Used for export table to file
  * @author Dmitriy Tseyler
  */
 public class TableExporter {

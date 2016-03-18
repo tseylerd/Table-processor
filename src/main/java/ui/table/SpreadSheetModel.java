@@ -22,6 +22,8 @@ import javax.swing.table.TableModel;
 import java.util.*;
 
 /**
+ * Model of {@link SpreadSheetTable}
+ * Contains {@link ExpressionParser}, {@link CellsConnectionModel} and values.
  * @author Dmitriy Tseyler
  */
 public class SpreadSheetModel implements TableModel {
@@ -31,7 +33,7 @@ public class SpreadSheetModel implements TableModel {
     private final CellsConnectionModel cellsConnectionModel;
     private final ExpressionParser parser;
 
-    private LazyDynamicArray<CellValue> values;
+    private final LazyDynamicArray<CellValue> values;
     private int rowCount;
     private int columnCount;
 

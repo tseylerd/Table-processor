@@ -18,6 +18,9 @@ public class BinaryExpression implements Expression {
         this.operation = operation;
     }
 
+    /**
+     * Here we save all exceptions during calculation and throw most priority
+     */
     @Override
     public LexerValue calculate() {
         SpreadSheetException firstException = null;

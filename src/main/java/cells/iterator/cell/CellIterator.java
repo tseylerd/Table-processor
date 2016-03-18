@@ -4,6 +4,9 @@ import cells.pointer.CellPointer;
 import cells.CellRange;
 
 /**
+ * Iterator over {@link CellRange} cell by cell.
+ * This is the normal order iterator. It begins in the left upper corner.
+ * @see InverseCellIterator
  * @author Dmitriy Tseyler
  */
 public class CellIterator extends AbstractCellIterator {

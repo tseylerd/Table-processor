@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
+ * Main application frame
  * @author Dmitriy Tseyler
  */
 public class MainFrame extends JFrame {

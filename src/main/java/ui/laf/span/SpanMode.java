@@ -11,6 +11,8 @@ import java.awt.*;
 import java.util.function.Supplier;
 
 /**
+ * Mode, which holds all parameters for spanning
+ * @see SpanManager
  * @author Dmitriy Tseyler
  */
 public enum SpanMode {

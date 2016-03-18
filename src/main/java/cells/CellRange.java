@@ -103,11 +103,11 @@ public class CellRange implements Iterable<CellPointer>, Transferable {
     }
 
     public Iterator<CellPointer> inverseRowColumnIterator() {
-        return new InverseCellIterator(this, CellIterationStrategy.ROW_COLUMN);
+        return new InverseCellIterator(this, CellIterationStrategy.ROW_CHANGE_FIRST);
     }
 
     public Iterator<CellPointer> rowColumnIterator() {
-        return new CellIterator(this, CellIterationStrategy.ROW_COLUMN);
+        return new CellIterator(this, CellIterationStrategy.COLUMN_CHANGE_FIRST);
     }
 
     public Iterator<CellRange> rangeIterator() {

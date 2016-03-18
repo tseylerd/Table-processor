@@ -15,6 +15,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 
 /**
+ * Largely, this is the copy of BasicTableUI.
+ * One moment is different: logic of painting grid and cell.
  * @author Dmitriy Tseyler
  */
 public class SpreadSheetTableUI extends BasicTableUI {

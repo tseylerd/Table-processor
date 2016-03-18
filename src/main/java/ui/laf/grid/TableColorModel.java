@@ -10,6 +10,7 @@ import java.awt.*;
 import java.util.*;
 
 /**
+ * This is the table color model. It holds colors of grid lines and grid showing parameters
  * @author Dmitriy Tseyler
  */
 public class TableColorModel {
@@ -32,7 +33,7 @@ public class TableColorModel {
 
     public void setNeedRightLine(CellRange range, boolean need) {
         Boolean modes = rightLineMapper.get(range);
-        if (modes != need) {
+        if (modes != need) { // replaceable by xor, but more friendly
             rightLineMapper.set(range, need);
         }
     }
@@ -68,22 +69,25 @@ public class TableColorModel {
             return ProcessorUIDefaults.DEFAULT_GRID_COLOR;
         }
         Color color = null;
-        if (range.getFirstColumn() > 0) {
+        if (range.getFirstColumn() > 0) { // check if we are on top
             CellRange left = new CellRange(range.getFirstRow(), range.getFirstColumn() - 1, range.getLastRow(), range.getFirstColumn() - 1);
             color = rightForegroundMapper.get(left);
         }
-        if (range.getFirstRow() > 0) {
+        if (range.getFirstRow() > 0) { // check if we are in left
             CellRange up = new CellRange(range.getFirstRow() - 1, range.getFirstColumn(), range.getFirstRow() - 1, range.getLastColumn());
             Color upColor = bottomForegroundMapper.get(up);
+
             if (color != null && !color.equals(upColor)) {
                 return ProcessorUIDefaults.DEFAULT_GRID_COLOR;
             }
         }
+
         Color right = rightForegroundMapper.get(range);
         Color down = bottomForegroundMapper.get(range);
         if (right.equals(down) && (color == null || color.equals(right))) {
             return right;
         }
+
         return ProcessorUIDefaults.DEFAULT_GRID_COLOR;
     }
 
@@ -144,12 +148,6 @@ public class TableColorModel {
             modesMap.put(mode, mode.isModeTurnedOn(this, range));
         }
         return modesMap;
-    }
-
-    public boolean isConfigured(CellPointer pointer) {
-        CellRange range = new CellRange(pointer, pointer);
-        return rightLineMapper.contains(range) || rightForegroundMapper.contains(range) || bottomForegroundMapper.contains(range)
-                || backgroundMapper.contains(range);
     }
 
     public Map<CellRange, Boolean> getBottomLineMap() {

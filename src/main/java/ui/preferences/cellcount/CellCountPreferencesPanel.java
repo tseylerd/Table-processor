@@ -10,6 +10,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 
 /**
+ * Panel for customize rows and columns count
  * @author Dmitriy Tseyler
  */
 public class CellCountPreferencesPanel extends JPanel {

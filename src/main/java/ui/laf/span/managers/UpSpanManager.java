@@ -5,6 +5,7 @@ import cells.CellRange;
 import ui.laf.span.spanner.Spanner;
 
 /**
+ * Spanning up
  * @author Dmitriy Tseyler
  */
 public class UpSpanManager extends SpanManager {

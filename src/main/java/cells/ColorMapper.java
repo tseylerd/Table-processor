@@ -5,6 +5,7 @@ import cells.pointer.CellPointer;
 import java.awt.*;
 
 /**
+ * Mapper implementation for colors.
  * @author Dmitriy Tseyler
  */
 
@@ -20,6 +21,9 @@ public class ColorMapper extends RangeMapper<Color> {
         return defaultColor;
     }
 
+    /**
+     * We returns not default color only if all splitted ranges colors are equals
+     */
     @Override
     Color processSplitted(SplittedRange splittedRange, CellRange range, Color existing) {
         Color leftColor = get(splittedRange.getLeft());

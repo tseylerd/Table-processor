@@ -11,6 +11,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
 
 /**
+ * Basic renderer for {@link SpreadSheetTable}
  * @author Dmitriy Tseyler
  */
 public class SpreadSheetRenderer extends DefaultTableCellRenderer {

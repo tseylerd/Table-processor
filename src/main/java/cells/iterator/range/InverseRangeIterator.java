@@ -4,6 +4,9 @@ import cells.CellRange;
 import cells.iterator.IterationStrategyIndexResolver;
 
 /**
+ * Iterator over {@link CellRange} rows or columns.
+ * This is the reverse order iterator. It begins in the right/lower column/row.
+ * @see RangeIterator
  * @author Dmitriy Tseyler
  */
 public class InverseRangeIterator extends AbstractRangeIterator {

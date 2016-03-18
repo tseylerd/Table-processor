@@ -5,6 +5,7 @@ import cells.CellRange;
 import ui.laf.span.spanner.Spanner;
 
 /**
+ * Spanning right
  * @author Dmitriy Tseyler
  */
 public class RightSpanManager extends SpanManager {

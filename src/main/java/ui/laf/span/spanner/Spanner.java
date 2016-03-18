@@ -12,6 +12,8 @@ import java.util.Iterator;
 import java.util.function.Function;
 
 /**
+ * Used for span cell range.
+ * Linear dependency should be refactored to some Enum with dependencies.
  * @author Dmitriy Tseyler
  */
 public enum Spanner {
@@ -69,6 +71,9 @@ public enum Spanner {
     abstract int getOffset(CellPointer from, CellPointer to);
     abstract CellValue moveWithOffset(CellValue toMove, int offset, int maxRows, int maxColumns);
 
+    /**
+     * First, tries to find linear dependency between cells. If there isn't linear dependency, just copy values.
+     */
     public void span(SpreadSheetModel model, CellRange from, CellRange to) {
         Iterator<CellRange> fromIterator = rangeIteratorGetter.apply(from);
         Iterator<CellRange> toIterator = rangeIteratorGetter.apply(to);
@@ -84,6 +89,9 @@ public enum Spanner {
         }
     }
 
+    /**
+     * If every diff between two cells is equals, then there is a linear dependency.
+     */
     private double findLinearDependency(CellRange range, SpreadSheetModel model) {
         if (range.size() <= 1) {
             return 0;

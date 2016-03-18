@@ -5,6 +5,7 @@ import ui.table.SpreadSheetModel;
 import ui.table.exceptions.InvalidCellPointerException;
 
 /**
+ * Expression, which knows, how to move cell pointer
  * @author Dmitriy Tseyler
  */
 public class PointerMovingExpression {

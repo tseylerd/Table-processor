@@ -5,7 +5,8 @@ import math.calculator.lexer.LexerValue;
 import java.util.function.BiFunction;
 
 /**
- * Created by dtseyler on 11.01.16.
+ * Used for applying binary function to values
+ * @author Dmitriy Tseyler
  */
 public class BinaryFunctionResolver implements FunctionResolver {
     private final BiFunction<LexerValue, LexerValue, LexerValue> biFunction;

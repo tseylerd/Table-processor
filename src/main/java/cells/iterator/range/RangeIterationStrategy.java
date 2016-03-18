@@ -7,6 +7,9 @@ import cells.iterator.IterationStrategyIndexResolver;
 import cells.iterator.RowResolver;
 
 /**
+ * The strategy, which determines, row or column we iterate by.
+ * {@link RangeIterationStrategy#ROW} iterates by rows.
+ * {@link RangeIterationStrategy#COLUMN} iterates by columns.
  * @author Dmitriy Tseyler
  */
 public enum RangeIterationStrategy implements IterationStrategy<CellRange, AbstractRangeIterator> {

@@ -3,6 +3,7 @@ package cells.iterator;
 import cells.CellRange;
 
 /**
+ * Helps range iterator to resolve what row is first and last in range
  * @author Dmitriy Tseyler
  */
 public class RowResolver implements IterationStrategyIndexResolver {

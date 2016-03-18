@@ -4,6 +4,7 @@ import ui.table.error.Error;
 import ui.table.exceptions.SpreadSheetException;
 
 /**
+ * Most priority exception
  * @author Dmitriy Tseyler
  */
 public class ParserException extends SpreadSheetException {

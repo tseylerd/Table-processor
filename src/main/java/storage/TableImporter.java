@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Used to import table from file
  * @author Dmitriy Tseyler
  */
 public class TableImporter {

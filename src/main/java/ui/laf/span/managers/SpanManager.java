@@ -10,7 +10,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * @author dtseyler
+ * Manager to span cell range. It holds start range end new ranges and then spanning start range on new ranges;
+ * @see Spanner
+ * @author Dmitriy Tseyler
  */
 public abstract class SpanManager {
     private final LinkedList<CellRange> ranges;

@@ -4,12 +4,15 @@ import cells.pointer.CellPointer;
 import cells.CellRange;
 
 /**
+ * Iterator over {@link CellRange} cell by cell.
+ * This is the reverse order iterator. It begins in the right lower corner.
+ * @see CellIterator
  * @author Dmitriy Tseyler
  */
 public class InverseCellIterator extends AbstractCellIterator {
 
     public InverseCellIterator(CellRange range) {
-        this(range, CellIterationStrategy.COLUMN_ROW);
+        this(range, CellIterationStrategy.COLUMN_CHANGE_FIRST);
     }
 
     public InverseCellIterator(CellRange range, CellIterationStrategy strategy) {

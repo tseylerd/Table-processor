@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
+ * Base class for expression parsing
  * @author Dmitriy Tseyler
  */
 

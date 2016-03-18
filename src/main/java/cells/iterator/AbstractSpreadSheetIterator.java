@@ -5,6 +5,9 @@ import cells.CellRange;
 import java.util.Iterator;
 
 /**
+ * Base class of all spread sheed iterators
+ * @see cells.iterator.cell.AbstractCellIterator
+ * @see cells.iterator.range.AbstractRangeIterator
  * @author Dmitriy Tseyler
  */
 public abstract class AbstractSpreadSheetIterator<T, U extends IterationStrategy<T, ? extends AbstractSpreadSheetIterator>> implements Iterator<T> {

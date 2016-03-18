@@ -3,15 +3,16 @@ package cells.iterator.cell;
 import cells.pointer.CellPointer;
 import cells.CellRange;
 import cells.iterator.AbstractSpreadSheetIterator;
-import cells.iterator.IterationStrategy;
 
 
 /**
+ * Abstract cell iterator. Used for iteration over the {@link CellRange}.
+ * @see CellIterationStrategy
  * @author Dmitriy Tseyler
  */
 public abstract class AbstractCellIterator extends AbstractSpreadSheetIterator<CellPointer, CellIterationStrategy> {
     protected AbstractCellIterator(CellRange range, int offset) {
-        this(range, CellIterationStrategy.COLUMN_ROW, offset);
+        this(range, CellIterationStrategy.COLUMN_CHANGE_FIRST, offset);
     }
 
     protected AbstractCellIterator(CellRange range, CellIterationStrategy strategy, int offset) {

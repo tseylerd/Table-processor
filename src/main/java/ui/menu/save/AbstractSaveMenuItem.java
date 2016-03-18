@@ -35,7 +35,7 @@ public abstract class AbstractSaveMenuItem extends JMenuItem {
         }
 
         SpreadSheetPanel panel = (SpreadSheetPanel)tabbedPane.getSelectedComponent();
-        if (!(file.getName().endsWith(TableFileChooser.FILE_FORMAT))) {
+        if (!file.getName().endsWith(TableFileChooser.FILE_FORMAT)) {
             file = new File(file.getPath() + TableFileChooser.FILE_FORMAT);
         }
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {

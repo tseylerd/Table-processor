@@ -4,6 +4,7 @@ import cells.CellRange;
 import ui.table.SpreadSheetModel;
 
 /**
+ * Border mode for range. Shows, what lines should be showing for a specific range
  * @author Dmitriy Tseyler
  */
 public enum BorderMode {

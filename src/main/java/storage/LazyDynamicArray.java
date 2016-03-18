@@ -5,6 +5,9 @@ import ui.laf.ProcessorUIDefaults;
 import java.lang.reflect.Array;
 
 /**
+ * Implementation of lazy dynamic array of arrays.
+ * It allocate memory only is needed
+ * Next step is to implement lazy copying.
  * @author Dmitriy Tseyler
  */
 public class LazyDynamicArray<T> {

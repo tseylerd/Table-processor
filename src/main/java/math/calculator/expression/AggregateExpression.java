@@ -6,6 +6,7 @@ import math.calculator.lexer.LexerValue;
 import ui.table.SpreadSheetModel;
 
 /**
+ * Expression for aggregate values from CellRange
  * @author Dmitriy Tseyler
  */
 public class AggregateExpression implements Expression {

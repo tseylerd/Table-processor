@@ -9,6 +9,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 
 /**
+ * Panel with preferences panel and table
  * @author Dmitriy Tseyler
  */
 public class SpreadSheetPanel extends JPanel {

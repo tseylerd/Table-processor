@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * A small look and feel with one custom action and one custom UI.
  * @author Dmitriy Tseyler
  */
 public class ProcessorLookAndFeel extends MetalLookAndFeel {

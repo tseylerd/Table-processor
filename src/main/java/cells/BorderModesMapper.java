@@ -3,6 +3,7 @@ package cells;
 import cells.pointer.CellPointer;
 
 /**
+ * Mapper implementation for border modes.
  * @author Dmitriy Tseyler
  */
 public class BorderModesMapper extends RangeMapper<Boolean> {
@@ -18,6 +19,9 @@ public class BorderModesMapper extends RangeMapper<Boolean> {
         return true;
     }
 
+    /**
+     * Returns not existing value only if all splitted range values are the same
+     */
     @Override
     Boolean processSplitted(SplittedRange splittedRange, CellRange range, Boolean existing) {
         Boolean leftModes = get(splittedRange.getLeft());

@@ -3,6 +3,10 @@ package cells;
 import java.util.*;
 
 /**
+ * Base class of mapper between ranges and values.
+ * Used for fast access to range parameters
+ * <b>This mapper allow as to store and get some range parameters in fast way for a big tables
+ * (at least 30000 * 30000} </b>
  * @author Dmitriy Tseyler
  * @param <T> a value class parameter
  */
@@ -76,6 +80,17 @@ public abstract class RangeMapper<T> {
         createNewRange();
     }
 
+    /**
+     * Setter for range value
+     * We iterate over all saved ranges and watch, if range intersects or contains new range.
+     * If range, exists, we simply replace it's value in new map.
+     * Else, if range intersects with existing ranges, we split existing ranges and put splitted ranges in new map
+     * with old values.
+     * @param range
+     * Range for value
+     * @param newValue
+     * Value for range
+     */
     public void set(CellRange range, T newValue) {
         Map<CellRange, T> newMap = new HashMap<>();
         reset();
@@ -118,6 +133,20 @@ public abstract class RangeMapper<T> {
         }
     }
 
+    /**
+     * Getter for range value.
+     * First we check that it is possible that the mapper contains interested range.
+     * If not, we returns default value.
+     * If possible, we check that range contains in full modified range.
+     * If not, we split interested range by full range and concatenate splitter value with splitted parts.
+     * If splitting is not possible, we return the default value.
+     * If full modified range contains our range, we check mapper on containing our range.
+     * If mapper contains range, we return it's value. Else we iterate over all ranges and watch for intersections.
+     * If intersections found, we concatenate all splitted ranges values and return result.
+     * @param range
+     * Range to find
+     * @return value for range
+     */
     public T get(CellRange range) {
         if (fullRange == null) {
             return defaultValue(range);
