@@ -29,7 +29,7 @@ You can fix column on row with '$' symbol. For example, "=$A$1".
 Argument of aggregate function is cell range: <first cell reference>:<second cell reference>.
 First reference must have less or equal row and less or equal column.
 
-Expression can contains +, -, /, * and power binary operations, +, - unary operations.
+Expression can contains +, -, /, * and power(^) binary operations, +, - unary operations.
 Case is not important.
 
 ###Example of expression:
