@@ -196,7 +196,13 @@ public class Lexer {
     }
 
     private CellPointer readCellPointer(String column) {
-        return CellPointer.getPointer(Integer.parseInt(readNumber()) - 1, Util.indexByColumnName(column));
+        CellPointer pointer;
+        try {
+            pointer = CellPointer.getPointer(Integer.parseInt(readNumber()) - 1, Util.indexByColumnName(column));
+        } catch (NumberFormatException e) {
+            throw new ParserException();
+        }
+        return pointer;
     }
 
     private CellPointer readCellPointer() {
@@ -204,7 +210,13 @@ public class Lexer {
         String column = readLiteral();
         checkFixCharacter(Character::isDigit);
         String row = readNumber();
-        return CellPointer.getPointer(Integer.parseInt(row) - 1, Util.indexByColumnName(column));
+        CellPointer pointer;
+        try {
+             pointer = CellPointer.getPointer(Integer.parseInt(row) - 1, Util.indexByColumnName(column));
+        } catch (NumberFormatException e) {
+            throw new ParserException();
+        }
+        return pointer;
     }
 
     private void checkFixCharacter(Predicate<Character> check) {
