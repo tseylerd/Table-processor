@@ -103,7 +103,7 @@ public class ExpressionParser {
         return lexeme.getType().getExpression(this);
     }
 
-    public Expression onAgregateFunction() throws ParserException {
+    public Expression onAggregateFunction() throws ParserException {
         CellRange range = lexer.getRange();
         if (range.getFirstColumn() > range.getLastColumn() || range.getFirstRow() > range.getLastRow()) {
             throw new ParserException();

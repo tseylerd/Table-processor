@@ -178,12 +178,12 @@ public class TableColorModel {
         backgroundMapper.delete(range);
     }
 
-    public void setMaps(Map<CellRange, Color> rightLineColors, Map<CellRange, Color> bottomLinecColors,
+    public void setMaps(Map<CellRange, Color> rightLineColors, Map<CellRange, Color> bottomLineColors,
                         Map<CellRange, Color> backgroundColors, Map<CellRange, Boolean> rightLines,
                         Map<CellRange, Boolean> bottomLines)
     {
         rightForegroundMapper.setMap(rightLineColors);
-        bottomForegroundMapper.setMap(bottomLinecColors);
+        bottomForegroundMapper.setMap(bottomLineColors);
         backgroundMapper.setMap(backgroundColors);
         rightLineMapper.setMap(rightLines);
         bottomLineMapper.setMap(bottomLines);

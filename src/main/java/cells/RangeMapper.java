@@ -48,17 +48,6 @@ public abstract class RangeMapper<T> {
         fullRange = new CellRange(minY, minX, maxY, maxX);
     }
 
-    public boolean contains(CellRange range) {
-        if (map.containsKey(range)) {
-            return true;
-        }
-        for (CellRange cellRange : map.keySet()) {
-            if (cellRange.isInside(range))
-                return true;
-        }
-        return false;
-    }
-
     public void delete(CellRange range) {
         map.remove(range);
         reset();
@@ -156,7 +145,7 @@ public abstract class RangeMapper<T> {
         }
         if (!fullRange.isInside(range)) {
             SplittedRange splitted = range.splitHonestly(fullRange);
-            if (splitted == null || !splitted.splitSucceful()) {
+            if (splitted == null || !splitted.splitSuccessful()) {
                 return defaultValue(range);
             } else {
                 return concatenate(splitted, range);
@@ -180,8 +169,8 @@ public abstract class RangeMapper<T> {
         for (Map.Entry<CellRange, T> cellRangeListEntry : map.entrySet()) {
             CellRange existing = cellRangeListEntry.getKey();
             SplittedRange splittedRange = range.splitHonestly(existing);
-            if (splittedRange != null && splittedRange.splitSucceful()) {
-                return processSplitted(splittedRange, existing, cellRangeListEntry.getValue());
+            if (splittedRange != null && splittedRange.splitSuccessful()) {
+                return processSplitted(splittedRange, cellRangeListEntry.getValue());
             }
         }
         return defaultValue(range);
@@ -191,7 +180,7 @@ public abstract class RangeMapper<T> {
         return Collections.unmodifiableMap(map);
     }
 
-    abstract T processSplitted(SplittedRange splittedRange, CellRange range, T existing);
+    abstract T processSplitted(SplittedRange splittedRange, T existing);
     abstract T defaultValue(CellRange range);
     abstract T concatenate(SplittedRange splittedRange, CellRange range);
 }

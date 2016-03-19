@@ -11,7 +11,7 @@ import java.util.*;
 
 /**
  * This model represents a graph of table cells. It knows, which cells we should be recalculated on cell change.
- * <b>Now, this model is the bottleneck of apllication. It hangs on ranges of about 3000x3000 and bigger.
+ * <b>Now, this model is the bottleneck of application. It hangs on ranges of about 3000x3000 and bigger.
  * In future, this model should use something like {@link cells.RangeMapper}.</b>
  * @author Dmitriy Tseyler
  */
@@ -94,7 +94,7 @@ public class CellsConnectionModel {
         processRanges(pointer, ranges); // write new subscription
     }
 
-    public void processRanges(PointerNode pointer, List<CellRange> ranges) {
+    private void processRanges(PointerNode pointer, List<CellRange> ranges) {
         for (CellRange range : ranges) {
             processRange(pointer, range);
         }

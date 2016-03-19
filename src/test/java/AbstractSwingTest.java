@@ -14,7 +14,7 @@ public class AbstractSwingTest {
         installLaf();
     }
 
-    protected void installLaf() {
+    private void installLaf() {
         try {
             SwingUtilities.invokeAndWait(this::install);
         } catch (InterruptedException | InvocationTargetException ignored) {

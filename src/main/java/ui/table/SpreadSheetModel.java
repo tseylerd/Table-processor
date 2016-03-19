@@ -27,7 +27,7 @@ import java.util.*;
  * @author Dmitriy Tseyler
  */
 public class SpreadSheetModel implements TableModel {
-    public static final CellValue EMPTY = new CellValue();
+    private static final CellValue EMPTY = new CellValue();
 
     private final List<TableModelListener> tableModelListeners;
     private final CellsConnectionModel cellsConnectionModel;
@@ -147,7 +147,7 @@ public class SpreadSheetModel implements TableModel {
         tableModelListeners.forEach(tableModelListener -> tableModelListener.tableChanged(event));
     }
 
-    public double getNumber(int row, int column) {
+    private double getNumber(int row, int column) {
         CellValue value = (CellValue) getValueAt(row, column);
         try {
             return Double.parseDouble(value.getRendererValue());
@@ -227,12 +227,12 @@ public class SpreadSheetModel implements TableModel {
                 TableModelEvent.ALL_COLUMNS, TableModelEvent.DELETE));
     }
 
-    public void fireTableRowsInserted(int firstRow, int lastRow) {
+    private void fireTableRowsInserted(int firstRow, int lastRow) {
         fireTableModelListeners(new TableModelEvent(this, firstRow, lastRow,
                 TableModelEvent.ALL_COLUMNS, TableModelEvent.INSERT));
     }
 
-    public void fireTableStructureChanged() {
+    private void fireTableStructureChanged() {
         fireTableModelListeners(new TableModelEvent(this, TableModelEvent.HEADER_ROW));
     }
 }

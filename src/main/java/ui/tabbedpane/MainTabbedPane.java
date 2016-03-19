@@ -14,7 +14,7 @@ import java.util.Set;
 /**
  * Main visible interface of table processor. Contains tabs with tables. Holds saved/unsaved state of each tab.
  * Monitors tabs overwriting.
- * By default contains one table with {@value MainTabbedPane.DEFAULT_NAME} name.
+ * By default contains one table with {@link MainTabbedPane#DEFAULT_NAME} name.
  * @author Dmitriy Tseyler
  */
 public class MainTabbedPane extends JTabbedPane {

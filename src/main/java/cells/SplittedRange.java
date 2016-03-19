@@ -39,7 +39,7 @@ public class SplittedRange {
         return splitter;
     }
 
-    public boolean splitSucceful() {
+    public boolean splitSuccessful() {
         return up != null
                 || down != null
                 || right != null

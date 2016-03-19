@@ -61,11 +61,11 @@ public class NewTableDialog extends JDialog {
         return panel;
     }
 
-    public int getRowCount() {
+    private int getRowCount() {
         return (Integer) rowCount.getValue();
     }
 
-    public int getColumnCount() {
+    private int getColumnCount() {
         return (Integer) columnCount.getValue();
     }
 

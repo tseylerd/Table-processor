@@ -20,7 +20,7 @@ public abstract class SpanManager {
 
     private CellRange startRange;
 
-    public SpanManager(Spanner spanner) {
+    protected SpanManager(Spanner spanner) {
         this.spanner = spanner;
         ranges = new LinkedList<>();
     }
