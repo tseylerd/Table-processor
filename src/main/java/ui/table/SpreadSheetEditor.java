@@ -9,10 +9,10 @@ import java.awt.*;
  * Editor for {@link SpreadSheetTable} with {@link EditorTextField}
  * @author Dmitriy Tseyler
  */
-public class SpreadSheetEditor extends DefaultCellEditor {
+class SpreadSheetEditor extends DefaultCellEditor {
     private final EditorTextField field;
 
-    public SpreadSheetEditor() {
+    SpreadSheetEditor() {
         super(new EditorTextField());
         field = (EditorTextField)editorComponent;
     }

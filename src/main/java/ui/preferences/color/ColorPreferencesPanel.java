@@ -5,6 +5,7 @@ import ui.laf.ProcessorUIDefaults;
 import ui.laf.grid.BorderMode;
 import ui.table.SpreadSheetModel;
 import ui.table.SpreadSheetTable;
+import util.TableColumnModelAdapter;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;

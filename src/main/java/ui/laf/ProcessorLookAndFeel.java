@@ -2,7 +2,6 @@ package ui.laf;
 
 import javax.swing.*;
 import javax.swing.plaf.metal.MetalLookAndFeel;
-import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 

@@ -17,7 +17,7 @@ public class ColorMapper extends RangeMapper<Color> {
     }
 
     @Override
-    Color defaultValue(CellRange range) {
+    Color defaultValue() {
         return defaultColor;
     }
 

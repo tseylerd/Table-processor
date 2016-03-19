@@ -9,8 +9,8 @@ import java.awt.*;
  * Button with always visible text color depends on background color
  * @author Dmitriy Tseyler
  */
-public class InverseColorButton extends JButton {
-    public InverseColorButton(Action action) {
+class InverseColorButton extends JButton {
+    InverseColorButton(Action action) {
         super(action);
     }
 

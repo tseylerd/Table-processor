@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.*;
 
 /**
+ * Cell range implementation
  * @author Dmitriy Tseyler
  */
 public class CellRange implements Iterable<CellPointer>, Transferable {
@@ -48,7 +49,7 @@ public class CellRange implements Iterable<CellPointer>, Transferable {
                 end.getColumn() >= pointer.getColumn();
     }
 
-    public boolean isInside(CellRange range) {
+    boolean isInside(CellRange range) {
         return  range != null &&
                 getFirstColumn() <= range.getFirstColumn() &&
                 getFirstRow() <= range.getFirstRow() &&
@@ -130,6 +131,10 @@ public class CellRange implements Iterable<CellPointer>, Transferable {
         return (end.getColumn() - begin.getColumn() + 1) * (end.getRow() - begin.getRow() + 1);
     }
 
+    /**
+     * Splits range on four parts by another range.
+     * After split intersects left and right part with top and bottom parts.
+     */
     public List<CellRange> split(CellRange range) {
         CellPointer rangeBegin = range.getBegin();
         CellPointer rangeEnd = range.getEnd();
@@ -158,7 +163,11 @@ public class CellRange implements Iterable<CellPointer>, Transferable {
         return Collections.unmodifiableList(ranges);
     }
 
-    public SplittedRange splitHonestly(CellRange range) {
+    /**
+     * Splits range on four parts by another range.
+     * Doesn't intersect left and right part with top and bottom parts.
+     */
+    SplittedRange splitHonestly(CellRange range) {
         CellPointer rangeBegin = range.getBegin();
         CellPointer rangeEnd = range.getEnd();
         int xMax = Math.min(rangeEnd.getColumn(), end.getColumn());

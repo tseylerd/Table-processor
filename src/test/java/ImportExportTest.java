@@ -2,7 +2,6 @@ import cells.CellRange;
 import cells.CellValue;
 import cells.pointer.CellPointer;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import storage.ImportFormatException;
 import storage.TableExporter;

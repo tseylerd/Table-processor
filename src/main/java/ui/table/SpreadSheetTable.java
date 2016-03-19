@@ -29,7 +29,7 @@ public class SpreadSheetTable extends JTable {
         this(new SpreadSheetModel(rowCount, columnCount));
     }
 
-    public SpreadSheetTable(SpreadSheetModel model) {
+    private SpreadSheetTable(SpreadSheetModel model) {
         this(model, new TableColorModel());
     }
 

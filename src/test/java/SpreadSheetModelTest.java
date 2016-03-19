@@ -4,8 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 import ui.table.SpreadSheetModel;
 import ui.table.error.Error;
-import ui.table.exceptions.EmptyValueException;
-import ui.table.exceptions.NumberParseException;
 
 /**
  * @author Dmitriy Tseyler

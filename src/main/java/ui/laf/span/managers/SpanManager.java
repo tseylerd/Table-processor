@@ -6,8 +6,6 @@ import ui.laf.span.spanner.Spanner;
 import ui.table.SpreadSheetModel;
 
 import java.util.LinkedList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Manager to span cell range. It holds start range end new ranges and then spanning start range on new ranges;
@@ -20,7 +18,7 @@ public abstract class SpanManager {
 
     private CellRange startRange;
 
-    protected SpanManager(Spanner spanner) {
+    SpanManager(Spanner spanner) {
         this.spanner = spanner;
         ranges = new LinkedList<>();
     }
@@ -34,7 +32,7 @@ public abstract class SpanManager {
         }
     }
 
-    protected CellRange getLast() {
+    CellRange getLast() {
         return ranges.peekLast() == null ? startRange : ranges.peekLast();
     }
 
@@ -42,19 +40,19 @@ public abstract class SpanManager {
         this.startRange = startRange;
     }
 
-    protected int getFirstColumn() {
+    int getFirstColumn() {
         return startRange.getFirstColumn();
     }
 
-    protected int getLastColumn() {
+    int getLastColumn() {
         return startRange.getLastColumn();
     }
 
-    protected int getFirstRow() {
+    int getFirstRow() {
         return startRange.getFirstRow();
     }
 
-    protected int getLastRow() {
+    int getLastRow() {
         return startRange.getLastRow();
     }
 

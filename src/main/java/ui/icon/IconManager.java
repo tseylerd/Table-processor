@@ -2,7 +2,6 @@ package ui.icon;
 
 import javax.swing.*;
 import java.awt.*;
-import java.net.URL;
 import java.util.EnumMap;
 import java.util.Map;
 

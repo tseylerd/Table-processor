@@ -1,21 +1,19 @@
 package util;
 
 import cells.pointer.CellPointer;
-import ui.table.SpreadSheetModel;
-import ui.table.exceptions.InvalidCellPointerException;
 
 /**
  * Expression, which knows, how to move cell pointer
  * @author Dmitriy Tseyler
  */
-public class PointerMovingExpression {
+class PointerMovingExpression {
     private final boolean columnFixed;
     private final boolean rowFixed;
     private final int maxRows;
     private final int maxColumns;
     private final CellPointer pointer;
 
-    public PointerMovingExpression(boolean columnFixed, boolean rowFixed, CellPointer pointer, int maxRows, int maxColumns) {
+    PointerMovingExpression(boolean columnFixed, boolean rowFixed, CellPointer pointer, int maxRows, int maxColumns) {
         this.rowFixed = rowFixed;
         this.columnFixed = columnFixed;
         this.pointer = pointer;
@@ -49,7 +47,7 @@ public class PointerMovingExpression {
         return columnFixed || outOfRange ? 0 : offset;
     }
 
-    public PointerMovingExpression moveAndGet(int rowOffset, int columnOffset) {
+    PointerMovingExpression moveAndGet(int rowOffset, int columnOffset) {
         CellPointer moved = CellPointer.getPointer(pointer, filterRowOffset(rowOffset), filterColumnOffset(columnOffset));
         return new PointerMovingExpression(columnFixed, rowFixed, moved, maxRows, maxColumns);
     }

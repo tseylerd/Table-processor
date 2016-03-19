@@ -3,7 +3,6 @@ package math.calculator.function;
 import math.calculator.ParserException;
 import math.calculator.lexer.LexerValue;
 
-import java.text.ParseException;
 import java.util.function.BiFunction;
 
 /**

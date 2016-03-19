@@ -19,7 +19,7 @@ public class InverseCellIterator extends AbstractCellIterator {
         this(range, strategy, -1);
     }
 
-    public InverseCellIterator(CellRange range, CellIterationStrategy strategy, int offset) {
+    private InverseCellIterator(CellRange range, CellIterationStrategy strategy, int offset) {
         super(range, strategy, offset);
     }
 
