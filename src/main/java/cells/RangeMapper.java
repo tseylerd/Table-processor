@@ -19,7 +19,7 @@ public abstract class RangeMapper<T> {
     private int maxY;
     private CellRange fullRange;
 
-    protected RangeMapper() {
+    RangeMapper() {
         map = new HashMap<>();
     }
 
@@ -138,7 +138,7 @@ public abstract class RangeMapper<T> {
      */
     public T get(CellRange range) {
         if (fullRange == null) {
-            return defaultValue(range);
+            return defaultValue();
         }
         if (range == null) {
             return null;
@@ -146,7 +146,7 @@ public abstract class RangeMapper<T> {
         if (!fullRange.isInside(range)) {
             SplittedRange splitted = range.splitHonestly(fullRange);
             if (splitted == null || !splitted.splitSuccessful()) {
-                return defaultValue(range);
+                return defaultValue();
             } else {
                 return concatenate(splitted, range);
             }
@@ -173,7 +173,7 @@ public abstract class RangeMapper<T> {
                 return processSplitted(splittedRange, cellRangeListEntry.getValue());
             }
         }
-        return defaultValue(range);
+        return defaultValue();
     }
 
     public Map<CellRange, T> getMap() {
@@ -181,6 +181,6 @@ public abstract class RangeMapper<T> {
     }
 
     abstract T processSplitted(SplittedRange splittedRange, T existing);
-    abstract T defaultValue(CellRange range);
+    abstract T defaultValue();
     abstract T concatenate(SplittedRange splittedRange, CellRange range);
 }

@@ -6,7 +6,6 @@ import math.calculator.lexer.LexerValue;
 import ui.table.SpreadSheetModel;
 import ui.table.exceptions.CorruptedReferenceException;
 import ui.table.exceptions.EmptyValueException;
-import ui.table.exceptions.SpreadSheetException;
 
 /**
  * Expression for access table cell value

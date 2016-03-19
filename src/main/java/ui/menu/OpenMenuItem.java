@@ -1,6 +1,5 @@
 package ui.menu;
 
-import storage.ImportFormatException;
 import storage.TableImporter;
 import ui.tabbedpane.MainTabbedPane;
 import ui.table.SpreadSheetTable;
@@ -12,11 +11,11 @@ import java.io.*;
 /**
  * @author Dmitriy Tseyler
  */
-public class OpenMenuItem extends JMenuItem {
+class OpenMenuItem extends JMenuItem {
     private final MainTabbedPane tabbedPane;
     private final JFileChooser fileChooser;
 
-    public OpenMenuItem(MainTabbedPane tabbedPane) {
+    OpenMenuItem(MainTabbedPane tabbedPane) {
         super("Open table");
         this.tabbedPane = tabbedPane;
         fileChooser = new TableFileChooser();

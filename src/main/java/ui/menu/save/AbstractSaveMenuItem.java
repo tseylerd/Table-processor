@@ -15,16 +15,16 @@ import java.io.IOException;
 /**
  * @author Dmitriy Tseyler
  */
-public abstract class AbstractSaveMenuItem extends JMenuItem {
-    protected final MainTabbedPane tabbedPane;
+abstract class AbstractSaveMenuItem extends JMenuItem {
+    final MainTabbedPane tabbedPane;
 
-    public AbstractSaveMenuItem(MainTabbedPane tabbedPane, String text) {
+    AbstractSaveMenuItem(MainTabbedPane tabbedPane, String text) {
         super(text);
         this.tabbedPane = tabbedPane;
         installListeners();
     }
 
-    protected void installListeners() {
+    void installListeners() {
         addActionListener(this::actionPerformed);
     }
 
@@ -46,7 +46,7 @@ public abstract class AbstractSaveMenuItem extends JMenuItem {
         }
     }
 
-    protected void afterSave(File file) {
+    void afterSave(File file) {
         tabbedPane.saved(file);
     }
 

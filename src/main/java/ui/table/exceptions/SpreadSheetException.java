@@ -17,7 +17,7 @@ public class SpreadSheetException extends RuntimeException implements Comparable
     private final int priority;
     private final String value;
 
-    public SpreadSheetException(Error error, int priority, String value) {
+    protected SpreadSheetException(Error error, int priority, String value) {
         this.error = error;
         this.priority = priority;
         this.value = value;

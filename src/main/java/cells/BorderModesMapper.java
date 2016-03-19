@@ -10,12 +10,12 @@ public class BorderModesMapper extends RangeMapper<Boolean> {
     @Override
     Boolean concatenate(SplittedRange splittedRange, CellRange range) {
         Boolean need = get(splittedRange.getSplitter());
-        Boolean result = defaultValue(range);
+        Boolean result = defaultValue();
         return result && need;
     }
 
     @Override
-    Boolean defaultValue(CellRange range) {
+    Boolean defaultValue() {
         return true;
     }
 

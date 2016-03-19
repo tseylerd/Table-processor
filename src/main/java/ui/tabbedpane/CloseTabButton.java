@@ -10,8 +10,8 @@ import javax.swing.*;
  * This button deletes tab from {@link MainTabbedPane}
  * @author Dmitriy Tseyler
  */
-public class CloseTabButton extends JButton {
-    public CloseTabButton(MainTabbedPane tabbedPane, String name) {
+class CloseTabButton extends JButton {
+    CloseTabButton(MainTabbedPane tabbedPane, String name) {
         setBackground(ProcessorUIDefaults.TRANSPARENT);
         setBorder(BorderFactory.createEmptyBorder());
         setOpaque(false);

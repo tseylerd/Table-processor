@@ -2,7 +2,6 @@ package cells.iterator.range;
 
 import cells.CellRange;
 import cells.iterator.IterationStrategyIndexResolver;
-import cells.iterator.cell.InverseCellIterator;
 
 /**
  * Iterator over {@link CellRange} rows or columns.
@@ -20,7 +19,7 @@ public class RangeIterator extends AbstractRangeIterator {
         this(range, strategy, 1);
     }
 
-    public RangeIterator(CellRange range, RangeIterationStrategy strategy, int offset) {
+    private RangeIterator(CellRange range, RangeIterationStrategy strategy, int offset) {
         super(range, strategy, offset);
         setBegin(strategy.getResolver().getFirstRange(range));
     }

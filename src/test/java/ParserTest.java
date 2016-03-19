@@ -4,10 +4,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import javax.swing.text.html.parser.Parser;
-import java.text.ParseException;
-
-
 /**
  * @author Dmitriy Tseyler
  */

@@ -11,7 +11,7 @@ import java.awt.event.ActionEvent;
 /**
  * @author Dmitriy Tseyler
  */
-public class NewTableDialog extends JDialog {
+class NewTableDialog extends JDialog {
     private static final String DEFAULT_TAB_NAME = "New table";
 
     private final MainTabbedPane tabbedPane;
@@ -73,7 +73,7 @@ public class NewTableDialog extends JDialog {
         return name.getText();
     }
 
-    public void createTable() {
+    void createTable() {
         name.setText(DEFAULT_TAB_NAME);
         rowCount.setValue(ProcessorUIDefaults.DEFAULT_ROW_COUNT);
         columnCount.setValue(ProcessorUIDefaults.DEFAULT_COLUMN_COUNT);

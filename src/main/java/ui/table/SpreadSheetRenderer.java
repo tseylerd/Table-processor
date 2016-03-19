@@ -14,11 +14,11 @@ import java.awt.*;
  * Basic renderer for {@link SpreadSheetTable}
  * @author Dmitriy Tseyler
  */
-public class SpreadSheetRenderer extends DefaultTableCellRenderer {
+class SpreadSheetRenderer extends DefaultTableCellRenderer {
 
     private final SpreadSheetTable table;
 
-    public SpreadSheetRenderer(SpreadSheetTable table) {
+    SpreadSheetRenderer(SpreadSheetTable table) {
         this.table = table;
     }
 

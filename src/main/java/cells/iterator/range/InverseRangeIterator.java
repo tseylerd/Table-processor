@@ -19,7 +19,7 @@ public class InverseRangeIterator extends AbstractRangeIterator {
         this(range, strategy, -1);
     }
 
-    public InverseRangeIterator(CellRange range, RangeIterationStrategy strategy, int offset) {
+    private InverseRangeIterator(CellRange range, RangeIterationStrategy strategy, int offset) {
         super(range, strategy, offset);
         setBegin(strategy.getResolver().getLastRange(range));
     }

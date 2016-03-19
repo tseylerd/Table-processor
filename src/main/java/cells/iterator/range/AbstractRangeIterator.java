@@ -10,7 +10,7 @@ import cells.iterator.IterationStrategyIndexResolver;
  * @author Dmitriy Tseyler
  */
 public abstract class AbstractRangeIterator extends AbstractSpreadSheetIterator<CellRange, RangeIterationStrategy> {
-    public AbstractRangeIterator(CellRange range, RangeIterationStrategy strategy, int offset) {
+    AbstractRangeIterator(CellRange range, RangeIterationStrategy strategy, int offset) {
         super(range, strategy, offset);
     }
 

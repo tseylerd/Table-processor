@@ -1,7 +1,6 @@
 package math.calculator.lexer;
 
 import ui.table.exceptions.NumberParseException;
-import ui.table.exceptions.SpreadSheetException;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;

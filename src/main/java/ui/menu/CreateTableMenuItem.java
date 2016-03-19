@@ -8,10 +8,10 @@ import java.awt.event.ActionEvent;
 /**
  * @author Dmitriy Tseyler
  */
-public class CreateTableMenuItem extends JMenuItem {
+class CreateTableMenuItem extends JMenuItem {
     private final NewTableDialog dialog;
 
-    public CreateTableMenuItem(MainTabbedPane tabbedPane) {
+    CreateTableMenuItem(MainTabbedPane tabbedPane) {
         super("New table");
         dialog = new NewTableDialog(tabbedPane);
         addActionListener(this::actionPerformed);

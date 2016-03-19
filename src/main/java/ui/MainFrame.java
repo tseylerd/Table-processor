@@ -11,11 +11,11 @@ import java.awt.*;
  * Main application frame
  * @author Dmitriy Tseyler
  */
-public class MainFrame extends JFrame {
+class MainFrame extends JFrame {
     private static final Dimension DEFAULT_SIZE = new Dimension(1024, 768);
     private static final String TITLE = "Table processor";
 
-    public MainFrame() {
+    private MainFrame() {
         MainTabbedPane tabbedPane = new MainTabbedPane();
         setJMenuBar(new MainMenuBar(tabbedPane, this));
         setLayout(new BorderLayout());

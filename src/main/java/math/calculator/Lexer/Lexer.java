@@ -7,7 +7,6 @@ import math.calculator.LexemeType;
 import math.calculator.ParserException;
 import util.Util;
 
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 /**
@@ -15,7 +14,7 @@ import java.util.function.Predicate;
  * @author Dmitriy Tseyler
  */
 public class Lexer {
-    public static final char FIX_CHARACTER = '$';
+    private static final char FIX_CHARACTER = '$';
 
     private final String upperCaseExpression;
     private final StringBuilder builder;
