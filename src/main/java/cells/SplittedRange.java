@@ -4,14 +4,14 @@ package cells;
  * Result of range splitting by another range.
  * @author Dmitriy Tseyler
  */
-public class SplittedRange {
+class SplittedRange {
     private final CellRange left;
     private final CellRange right;
     private final CellRange down;
     private final CellRange up;
     private final CellRange splitter;
 
-    public SplittedRange(CellRange up, CellRange down, CellRange left, CellRange right, CellRange splitter) {
+    SplittedRange(CellRange up, CellRange down, CellRange left, CellRange right, CellRange splitter) {
         this.left = left;
         this.right = right;
         this.down = down;
@@ -19,27 +19,27 @@ public class SplittedRange {
         this.splitter = splitter;
     }
 
-    public CellRange getDown() {
+    CellRange getDown() {
         return down;
     }
 
-    public CellRange getLeft() {
+    CellRange getLeft() {
         return left;
     }
 
-    public CellRange getUp() {
+    CellRange getUp() {
         return up;
     }
 
-    public CellRange getRight() {
+    CellRange getRight() {
         return right;
     }
 
-    public CellRange getSplitter() {
+    CellRange getSplitter() {
         return splitter;
     }
 
-    public boolean splitSuccessful() {
+    boolean splitSuccessful() {
         return up != null
                 || down != null
                 || right != null

@@ -1,4 +1,4 @@
-package ui.preferences.color;
+package util;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ListSelectionEvent;
