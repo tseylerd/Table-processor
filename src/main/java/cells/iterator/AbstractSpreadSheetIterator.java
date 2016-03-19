@@ -5,7 +5,7 @@ import cells.CellRange;
 import java.util.Iterator;
 
 /**
- * Base class of all spread sheed iterators
+ * Base class of all spread sheet iterators
  * @see cells.iterator.cell.AbstractCellIterator
  * @see cells.iterator.range.AbstractRangeIterator
  * @author Dmitriy Tseyler
@@ -16,7 +16,7 @@ public abstract class AbstractSpreadSheetIterator<T, U extends IterationStrategy
     private final int offset;
     private T current;
 
-    public AbstractSpreadSheetIterator(CellRange range, U strategy, int offset) {
+    protected AbstractSpreadSheetIterator(CellRange range, U strategy, int offset) {
         this.range = range;
         this.strategy = strategy;
         this.offset = offset;

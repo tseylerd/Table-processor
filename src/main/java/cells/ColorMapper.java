@@ -25,7 +25,7 @@ public class ColorMapper extends RangeMapper<Color> {
      * We returns not default color only if all splitted ranges colors are equals
      */
     @Override
-    Color processSplitted(SplittedRange splittedRange, CellRange range, Color existing) {
+    Color processSplitted(SplittedRange splittedRange, Color existing) {
         Color leftColor = get(splittedRange.getLeft());
         Color rightColor = get(splittedRange.getRight());
         Color upColor = get(splittedRange.getUp());

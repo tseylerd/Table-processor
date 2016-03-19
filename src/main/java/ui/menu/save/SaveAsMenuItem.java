@@ -4,7 +4,7 @@ import ui.menu.TableFileChooser;
 import ui.tabbedpane.MainTabbedPane;
 
 import javax.swing.*;
-import java.io.File;;
+import java.io.File;
 
 /**
  * @author Dmitriy Tseyler

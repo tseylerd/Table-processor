@@ -23,16 +23,12 @@ public class PointerMovingExpression {
         this.maxColumns = maxColumns;
     }
 
-    public boolean isRowFixed() {
+    private boolean isRowFixed() {
         return rowFixed;
     }
 
-    public boolean isColumnFixed() {
+    private boolean isColumnFixed() {
         return columnFixed;
-    }
-
-    public CellPointer getPointer() {
-        return pointer;
     }
 
     private String getRowFixedString() {

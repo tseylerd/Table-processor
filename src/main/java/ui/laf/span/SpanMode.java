@@ -144,7 +144,7 @@ public enum SpanMode {
         this.supplier = supplier;
     }
 
-    public boolean compare(Point point, Rectangle rectangle, CellPointer pointer, JTable table) {
+    private boolean compare(Point point, Rectangle rectangle, CellPointer pointer, JTable table) {
         return isMouseCoordinateOnBorder(getRectangleCoordinate(rectangle), getMouseCoordinate(point)) && isItNotLast(pointer, table);
     }
 

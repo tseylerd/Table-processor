@@ -12,7 +12,7 @@ import javax.swing.*;
  */
 public class CloseTabButton extends JButton {
     public CloseTabButton(MainTabbedPane tabbedPane, String name) {
-        setBackground(ProcessorUIDefaults.TRANPARENT);
+        setBackground(ProcessorUIDefaults.TRANSPARENT);
         setBorder(BorderFactory.createEmptyBorder());
         setOpaque(false);
         setIcon(IconManager.getInstance().getIcon(IconConfiguration.CLOSE));

@@ -10,7 +10,7 @@ public enum LexemeType {
     AGGREGATE_FUNCTION() {
         @Override
         Expression getExpression(ExpressionParser parser) throws ParserException {
-            return parser.onAgregateFunction();
+            return parser.onAggregateFunction();
         }
     },
     FUNCTION() {

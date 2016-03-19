@@ -23,7 +23,7 @@ public class BorderModesMapper extends RangeMapper<Boolean> {
      * Returns not existing value only if all splitted range values are the same
      */
     @Override
-    Boolean processSplitted(SplittedRange splittedRange, CellRange range, Boolean existing) {
+    Boolean processSplitted(SplittedRange splittedRange, Boolean existing) {
         Boolean leftModes = get(splittedRange.getLeft());
         Boolean rightModes = get(splittedRange.getRight());
         Boolean upModes = get(splittedRange.getUp());
