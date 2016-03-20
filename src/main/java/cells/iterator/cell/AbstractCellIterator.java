@@ -11,9 +11,6 @@ import cells.iterator.AbstractSpreadSheetIterator;
  * @author Dmitriy Tseyler
  */
 public abstract class AbstractCellIterator extends AbstractSpreadSheetIterator<CellPointer, CellIterationStrategy> {
-    AbstractCellIterator(CellRange range, int offset) {
-        this(range, CellIterationStrategy.COLUMN_CHANGE_FIRST, offset);
-    }
 
     AbstractCellIterator(CellRange range, CellIterationStrategy strategy, int offset) {
         super(range, strategy, offset);

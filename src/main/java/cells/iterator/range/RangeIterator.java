@@ -16,12 +16,7 @@ public class RangeIterator extends AbstractRangeIterator {
     }
 
     public RangeIterator(CellRange range, RangeIterationStrategy strategy) {
-        this(range, strategy, 1);
-    }
-
-    private RangeIterator(CellRange range, RangeIterationStrategy strategy, int offset) {
-        super(range, strategy, offset);
-        setBegin(strategy.getResolver().getFirstRange(range));
+        super(range, strategy, 1);
     }
 
     @Override
@@ -31,6 +26,6 @@ public class RangeIterator extends AbstractRangeIterator {
 
     @Override
     public CellRange getBegin() {
-        return null;
+        return strategy.getResolver().getFirstRange(range);
     }
 }
