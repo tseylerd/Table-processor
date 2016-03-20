@@ -12,7 +12,7 @@ import cells.CellRange;
 public class CellIterator extends AbstractCellIterator {
 
     public CellIterator(CellRange range) {
-        super(range, 1);
+        this(range, CellIterationStrategy.COLUMN_CHANGE_FIRST);
     }
 
     public CellIterator(CellRange range, CellIterationStrategy strategy) {
