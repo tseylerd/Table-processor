@@ -15,19 +15,19 @@ public class ParserTest extends AbstractExpressionTest {
         calculator = new ExpressionParser(null);
     }
 
-    private String calculate(String expression) throws Exception {
+    private String calculate(String expression) {
         return calculator.parse(expression).calculate().getStringValue();
     }
 
     @Test
-    public void testNumber() throws Exception {
+    public void testNumber() {
         for (int i = 0; i < 10; i++) {
             test(calculate('=' + String.valueOf(i)), i);
         }
     }
 
     @Test
-    public void testAdditionAndSubstitution() throws Exception {
+    public void testAdditionAndSubstitution() {
         String expression = "=1+2+3+4+5+6+(2+1)";
         double result = 1+2+3+4+5+6+(2+1);
         test(calculate(expression), result);
@@ -38,7 +38,7 @@ public class ParserTest extends AbstractExpressionTest {
     }
 
     @Test
-    public void testMultiplyDivision() throws Exception {
+    public void testMultiplyDivision() {
         String expression = " = 2 * 3 * 4 * 5";
         double result = 2 * 3 * 4 * 5;
         test(calculate(expression), result);
@@ -49,28 +49,28 @@ public class ParserTest extends AbstractExpressionTest {
     }
 
     @Test
-    public void testPower() throws Exception {
+    public void testPower() {
         String expression = "= 3^5";
         double result = Math.pow(3, 5);
         test(calculate(expression), result);
     }
 
     @Test
-    public void testBraces() throws Exception {
+    public void testBraces() {
         String expression = "= (1+452+(600+4)*2^5/10)*50";
         double result = (1+452+(600+4)*Math.pow(2, 5)/10)*50;
         test(calculate(expression), result);
     }
 
     @Test
-    public void testFunc() throws Exception {
+    public void testFunc() {
         String expression = "= sin(1)^4";
         double result = Math.pow(Math.sin(1), 4);
         test(calculate(expression), result);
     }
 
     @Test
-    public void testStringExpression() throws Exception {
+    public void testStringExpression() {
         String expression;
         try {
             expression = "=abdfgggg+1";
