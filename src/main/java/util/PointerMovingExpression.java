@@ -43,7 +43,7 @@ class PointerMovingExpression {
     }
 
     private int filterColumnOffset(int offset) {
-        boolean outOfRange = pointer.getColumn() + offset > maxColumns || pointer.getColumn() + offset < 0;
+        boolean outOfRange = pointer.getColumn() + offset >= maxColumns || pointer.getColumn() + offset < 0;
         return columnFixed || outOfRange ? 0 : offset;
     }
 

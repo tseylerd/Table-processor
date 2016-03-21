@@ -49,6 +49,10 @@ public class CellValue {
     }
 
     public void setError(Error error) {
+        if (error != null) {
+            rendererValue = "";
+        }
+
         this.error = error;
     }
 

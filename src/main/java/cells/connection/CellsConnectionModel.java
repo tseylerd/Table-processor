@@ -21,6 +21,8 @@ public class CellsConnectionModel {
     private final LazyDynamicArray<List<PointerNode>> subscribed; // array of cells, that are subscribed on cell (i, j) changes
     private final LazyDynamicArray<List<CellRange>> references; // array of referenced by cell (i, j) ranges
 
+    private final LinkedList<PointerNode> topSortList;
+    private final Set<PointerNode> cyclic;
     private final SpreadSheetModel model;
 
     private PointerNode firstInCycle;
@@ -29,44 +31,80 @@ public class CellsConnectionModel {
     public CellsConnectionModel(SpreadSheetModel model) {
         subscribed = new LazyDynamicArray<>(model.getRowCount(), model.getColumnCount(), (Class<List<PointerNode>>)(Object)List.class);
         references = new LazyDynamicArray<>(model.getRowCount(), model.getColumnCount(), (Class<List<CellRange>>)(Object)List.class);
+        topSortList = new LinkedList<>();
+        cyclic = new HashSet<>();
+
         this.model = model;
+
         model.addTableModelListener(this::tableModelChanged);
     }
 
     /**
-     * Here we try recalculate all subscribed cells
+     * Build list of top sorted nodes
+     * Bulid list of cycle part nodes
      */
-    public void cellChanged(PointerNode pointer) throws CyclicReferenceException {
-        int row = pointer.getRow();
-        int column = pointer.getColumn();
-        if (subscribed.get(row, column) == null) {
+    private void dfs(PointerNode node, Set<PointerNode> inThisWay) {
+        if (node.isVisited()) {
+            indexCyclicReference(node);
+        }
+        if (inThisWay.contains(node)) {
             return;
         }
 
-        if (pointer.isVisited()) {
-            firstInCycle = pointer;
-            throw new CyclicReferenceException();
+        List<PointerNode> nodes = subscribed.get(node.getRow(), node.getColumn());
+
+        if (nodes == null) {
+            topSortList.addLast(node);
+            return;
         }
 
-        try {
-            pointer.setVisited(true);
-            List<PointerNode> refs = subscribed.get(row, column);
-            refs.forEach(model::recalculate);
-        } finally {
-            pointer.setVisited(false);
-        }
-
-        if (firstInCycle != null) {
-            if (firstInCycle.equals(pointer)) {
-                firstInCycle = null;
+        inThisWay.add(node);
+        node.setVisited(true);
+        for (PointerNode current : nodes) {
+            try {
+                dfs(current, inThisWay);
+            } catch (CyclicReferenceException e) {
+                indexCyclicReference(node);
             }
-            throw new CyclicReferenceException();
+        }
+        node.setVisited(false);
+
+        if (!cyclic.contains(node)) {
+            topSortList.addLast(node);
         }
     }
 
+    private void indexCyclicReference(PointerNode node) {
+        cyclic.add(node);
 
-    public void resetErrors() {
-        firstInCycle = null;
+        if (firstInCycle == null) {
+            firstInCycle = node;
+            node.setVisited(false);
+            throw new CyclicReferenceException();
+        }
+
+        if (!node.equals(firstInCycle)) {
+            node.setVisited(false);
+            throw new CyclicReferenceException();
+        } else {
+            firstInCycle = null;
+        }
+    }
+
+    /**
+     * Here we try recalculate all subscribed cells
+     * In reverse order from topological sort
+     */
+    public void cellChanged(PointerNode pointer) throws CyclicReferenceException {
+        dfs(pointer, new HashSet<>());
+        while (!topSortList.isEmpty()) {
+            model.recalculate(topSortList.pollLast().getPointer());
+        }
+        for (PointerNode pointerNode : cyclic) {
+            model.setCyclicReference(pointerNode.getPointer());
+        }
+        topSortList.clear();
+        cyclic.clear();
     }
 
     private void clear(PointerNode node) {
